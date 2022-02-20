@@ -48,7 +48,6 @@ public class Player : MonoBehaviour
     private string enemyTag = "Enemy";
     private EnemyBehavior o = null;
     private BossBehavior b = null;
-    private float playerHitPos;
     private Vector2 addVelocity;
     private float xspeed;
     private float yspeed;
@@ -145,7 +144,6 @@ public class Player : MonoBehaviour
                     }
                     else if (o != null)
                     {
-                        Debug.Log("右はいった");
                         xspeed = speed;
                         yspeed = -10f;
                     }
@@ -166,12 +164,13 @@ public class Player : MonoBehaviour
             }
             else if(downTime >= 0.6f || isGround)
             {
-                if (GameManager.instance.hpNum > 0)
+                if (GameManager.instance.hpNum > 0m)
                 {
                     anim.Play("Player_Stand");
                         isDown = false;
                         downTime = 0.0f;
                 }
+                Debug.Log(GameManager.instance.hpNum);
             }
             downTime += Time.deltaTime;
         }
@@ -185,10 +184,18 @@ public class Player : MonoBehaviour
     {
         o = collision.transform.root.gameObject.GetComponent<EnemyBehavior>();
         b = collision.transform.root.gameObject.GetComponent<BossBehavior>();
+
+        if (collision.collider.transform.position.x <= transform.position.x)
+        {
+            enemyOnRight = true;
+        }
+        else
+        {
+            enemyOnRight = false;
+        }
+
         if (collision.collider.tag == "Enemy_Head")
         {
-            
-            
             if (o != null || b != null)
             {
                
@@ -203,14 +210,12 @@ public class Player : MonoBehaviour
                 }
                 else if (b != null)//ボスの場合
                 {
-                    
                     if (b.isAttack == true)
                     {
                         b.playerStepOn2 = false;
-                        playerHitPos = transform.position.x;
                         anim.Play("Player_Down");
                         isDown = true;
-                        GameManager.instance.hpNum -= 1;
+                        GameManager.instance.hpNum -= 0.1m;
                     }
                     else
                     {
@@ -223,17 +228,9 @@ public class Player : MonoBehaviour
             }
         }else if(collision.collider.tag == "Enemy_Body")
         {
-            if(collision.collider.transform.position.x <= transform.position.x)
-            {
-                enemyOnRight = true;
-            }
-            else
-            {
-                enemyOnRight = false;
-            }
             anim.Play("Player_Down");
             isDown = true;
-            GameManager.instance.hpNum -= 0.1f;
+            GameManager.instance.hpNum -= 0.1m;
         }else if(collision.collider.tag == "MovingGround")
         {
             moveObj = collision.gameObject.GetComponent<MoveObject>();
@@ -414,7 +411,7 @@ public class Player : MonoBehaviour
         anim.SetBool("Rolling", isRolling);
     }
 
-    public bool IsContinueWating()//コンティニュー待ちか。結果をstagectrlに送る。
+    public bool IsContinueWating()//コンティニュー待ちか。結果をstagectrlのupdateに送る。
     {
         if (GameManager.instance.hpNum <= 0)
         {

@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     public int score;
     public int stageNum;//どのステージに居るか
-    public float hpNum = 0.5f;
+    public decimal hpNum = 0.5m;
     public CinemachineVirtualCamera Cam;
     public Camera cam;
     [HideInInspector] public bool bossIsvisble;
@@ -42,9 +42,9 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        if(hpNum >= 1f)
+        if(hpNum >= 1m)
         {
-            hpNum = 1f;
+            hpNum = 1m;
         }
 
         if (goBossBattle)

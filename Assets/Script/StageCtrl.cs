@@ -34,7 +34,6 @@ public class StageCtrl : MonoBehaviour
         {
             if (playerObj.transform.position.x <= continuePoint[nextSpawn].transform.position.x)
             {
-                Debug.Log("次のリスポーンを設定");
                 continueNum = nextSpawn;
                 nextSpawn++;
                 
@@ -47,7 +46,7 @@ public class StageCtrl : MonoBehaviour
             {
                 playerObj.transform.position = continuePoint[continueNum].transform.position;
                 p.ContinuePlayer();
-                GameManager.instance.hpNum = 0.5f;
+                GameManager.instance.hpNum = 0.5m;
             }
             else
             {

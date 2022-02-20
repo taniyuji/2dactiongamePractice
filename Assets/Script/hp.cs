@@ -7,14 +7,14 @@ public class hp : MonoBehaviour
 {
     public Image hpGage;
     private Text hpText = null;
-    private float oldHpNum = 0;
+    private decimal oldHpNum = 0m;
 
     void Start()
     {
         hpText = GetComponent<Text>();
         if (GameManager.instance != null)
         {
-            hpGage.fillAmount = GameManager.instance.hpNum;
+            hpGage.fillAmount = (float)GameManager.instance.hpNum;
         }
         else
         {
@@ -27,7 +27,7 @@ public class hp : MonoBehaviour
     {
         if (oldHpNum != GameManager.instance.hpNum)
         {
-            hpGage.fillAmount = GameManager.instance.hpNum;
+            hpGage.fillAmount = (float)GameManager.instance.hpNum;
             oldHpNum = GameManager.instance.hpNum;
         }
     }
