@@ -49,9 +49,9 @@ public class Player : MonoBehaviour
     private EnemyBehavior o = null;
     private BossBehavior b = null;
     private float playerHitPos;
+    private Vector2 addVelocity;
     private float xspeed;
     private float yspeed;
-    private Vector2 addVelocity;
     private GameObject goBossPos;
     private AnimatorStateInfo currentState;
     ///////////////////////////////////メイン///////////////////////////////////
@@ -93,10 +93,11 @@ public class Player : MonoBehaviour
             xspeed = GetXspeed();
             yspeed = GetYspeed(xspeed);
             //入手した速度を代入(Velocityは物理演算した結果算出した速度を格納しているところ。
-           Vector2 addVelocity = Vector2.zero;
-            if(moveObj != null)
+            addVelocity = Vector2.zero;
+            if (moveObj != null)
             {
                     addVelocity = moveObj.GetVelocity();
+                Debug.Log("addVelocity = " + addVelocity);
             }
            
         }
@@ -125,7 +126,7 @@ public class Player : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("右上に飛びます");
+
                         xspeed = speed + 0.5f;
                         yspeed = 10f;
                     }
@@ -153,7 +154,6 @@ public class Player : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("右下に飛びます");
                         xspeed = speed;
                         yspeed = -10f;
                     }
@@ -170,6 +170,7 @@ public class Player : MonoBehaviour
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
         rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;
+        Debug.Log("rb = " + rb.velocity);
 
     }
 
