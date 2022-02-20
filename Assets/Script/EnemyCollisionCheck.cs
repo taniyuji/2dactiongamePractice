@@ -1,0 +1,39 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemyCollisionCheck : MonoBehaviour
+{
+    private EnemyBehavior enm;
+    private BossBehavior bos;
+
+    private void Start()
+    {
+        enm = transform.root.GetComponent<EnemyBehavior>();
+        bos = transform.root.GetComponent<BossBehavior>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Ground" || collision.tag == "Enemy")
+        {
+            //Debug.Log("地面にあたった！");
+            if (enm != null)
+            {
+                enm.DirectionRight = !enm.DirectionRight;
+            }else if(bos != null)
+            {
+                //Debug.Log("方向変えろ！");
+                bos.hitGround = true;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(bos != null)
+        {
+            bos.hitGround = false;
+        }
+    }
+}
