@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
     private float yspeed;
     private GameObject goBossPos;
     private AnimatorStateInfo currentState;
+    private bool enemyOnRight = false;
     ///////////////////////////////////メイン///////////////////////////////////
     void Start()
     {
@@ -97,7 +98,6 @@ public class Player : MonoBehaviour
             if (moveObj != null)
             {
                     addVelocity = moveObj.GetVelocity();
-                Debug.Log("addVelocity = " + addVelocity);
             }
            
         }
@@ -105,73 +105,78 @@ public class Player : MonoBehaviour
         {//プレイヤーがダウンしている場合
             if (downTime < 0.2f) //吹き飛び上昇
             {
-                //衝突地点がボディの真ん中より後ろの場合
-                if (b != null && playerHitPos < b.transform.position.x)
-                {
-                    if(b != null)
-                    xspeed = -(speed + 1f);
-                    yspeed = 20f;
-                }
-                else if(o != null && playerHitPos < o.transform.position.x)
-                {
-                    
-                    xspeed = -(speed + 0.5f);
-                    yspeed = 10f;
-                }else//前の場合
+                //衝突地点が敵の右側の場合
+                if (enemyOnRight)
                 {
                     if (b != null)
                     {
                         xspeed = speed + 1f;
                         yspeed = 20f;
                     }
-                    else
-                    {
-
+                    else if(o != null)
+                    { 
                         xspeed = speed + 0.5f;
                         yspeed = 10f;
                     }
                 }
-                downTime += Time.deltaTime;
+                else//左の場合
+                {
+                    if (b != null)
+                    {
+                        xspeed = -(speed + 1f);
+                        yspeed = 20f;
+                    }
+                    else if(o != null)
+                    {
+
+                        xspeed = -(speed + 0.5f);
+                        yspeed = 10f;
+                    }
+                }
             }
             else if (downTime >= 0.2f && downTime < 0.6f && !isGround)//吹き飛び下降
             {
-                if (b != null && playerHitPos < b.transform.position.x)
-                {
-                    xspeed = -speed;
-                    yspeed = -20f;
-                }
-                else if (o != null && playerHitPos < o.transform.position.x)
-                {
-                    xspeed = -speed;
-                    yspeed = -10f;
-                }
-                else
+                if (enemyOnRight)
                 {
                     if (b != null)
                     {
                         xspeed = speed;
                         yspeed = -20f;
                     }
-                    else
+                    else if (o != null)
                     {
+                        Debug.Log("右はいった");
                         xspeed = speed;
                         yspeed = -10f;
                     }
                 }
-                downTime += Time.deltaTime;
+                else
+                {
+                    if (b != null)
+                    {
+                        xspeed = -speed;
+                        yspeed = -20f;
+                    }
+                    else if(o != null)
+                    {
+                        xspeed = -speed;
+                        yspeed = -10f;
+                    }
+                }
             }
-            else if (downTime >= 0.6f || isGround)
+            else if(downTime >= 0.6f || isGround)
             {
                 if (GameManager.instance.hpNum > 0)
-                anim.Play("Player_Stand");
-                downTime = 0.0f;
-                isDown = false;
-            }         
+                {
+                    anim.Play("Player_Stand");
+                        isDown = false;
+                        downTime = 0.0f;
+                }
+            }
+            downTime += Time.deltaTime;
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
-        rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;
-        Debug.Log("rb = " + rb.velocity);
-
+        rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;    
     }
 
     
@@ -218,7 +223,14 @@ public class Player : MonoBehaviour
             }
         }else if(collision.collider.tag == "Enemy_Body")
         {
-            playerHitPos = transform.position.x;
+            if(collision.collider.transform.position.x <= transform.position.x)
+            {
+                enemyOnRight = true;
+            }
+            else
+            {
+                enemyOnRight = false;
+            }
             anim.Play("Player_Down");
             isDown = true;
             GameManager.instance.hpNum -= 0.1f;
@@ -245,13 +257,6 @@ public class Player : MonoBehaviour
         //定義
         float horizontalkey = Input.GetAxisRaw("Horizontal") * Time.deltaTime;
         float xspeed;
-
-        if (isDown)
-        {
-            xspeed = 0;
-        }
-        else
-        {
 
             //右矢印キーが押された場合
             if (horizontalkey > 0)
@@ -284,11 +289,12 @@ public class Player : MonoBehaviour
             {
                 dashTime = 0.0f;
             }
-        }
+
         //直前に押されていたキーを入手
         beforeKey = horizontalkey;
         //移動表現を代入
         xspeed *= DashCurve.Evaluate(dashTime);
+
         return xspeed;
     }
 

@@ -24,7 +24,6 @@ public class Item : MonoBehaviour
     void Update()
     {
         if (playerCheck.isOn){
-            Debug.Log("入った");
             sr.enabled = false;
             box.enabled = false;
             if (!added)

@@ -3998,7 +3998,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1611089666133634016, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: enemy
@@ -5067,7 +5067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1147646375463163051, guid: e5ecf1302e5434618905544a078f9566, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1147646375463163054, guid: e5ecf1302e5434618905544a078f9566, type: 3}
       propertyPath: isJamp
@@ -5842,7 +5842,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1611089666133634016, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: enemy
@@ -6013,7 +6013,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1611089666133634016, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: enemy
@@ -6458,6 +6458,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BigEnemy (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1147646375463163051, guid: e5ecf1302e5434618905544a078f9566, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1147646375463163054, guid: e5ecf1302e5434618905544a078f9566, type: 3}
       propertyPath: isJamp
       value: 0
@@ -6596,7 +6600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6793987961438072474, guid: d9805dcc041374de5a7de191c43b4b52, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9805dcc041374de5a7de191c43b4b52, type: 3}
@@ -7075,7 +7079,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1147646375463163051, guid: e5ecf1302e5434618905544a078f9566, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1147646375463163054, guid: e5ecf1302e5434618905544a078f9566, type: 3}
       propertyPath: isJamp
@@ -7374,7 +7378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1611089666133634016, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: enemy
@@ -8198,7 +8202,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1147646375463163051, guid: e5ecf1302e5434618905544a078f9566, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1147646375463163054, guid: e5ecf1302e5434618905544a078f9566, type: 3}
       propertyPath: isJamp
