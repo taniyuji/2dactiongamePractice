@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public int score;
     public int stageNum;//どのステージに居るか
     public decimal hpNum = 0.5m;
+
     public CinemachineVirtualCamera Cam;
     public Camera cam;
     [HideInInspector] public bool bossIsvisble;

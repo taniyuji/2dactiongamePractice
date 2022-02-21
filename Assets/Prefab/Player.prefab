@@ -177,6 +177,8 @@ MonoBehaviour:
   ground: {fileID: 405939117442520296}
   head: {fileID: 405939116045467331}
   EnemyCollision: 0
+  RLimitObj: {fileID: 0}
+  LLimitObj: {fileID: 0}
   testMode: 0
 --- !u!212 &405939116434810718
 SpriteRenderer:
@@ -197,7 +199,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 98ef909a2f0da41d6924e4f70b6f5903, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

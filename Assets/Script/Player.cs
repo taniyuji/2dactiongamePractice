@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public bool EnemyCollision = false;
     public GameObject RLimitObj;
     public GameObject LLimitObj;
+    public GameObject deadPos = null;
     public bool testMode = false;
     //プライベート変数
     private Animator anim = null;
@@ -85,6 +86,8 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.goBossBattle = true;
         }
+
+        FallDeadCheck();
       
         //プレイヤーがダウンしていない場合
         if (!isDown)
@@ -173,7 +176,11 @@ public class Player : MonoBehaviour
                         isDown = false;
                         downTime = 0.0f;
                 }
-                Debug.Log(GameManager.instance.hpNum);
+                else
+                {
+                    xspeed = 0;
+                    yspeed = -gravity;
+                }
             }
             downTime += Time.deltaTime;
         }
@@ -414,11 +421,35 @@ public class Player : MonoBehaviour
         anim.SetBool("Rolling", isRolling);
     }
 
+    public void FallDeadCheck()
+    {
+        if (isFallDead())
+        {
+            GameManager.instance.hpNum = 0;
+        }
+    }
+
+    public bool isFallDead()
+    {
+        if (deadPos != null)
+        {
+            return transform.position.y <= deadPos.transform.position.y;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public bool IsContinueWating()//コンティニュー待ちか。結果をstagectrlのupdateに送る。
     {
-        if (GameManager.instance.hpNum <= 0)
+        if (GameManager.instance.hpNum <= 0 && isFallDead() == false)
         {
             return IsDownAnimEnd();
+        }else if (isFallDead())
+        {
+            gameObject.SetActive(false);
+            return true;
         }
         else
         {
@@ -444,6 +475,7 @@ public class Player : MonoBehaviour
 
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
+        gameObject.SetActive(true);
         isDown = false;
         anim.Play("Player_Stand");
         isJump = false;

@@ -6,6 +6,7 @@ public class StageCtrl : MonoBehaviour
 {
     public GameObject playerObj;
     public GameObject[] continuePoint;
+    public GameObject continueButton;
     public int continueNum; //リスポーンする地点
     
     private Player p;
@@ -36,22 +37,29 @@ public class StageCtrl : MonoBehaviour
             {
                 continueNum = nextSpawn;
                 nextSpawn++;
-                
+
             }
         }
 
-        if(p != null && p.IsContinueWating())
+        Debug.Log(p.IsContinueWating());
+        if (p != null && p.IsContinueWating())
         {
-            if(continuePoint.Length > continueNum)
+            continueButton.SetActive(true);
+        }
+    }
+
+    public void onClickContinue()
+    {
+            if (continuePoint.Length > continueNum)
             {
                 playerObj.transform.position = continuePoint[continueNum].transform.position;
                 p.ContinuePlayer();
                 GameManager.instance.hpNum = 0.5m;
+                continueButton.SetActive(false);
             }
             else
             {
                 Debug.Log("コンティニューポイントの設定が足りていない");
             }
-        }
     }
 }

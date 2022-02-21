@@ -244,7 +244,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 98ef909a2f0da41d6924e4f70b6f5903, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -315,6 +315,7 @@ MonoBehaviour:
   bossHp: 5
   enc: {fileID: 650762974059182127}
   hitGround: 0
+  isAttack: 0
   playerStepOn2: 0
 --- !u!50 &5332623041972457708
 Rigidbody2D:

@@ -248,7 +248,6 @@ public class BossBehavior : MonoBehaviour
                     anim.SetBool("Attack", false);
                     enemySpeed = beforeSpeed;
                     rb.velocity = new Vector2(0, -gravity);
-                    Debug.Log(rb.velocity);
                 }
             }
 
