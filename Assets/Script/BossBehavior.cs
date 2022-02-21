@@ -98,7 +98,7 @@ public class BossBehavior : MonoBehaviour
                 {
                     if (attackNum != 1)
                     {
-                        attackNum = UnityEngine.Random.Range(1, 201);
+                        attackNum = UnityEngine.Random.Range(1, 401);
                     }
                     else
                     {
