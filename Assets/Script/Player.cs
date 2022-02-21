@@ -96,7 +96,10 @@ public class Player : MonoBehaviour
             addVelocity = Vector2.zero;
             if (moveObj != null)
             {
+                if (isGround)
+                {
                     addVelocity = moveObj.GetVelocity();
+                }
             }
            
         }
