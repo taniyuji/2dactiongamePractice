@@ -129,7 +129,6 @@ public class EnemyBehavior : MonoBehaviour
             {
                 p = player.transform.position;
                 toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
-                Debug.Log(toVector);
             }else if(judgeTime >= 1.5f && judgeTime < 2.5f)
             {
                 toVector = Vector2.MoveTowards(transform.position, beforePos, enemySpeed * Time.deltaTime);

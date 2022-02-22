@@ -36,11 +36,7 @@ public class MoveObject : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (onPlay == true && playerOn == false)
-        {
-        }
-        else if(onPlay == false || (onPlay == true && playerOn == true)){
-
+        if(onPlay == false || (onPlay == true && playerOn == true)){
             if (movePoint != null && movePoint.Length > 1 && rb != null)
             {
                 if (!returnPoint)
@@ -96,22 +92,6 @@ public class MoveObject : MonoBehaviour
         if(collision.collider.tag == "player")
         {
             playerOn = true;
-        }
-    }
-
-    public void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "player")
-        {
-            playerOn = true;
-        }
-    }
-
-    public void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "player")
-        {
-            playerOn = false;
         }
     }
 }
