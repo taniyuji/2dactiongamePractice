@@ -41,7 +41,6 @@ public class StageCtrl : MonoBehaviour
             }
         }
 
-        Debug.Log(p.IsContinueWating());
         if (p != null && p.IsContinueWating())
         {
             continueButton.SetActive(true);

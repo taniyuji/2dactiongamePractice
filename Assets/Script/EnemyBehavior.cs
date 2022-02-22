@@ -15,6 +15,7 @@ public class EnemyBehavior : MonoBehaviour
     public bool isJamp = false;
     public int myScore;
     public GroudCheck g;
+    public bool isFly;
     [HideInInspector]public bool playerStepOn = false; //敵を踏んだかどうか判断、インスペクターでは非表示
 
     private int count2;
@@ -25,10 +26,15 @@ public class EnemyBehavior : MonoBehaviour
     private GameObject Rlim;
     private GameObject LLim;
     private bool isDead;
-    private int xVector;
+    private bool posSet = false;
+    private Vector2 beforePos;
+    private float xVector;
     private float yVector;
-    private float jampTime;
+    private float judgeTime;
     private bool isJamping = false;
+    private GameObject player;
+    private Vector2 p;
+    private Vector2 toVector;
 
     private void Start()
     {
@@ -39,6 +45,14 @@ public class EnemyBehavior : MonoBehaviour
         getAllChildren();
         Rlim = GameObject.Find("RightMoveLimit");
         LLim = GameObject.Find("LeftMoveLimit");
+        if (isJamp)
+        {
+            isFly = false;
+        }else if (isFly)
+        {
+            isJamp = false;
+        }
+
         if (isJamp)
         {
             isJamping = true;
@@ -61,27 +75,26 @@ public class EnemyBehavior : MonoBehaviour
         }
         else//踏まれた場合
         {
-
             if (!isDead)
+            {
+                if (GameManager.instance != null)
                 {
-                    if (GameManager.instance != null)
-                    {
-                        GameManager.instance.score += myScore;
-                    }
-                    isDead = true;
-                    anim.SetBool("Defeated", true);
-                    rb.velocity = new Vector2(0, -gravity);
+                    GameManager.instance.score += myScore;
+                }
+                isDead = true;
+                anim.SetBool("Defeated", true);
+                rb.velocity = new Vector2(0, -gravity);
                 foreach (var i in children)//スプライトがあるため、親オブジェクトだけ消したくない
                 {
                     i.SetActive(false);
                 }
-                    Destroy(gameObject, 3f);
-                }
-                else
-                {
-                    transform.Rotate(new Vector3(0, 0, 5));
-                }
+                Destroy(gameObject, 3f);
             }
+            else
+            {
+                transform.Rotate(new Vector3(0, 0, 5));
+            }
+        }
     }
 
     private void Move() //敵キャラの動き
@@ -90,19 +103,43 @@ public class EnemyBehavior : MonoBehaviour
         {
             g.IsGround();
             anim.SetBool("Run", true);
-            if (jampTime < 1f)
+            if (judgeTime < 1f)
             {
                 yVector = 5f;
             }
-            else if (jampTime >= 1f && g.IsGround() == false)
+            else if (judgeTime >= 1f && g.IsGround() == false)
             {
                 yVector = -gravity;
             }
             else if (g.IsGround() == true)
             {
-                jampTime = 0.0f;
+                judgeTime = 0.0f;
             }
-            jampTime += Time.deltaTime;
+            judgeTime += Time.deltaTime;
+        }else if (isFly)
+        {
+
+            player = GameObject.Find("Player");
+            if (!posSet)
+            {
+                beforePos = transform.position;
+                posSet = true;
+            }
+            if(judgeTime < 1.5f)
+            {
+                p = player.transform.position;
+                toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
+                Debug.Log(toVector);
+            }else if(judgeTime >= 1.5f && judgeTime < 2.5f)
+            {
+                toVector = Vector2.MoveTowards(transform.position, beforePos, enemySpeed * Time.deltaTime);
+                Debug.Log(toVector);
+            }
+            else
+            {
+                judgeTime = 0.0f;
+            }
+            judgeTime += Time.deltaTime;
         }
         else
         {
@@ -110,31 +147,38 @@ public class EnemyBehavior : MonoBehaviour
             yVector = -gravity;
         }
 
-            anim.SetBool("Run", true);
-            if (DirectionRight)//動く方向が右方向の場合
-            {
+        anim.SetBool("Run", true);
+        if (DirectionRight)//動く方向が右方向の場合
+        {
 
-                xVector = 1;
-                transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y);
-                count2--;
-                if (count2 == 0 || transform.position.x >= Rlim.transform.position.x)//移動方向を転換
-                {
-                    count2 = 0;
-                    DirectionRight = false;
-                }
-            }
-            else//動く方向が左方向の場合
+            xVector = 1;
+            transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y);
+            count2--;
+            if (count2 == 0 || transform.position.x >= Rlim.transform.position.x)//移動方向を転換
             {
-                xVector = -1;
-                transform.localScale = new Vector2(-(Math.Abs(transform.localScale.x)), transform.localScale.y);
-                count2++;
-                if (count2 == DirectionChangeCount || transform.position.x <= LLim.transform.position.x)//移動方向を転換
-                {
-                    count2 = DirectionChangeCount;
-                    DirectionRight = true;
-                }
+                count2 = 0;
+                DirectionRight = false;
             }
-        rb.velocity = new Vector2(xVector * enemySpeed, yVector);
+        }
+        else//動く方向が左方向の場合
+        {
+            xVector = -1;
+            transform.localScale = new Vector2(-(Math.Abs(transform.localScale.x)), transform.localScale.y);
+            count2++;
+            if (count2 == DirectionChangeCount || transform.position.x <= LLim.transform.position.x)//移動方向を転換
+            {
+                count2 = DirectionChangeCount;
+                DirectionRight = true;
+            }
+        }
+        if (isFly)
+        {
+            rb.MovePosition(toVector);
+        }
+        else
+        {
+            rb.velocity = new Vector2(xVector * enemySpeed, yVector);
+        }
     }
 
     private void getAllChildren()
@@ -145,7 +189,4 @@ public class EnemyBehavior : MonoBehaviour
             children[i] = gameObject.transform.GetChild(i).gameObject;
         }
     }
-    
-
-
 }

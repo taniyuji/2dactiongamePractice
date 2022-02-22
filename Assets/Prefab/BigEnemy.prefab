@@ -145,7 +145,7 @@ MonoBehaviour:
   DirectionChangeCount: 400
   nonVisible: 0
   DirectionRight: 1
-  isJamp: 1
+  isJamp: 0
   myScore: 0
   g: {fileID: 7301626849824427113}
   playerStepOn: 0

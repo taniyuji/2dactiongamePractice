@@ -120,7 +120,7 @@ public class Player : MonoBehaviour
                     }
                     else if(o != null)
                     { 
-                        xspeed = speed + 0.5f;
+                        xspeed = speed + 0.3f;
                         yspeed = 10f;
                     }
                 }
@@ -134,7 +134,7 @@ public class Player : MonoBehaviour
                     else if(o != null)
                     {
 
-                        xspeed = -(speed + 0.5f);
+                        xspeed = -(speed + 0.3f);
                         yspeed = 10f;
                     }
                 }
@@ -236,7 +236,7 @@ public class Player : MonoBehaviour
                     }
                 }
             }
-        }else if(collision.collider.tag == "Enemy_Body")
+        }else if(collision.collider.tag == "Enemy_Body" && !testMode)
         {
             anim.Play("Player_Down");
             isDown = true;

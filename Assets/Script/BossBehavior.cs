@@ -11,6 +11,7 @@ public class BossBehavior : MonoBehaviour
     public bool nonVisible = false;//見えてないときでも動かすか
     public int myScore;
     public int bossHp;
+    public int stopWidth = 20;
     public EnemyCollisionCheck enc;
     [HideInInspector] public bool hitGround = false;
     [HideInInspector] public bool isAttack = false;
@@ -96,13 +97,16 @@ public class BossBehavior : MonoBehaviour
 
                 if (hitGround == false)
                 {
-                    if (attackNum != 1)
+                    if (gameObject.tag != "Enemy")
                     {
-                        attackNum = UnityEngine.Random.Range(1, 401);
-                    }
-                    else
-                    {
-                        bossAttack();
+                        if (attackNum != 1)
+                        {
+                            attackNum = UnityEngine.Random.Range(1, 401);
+                        }
+                        else
+                        {
+                            bossAttack();
+                        }
                     }
                 }
             }
@@ -161,7 +165,7 @@ public class BossBehavior : MonoBehaviour
         }
         else
         {
-            if (transform.position.x >= player.position.x - 20 && transform.position.x <= player.position.x + 20)
+            if (transform.position.x >= player.position.x - stopWidth && transform.position.x <= player.position.x + stopWidth)
             {
                 anim.SetBool("Run", false);
                 xVector = 0;
@@ -169,13 +173,13 @@ public class BossBehavior : MonoBehaviour
             else
             {
                 anim.SetBool("Run", true);
-                if (transform.position.x < player.position.x - 20)
+                if (transform.position.x < player.position.x - stopWidth)
                 {
 
                     moveRight = true;
                     xVector = 1;
                 }
-                else if (transform.position.x > player.position.x + 20)
+                else if (transform.position.x > player.position.x + stopWidth)
                 {
                     moveRight = false;
                     xVector = -1;
