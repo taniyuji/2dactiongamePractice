@@ -62,12 +62,8 @@ public class BossBehavior : MonoBehaviour
 
             if (bossHp <= 0)
             {
-                if (!isBlink)
-                {
-                    GameManager.instance.isBossDead = true;
-                    gameObject.SetActive(false);
-                    playerStepOn2 = false;
-                }
+                Debug.Log("はいった");
+                setBossDead();
             }
         }
        
@@ -76,38 +72,19 @@ public class BossBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-
-
         if (playerStepOn2 == false)
         {
             //カメラに写っているかどうか（シーンビューに映る際も適応される）
             if (sr.isVisible || nonVisible)
             {
                 GameManager.instance.bossIsvisble = true;
-                player = GameObject.Find("Player").transform;
-                if (player.transform.position.x < transform.position.x)
-                {
-                    playerOnRight = false;
-                }
-                else
-                {
-                    playerOnRight = true;
-                }
+                
+                judgePlayerDirection();
                 Move();
 
                 if (hitGround == false)
                 {
-                    if (gameObject.tag != "Enemy")
-                    {
-                        if (attackNum != 1)
-                        {
-                            attackNum = UnityEngine.Random.Range(1, 401);
-                        }
-                        else
-                        {
-                            bossAttack();
-                        }
-                    }
+                    bossAttack();
                 }
             }
             else
@@ -127,9 +104,11 @@ public class BossBehavior : MonoBehaviour
         rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
     }
 
+
+      ///メソッドたち///
     private void Move() //敵キャラの動き
     {
-        if (hitGround == true)
+        if (hitGround == true)//壁にあたっている場合
         {
             anim.SetBool("Run", false);
             //Debug.Log("静止します");
@@ -140,7 +119,7 @@ public class BossBehavior : MonoBehaviour
                 hitGround = false;
             }
         }
-        else if (playerHit && !isAttack)
+        else if (playerHit && !isAttack)//プレイヤーと衝突し、攻撃中ではない場合
         {
             if (backTime < 0.3f)
             {
@@ -163,29 +142,32 @@ public class BossBehavior : MonoBehaviour
             }
             backTime += Time.deltaTime;
         }
-        else
+        else//プレイヤーと衝突しておらず、攻撃中でない場合
         {
-            if (transform.position.x >= player.position.x - stopWidth && transform.position.x <= player.position.x + stopWidth)
+            //プレイヤーの位置によって、動き始める
+            var leftPlayerPosJudge = player.position.x - stopWidth;//プレイヤーが左側にいる場合の動き始め境界
+            var rightPlayerPosJudge = player.position.x + stopWidth;//プレイヤーが右側にいる場合の動き始め境界
+            int xLocalScale = 1;
+            if (transform.position.x < leftPlayerPosJudge)//境界より左側にいる場合
+            {
+                anim.SetBool("Run", true);
+                moveRight = true;
+                xVector = 1;
+                xLocalScale = 1;
+            }
+            else if (transform.position.x > rightPlayerPosJudge)//境界より右側にいる場合
+            {
+                anim.SetBool("Run", true);
+                moveRight = false;
+                xVector = -1;
+                xLocalScale = -1;
+            }
+            else//境界内にいる場合
             {
                 anim.SetBool("Run", false);
                 xVector = 0;
             }
-            else
-            {
-                anim.SetBool("Run", true);
-                if (transform.position.x < player.position.x - stopWidth)
-                {
-
-                    moveRight = true;
-                    xVector = 1;
-                }
-                else if (transform.position.x > player.position.x + stopWidth)
-                {
-                    moveRight = false;
-                    xVector = -1;
-                }
-                transform.localScale = new Vector3(xVector * Math.Abs(transform.localScale.x), transform.localScale.y);
-            }
+            transform.localScale = new Vector3(xLocalScale * Math.Abs(transform.localScale.x), transform.localScale.y);
         }
     }
 
@@ -224,7 +206,45 @@ public class BossBehavior : MonoBehaviour
         }
     }
 
-    public void bossAttack()
+    public void setBossDead()//ボス死亡時
+    {
+        if (!isBlink)
+        {
+            GameManager.instance.isBossDead = true;
+            gameObject.SetActive(false);
+            playerStepOn2 = false;
+        }
+    }
+
+    public void judgePlayerDirection()//プレイヤーの位置を特定
+    {
+        player = GameObject.Find("Player").transform;
+        if (player.transform.position.x < transform.position.x)
+        {
+            playerOnRight = false;
+        }
+        else
+        {
+            playerOnRight = true;
+        }
+    }
+
+    public void bossAttack()//ボスの攻撃処理
+    {
+        if (gameObject.tag != "Enemy")
+        {
+            if (attackNum != 1)
+            {
+                attackNum = UnityEngine.Random.Range(1, 401);
+            }
+            else
+            {
+                bossAttackBehavior();
+            }
+        }
+    }
+
+    public void bossAttackBehavior()//ボスの攻撃動作
     {
         if (time < 1f)
         {
