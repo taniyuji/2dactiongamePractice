@@ -388,6 +388,7 @@ MonoBehaviour:
   - {fileID: 1858436079}
   - {fileID: 1873749176}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &80376442
 Rigidbody2D:
   serializedVersion: 4
@@ -1347,6 +1348,7 @@ MonoBehaviour:
   - {fileID: 167871384}
   - {fileID: 1325094825}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &310835005
 Rigidbody2D:
   serializedVersion: 4
@@ -1715,7 +1717,7 @@ RectTransform:
   m_Children:
   - {fileID: 1787733136}
   m_Father: {fileID: 1456910799}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1744,8 +1746,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.25, g: 0.4485178, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
+    m_HighlightedColor: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
+    m_PressedColor: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
     m_SelectedColor: {r: 0.12904951, g: 0.39645466, b: 0.9433962, a: 1}
     m_DisabledColor: {r: 0.25, g: 0.48728788, b: 1, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -1896,7 +1898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6981132, g: 0.6289605, b: 0.6289605, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1920,99 +1922,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 437727975}
-  m_CullTransparentMesh: 1
---- !u!1 &438117941
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 438117942}
-  - component: {fileID: 438117945}
-  - component: {fileID: 438117944}
-  - component: {fileID: 438117943}
-  m_Layer: 5
-  m_Name: Hp
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &438117942
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 438117941}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.3746874, y: 2.3239062, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1456910799}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -54.00003, y: 234}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &438117943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 438117941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a97471ba88a3f493998a22cb4c0262d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hpGage: {fileID: 1545643979}
---- !u!114 &438117944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 438117941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.25598526, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 0
-    m_MaxSize: 40
-    m_Alignment: 3
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 1
-    m_VerticalOverflow: 1
-    m_LineSpacing: 1
-  m_Text: 
---- !u!222 &438117945
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 438117941}
   m_CullTransparentMesh: 1
 --- !u!1001 &463659490
 PrefabInstance:
@@ -2339,7 +2248,7 @@ SpriteRenderer:
   m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f1dacac1bb47d4d4091c527f0b6f8503, type: 3}
-  m_Color: {r: 0.3301887, g: 0.31305626, b: 0.31305626, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2417,6 +2326,7 @@ MonoBehaviour:
   - {fileID: 268827719}
   - {fileID: 469002472}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &482593107
 Rigidbody2D:
   serializedVersion: 4
@@ -2735,6 +2645,7 @@ MonoBehaviour:
   - {fileID: 1599321374}
   - {fileID: 1070708342}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &594171162
 Rigidbody2D:
   serializedVersion: 4
@@ -2977,6 +2888,7 @@ MonoBehaviour:
   - {fileID: 563418566}
   - {fileID: 465020490}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &665418284
 Rigidbody2D:
   serializedVersion: 4
@@ -3529,7 +3441,7 @@ SpriteRenderer:
   m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f1dacac1bb47d4d4091c527f0b6f8503, type: 3}
-  m_Color: {r: 0.3301887, g: 0.31305626, b: 0.31305626, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3611,7 +3523,7 @@ SpriteRenderer:
   m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f1dacac1bb47d4d4091c527f0b6f8503, type: 3}
-  m_Color: {r: 0.3301887, g: 0.31305626, b: 0.31305626, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3935,7 +3847,7 @@ SpriteRenderer:
   m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f1dacac1bb47d4d4091c527f0b6f8503, type: 3}
-  m_Color: {r: 0.3301887, g: 0.31305626, b: 0.31305626, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -4013,6 +3925,7 @@ MonoBehaviour:
   - {fileID: 930829097}
   - {fileID: 1980152314}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &1066846632
 Rigidbody2D:
   serializedVersion: 4
@@ -4568,15 +4481,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8424379708208166256, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: m_Color.b
-      value: 0.28737986
+      value: 0.5283019
       objectReference: {fileID: 0}
     - target: {fileID: 8424379708208166256, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: m_Color.g
-      value: 0.2790139
+      value: 0.5283019
       objectReference: {fileID: 0}
     - target: {fileID: 8424379708208166256, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: m_Color.r
-      value: 0.3584906
+      value: 0.5283019
       objectReference: {fileID: 0}
     - target: {fileID: 8424379708208166256, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -4772,7 +4685,7 @@ SpriteRenderer:
   m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f1dacac1bb47d4d4091c527f0b6f8503, type: 3}
-  m_Color: {r: 0.3301887, g: 0.31305626, b: 0.31305626, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5166,6 +5079,7 @@ MonoBehaviour:
   - {fileID: 387422256}
   - {fileID: 396772682}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &1296203211
 Rigidbody2D:
   serializedVersion: 4
@@ -5766,7 +5680,7 @@ SpriteRenderer:
   m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f1dacac1bb47d4d4091c527f0b6f8503, type: 3}
-  m_Color: {r: 0.3301887, g: 0.31305626, b: 0.31305626, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5883,7 +5797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.25598526, a: 1}
+  m_Color: {r: 0.754717, g: 0.024919916, b: 0.21094656, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6036,7 +5950,6 @@ RectTransform:
   - {fileID: 467592236}
   - {fileID: 1429132504}
   - {fileID: 1801164907}
-  - {fileID: 438117942}
   - {fileID: 1696620586}
   - {fileID: 403922510}
   m_Father: {fileID: 0}
@@ -6273,8 +6186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: 2100000, guid: 3a4c061e774c84f64a1dfdb94ff50fc2, type: 2}
+  m_Color: {r: 0.7924528, g: 0.7836478, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6447,7 +6360,7 @@ SpriteRenderer:
   m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f1dacac1bb47d4d4091c527f0b6f8503, type: 3}
-  m_Color: {r: 0.3301887, g: 0.31305626, b: 0.31305626, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -6817,6 +6730,7 @@ MonoBehaviour:
   - {fileID: 1900534197}
   - {fileID: 1019905065}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &1696320211
 Rigidbody2D:
   serializedVersion: 4
@@ -6966,7 +6880,7 @@ Transform:
   - {fileID: 1545643978}
   - {fileID: 912163184}
   m_Father: {fileID: 1456910799}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1703672482
 GameObject:
@@ -7160,6 +7074,7 @@ MonoBehaviour:
   - {fileID: 836091323}
   - {fileID: 134050361}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &1766444033
 Rigidbody2D:
   serializedVersion: 4
@@ -7455,7 +7370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.25598526, a: 1}
+  m_Color: {r: 0.7830189, g: 0.0110804355, b: 0.207849, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7572,7 +7487,7 @@ SpriteRenderer:
   m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f1dacac1bb47d4d4091c527f0b6f8503, type: 3}
-  m_Color: {r: 0.3301887, g: 0.31305626, b: 0.31305626, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -8194,7 +8109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.25598526, a: 1}
+  m_Color: {r: 0.6981132, g: 0.0032929946, b: 0.18047222, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8307,6 +8222,7 @@ MonoBehaviour:
   - {fileID: 733775155}
   - {fileID: 2040084448}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &2053081496
 Rigidbody2D:
   serializedVersion: 4
@@ -8478,6 +8394,7 @@ MonoBehaviour:
   - {fileID: 111112621}
   - {fileID: 2127474871}
   nowPoint: 0
+  onPlay: 0
 --- !u!50 &2071338284
 Rigidbody2D:
   serializedVersion: 4
