@@ -88,8 +88,6 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.goBossBattle = true;
         }
-
-        FallDeadCheck();
       
         //プレイヤーがダウンしていない場合
         if (!isDown)
@@ -460,32 +458,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void FallDeadCheck()
-    {
-        if (isFallDead())
-        {
-            GameManager.instance.hpNum = 0;
-        }
-    }
-
-    public bool isFallDead()
-    {
-        if (deadPos != null)
-        {
-            return transform.position.y <= deadPos.transform.position.y;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     public bool IsContinueWating()//コンティニュー待ちか。結果をstagectrlのupdateに送る。
     {
-        if (GameManager.instance.hpNum <= 0 && isFallDead() == false)
+        if (GameManager.instance.hpNum <= 0 && GameManager.instance.isFallDead == false)
         {
             return IsDownAnimEnd();
-        }else if (isFallDead())
+        }else if (GameManager.instance.isFallDead == true)
         {
             gameObject.SetActive(false);
             return true;

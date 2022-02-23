@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool bossIsvisble;
     [HideInInspector] public bool isBossDead = false;
     [HideInInspector] public bool goBossBattle = false;
+    [HideInInspector] public bool isFallDead = false;
 
 
     private void Awake()

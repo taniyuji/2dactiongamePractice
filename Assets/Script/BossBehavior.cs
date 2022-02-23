@@ -11,7 +11,7 @@ public class BossBehavior : MonoBehaviour
     public bool nonVisible = false;//見えてないときでも動かすか
     public int myScore;
     public int bossHp;
-    public int stopWidth = 20;
+    public int stopWidth = 25;
     public EnemyCollisionCheck enc;
     [HideInInspector] public bool hitGround = false;
     [HideInInspector] public bool isAttack = false;
@@ -26,7 +26,7 @@ public class BossBehavior : MonoBehaviour
     private bool isStamped = false;
     private float blinkTime = 0.0f;
     private float continueTime = 0.0f;
-    private Transform player;
+    private GameObject player;
     private int xVector;
     private float beforeSpeed = 1;
     private bool moveRight = false;
@@ -48,6 +48,7 @@ public class BossBehavior : MonoBehaviour
         RLimitObj = GameObject.Find("RightMoveLimit");
         LLimitObj = GameObject.Find("LeftMoveLimit");
         beforeSpeed = enemySpeed;
+        player = GameObject.Find("Player");
     }
 
     private void Update()
@@ -146,8 +147,8 @@ public class BossBehavior : MonoBehaviour
         {
             Debug.Log("うごきます");
             //プレイヤーの位置によって、動き始める
-            var leftBossStopWidth = transform.position.x - 25;
-            var rightBossStopWidth = transform.position.x + 25;
+            var leftBossStopWidth = transform.position.x - stopWidth;
+            var rightBossStopWidth = transform.position.x + stopWidth;
             int xLocalScale = 1;
             if (player.transform.position.x < leftBossStopWidth)//境界より左側にいる場合
             {
@@ -227,7 +228,6 @@ public class BossBehavior : MonoBehaviour
 
     public void judgePlayerDirection()//プレイヤーの位置を特定
     {
-        player = GameObject.Find("Player").transform;
         if (player.transform.position.x < transform.position.x)
         {
             playerOnRight = false;
