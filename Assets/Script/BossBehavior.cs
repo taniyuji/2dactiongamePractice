@@ -119,7 +119,7 @@ public class BossBehavior : MonoBehaviour
                 hitGround = false;
             }
         }
-        else if (playerHit && !isAttack)//プレイヤーと衝突し、攻撃中ではない場合
+        else if (playerHit && isAttack == false)//プレイヤーと衝突し、攻撃中ではない場合
         {
             if (backTime < 0.3f)
             {
@@ -142,30 +142,39 @@ public class BossBehavior : MonoBehaviour
             }
             backTime += Time.deltaTime;
         }
-        else//プレイヤーと衝突しておらず、攻撃中でない場合
+        else if(isAttack == false)//プレイヤーと衝突しておらず、攻撃中でない場合
         {
+            Debug.Log("うごきます");
             //プレイヤーの位置によって、動き始める
-            var leftPlayerPosJudge = player.position.x - stopWidth;//プレイヤーが左側にいる場合の動き始め境界
-            var rightPlayerPosJudge = player.position.x + stopWidth;//プレイヤーが右側にいる場合の動き始め境界
+            var leftBossStopWidth = transform.position.x - 25;
+            var rightBossStopWidth = transform.position.x + 25;
             int xLocalScale = 1;
-            if (transform.position.x < leftPlayerPosJudge)//境界より左側にいる場合
-            {
-                anim.SetBool("Run", true);
-                moveRight = true;
-                xVector = 1;
-                xLocalScale = 1;
-            }
-            else if (transform.position.x > rightPlayerPosJudge)//境界より右側にいる場合
+            if (player.transform.position.x < leftBossStopWidth)//境界より左側にいる場合
             {
                 anim.SetBool("Run", true);
                 moveRight = false;
                 xVector = -1;
                 xLocalScale = -1;
             }
+            else if (player.transform.position.x > rightBossStopWidth)//境界より右側にいる場合
+            {
+                anim.SetBool("Run", true);
+                moveRight = true;
+                xVector = 1;
+                xLocalScale = 1;
+            }
             else//境界内にいる場合
             {
                 anim.SetBool("Run", false);
                 xVector = 0;
+                if (moveRight)
+                {
+                    xLocalScale = 1;
+                }
+                else
+                {
+                    xLocalScale = -1;
+                }
             }
             transform.localScale = new Vector3(xLocalScale * Math.Abs(transform.localScale.x), transform.localScale.y);
         }
@@ -235,7 +244,7 @@ public class BossBehavior : MonoBehaviour
         {
             if (attackNum != 1)
             {
-                attackNum = UnityEngine.Random.Range(1, 401);
+                attackNum = UnityEngine.Random.Range(1, 351);
             }
             else
             {
@@ -250,10 +259,19 @@ public class BossBehavior : MonoBehaviour
         {
             anim.SetBool("Run", false);
             AttackAnimFin = false;
-
+            judgePlayerDirection();
         }
         else if (time >= 1f && AttackAnimFin == false)
         {
+            if (playerOnRight)
+            {
+                xVector = 1;
+            }
+            else
+            {
+                xVector = -1;
+            }
+            Debug.Log("攻撃開始");
             isAttack = true;
             anim.SetBool("Attack", true);
             AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
@@ -265,6 +283,7 @@ public class BossBehavior : MonoBehaviour
                 }
                 else if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
+                    Debug.Log("攻撃終了");
                     attackNum = 0;
                     time = 0f;
                     isAttack = false;

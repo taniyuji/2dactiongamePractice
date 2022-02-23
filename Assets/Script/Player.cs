@@ -37,6 +37,8 @@ public class Player : MonoBehaviour
     private bool isOtherJump = false;
     private bool isContinue = false;
     private bool isMovingGround = false;
+    private bool isBoss = false;
+    private bool isDead = false;
     private float continueTime = 0.0f;
     private float blinkTime = 0.0f;
     private SpriteRenderer sr = null;
@@ -108,81 +110,7 @@ public class Player : MonoBehaviour
         }
         else if (isDown && !testMode)
         {//プレイヤーがダウンしている場合
-            if (downTime < 0.2f) //吹き飛び上昇
-            {
-                //衝突地点が敵の右側の場合
-                if (enemyOnRight)
-                {
-                    if (b != null)
-                    {
-                        xspeed = speed + 1f;
-                        yspeed = 20f;
-                    }
-                    else if(o != null)
-                    { 
-                        xspeed = speed + 0.3f;
-                        yspeed = 10f;
-                    }
-                }
-                else//左の場合
-                {
-                    if (b != null)
-                    {
-                        xspeed = -(speed + 1f);
-                        yspeed = 20f;
-                    }
-                    else if(o != null)
-                    {
-
-                        xspeed = -(speed + 0.3f);
-                        yspeed = 10f;
-                    }
-                }
-            }
-            else if (downTime >= 0.2f && downTime < 0.6f && !isGround)//吹き飛び下降
-            {
-                if (enemyOnRight)
-                {
-                    if (b != null)
-                    {
-                        xspeed = speed;
-                        yspeed = -20f;
-                    }
-                    else if (o != null)
-                    {
-                        xspeed = speed;
-                        yspeed = -10f;
-                    }
-                }
-                else
-                {
-                    if (b != null)
-                    {
-                        xspeed = -speed;
-                        yspeed = -20f;
-                    }
-                    else if(o != null)
-                    {
-                        xspeed = -speed;
-                        yspeed = -10f;
-                    }
-                }
-            }
-            else if(downTime >= 0.6f || isGround)
-            {
-                if (GameManager.instance.hpNum > 0m)
-                {
-                    anim.Play("Player_Stand");
-                        isDown = false;
-                        downTime = 0.0f;
-                }
-                else
-                {
-                    xspeed = 0;
-                    yspeed = -gravity;
-                }
-            }
-            downTime += Time.deltaTime;
+            downBehavior();
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
         rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;    
@@ -194,7 +122,10 @@ public class Player : MonoBehaviour
     {
         o = collision.transform.root.gameObject.GetComponent<EnemyBehavior>();
         b = collision.transform.root.gameObject.GetComponent<BossBehavior>();
-
+        if(b!= null)
+        {
+            isBoss = true;
+        }
         if (collision.collider.transform.position.x <= transform.position.x)
         {
             enemyOnRight = true;
@@ -421,6 +352,114 @@ public class Player : MonoBehaviour
         anim.SetBool("Rolling", isRolling);
     }
 
+    public void downBehavior()
+    {
+        if (!isDead)
+        {
+            if (isBoss)
+            {
+                bossDownBehavior();
+            }
+            else if (!isBoss)
+            {
+                enemyDownBehavior();
+            }
+            downTime += Time.deltaTime;
+        }
+        else
+        {
+            xspeed = 0;
+            yspeed = -gravity;
+        }
+    }
+
+    public void enemyDownBehavior()
+    {
+
+        if (downTime < 0.2f)
+        {
+            if (enemyOnRight)
+            {
+                xspeed = speed + 0.3f;
+                yspeed = 10f;
+            }
+            else
+            {
+                xspeed = -(speed + 0.3f);
+                yspeed = 10f;
+            }
+        }
+        else if (downTime >= 0.2f && downTime < 0.6f && !isGround)
+        {
+            if (enemyOnRight)
+            {
+                xspeed = speed;
+                yspeed = -10f;
+            }
+            else
+            {
+                xspeed = -speed;
+                yspeed = -10f;
+            }
+        }else if(downTime >= 0.6f || isGround)
+        {
+            if (GameManager.instance.hpNum > 0m)
+            {
+                anim.Play("Player_Stand");
+                isDown = false;
+            }
+            else
+            {
+                isDead = true;
+            }
+            downTime = 0.0f;
+        }
+    }
+
+    public void bossDownBehavior()
+    {
+        if (downTime < 0.2f)
+        {
+            if (enemyOnRight)
+            {
+                xspeed = speed + 1f;
+                yspeed = 20f;
+            }
+            else
+            {
+                xspeed = -(speed + 1f);
+                yspeed = 20f;
+            }
+        }
+        else if (downTime >= 0.2f && downTime < 0.6f && !isGround)
+        {
+            if (enemyOnRight)
+            {
+                xspeed = speed;
+                yspeed = -20f;
+            }
+            else
+            {
+                xspeed = -speed;
+                yspeed = -20f;
+            }
+        }
+        else if (downTime >= 0.6f || isGround)
+        {
+            if (GameManager.instance.hpNum > 0m)
+            {
+                anim.Play("Player_Stand");
+                isDown = false;
+            }
+            else
+            {
+                isDead = true;
+            }
+            downTime = 0.0f;
+            isBoss = false;
+        }
+    }
+
     public void FallDeadCheck()
     {
         if (isFallDead())
@@ -475,6 +514,7 @@ public class Player : MonoBehaviour
 
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
+        GameManager.instance.hpNum = 0.5m;
         gameObject.SetActive(true);
         isDown = false;
         anim.Play("Player_Stand");
@@ -482,6 +522,7 @@ public class Player : MonoBehaviour
         isOtherJump = false;
         isRun = false;
         isContinue = true;
+        isDead = false;
     }
 
     public void blink()//点滅表現

@@ -53,7 +53,6 @@ public class StageCtrl : MonoBehaviour
             {
                 playerObj.transform.position = continuePoint[continueNum].transform.position;
                 p.ContinuePlayer();
-                GameManager.instance.hpNum = 0.5m;
                 continueButton.SetActive(false);
             }
             else
