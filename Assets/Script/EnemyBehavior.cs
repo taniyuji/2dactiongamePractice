@@ -99,6 +99,29 @@ public class EnemyBehavior : MonoBehaviour
 
     private void Move() //敵キャラの動き
     {
+        getYVector();
+        getXVector();
+        if (isFly == true)
+        {
+            rb.MovePosition(toVector);
+        }
+        else
+        {
+            rb.velocity = new Vector2(xVector * enemySpeed, yVector);
+        }
+    }
+
+    private void getAllChildren()
+    {
+        children = new GameObject[gameObject.transform.childCount];
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            children[i] = gameObject.transform.GetChild(i).gameObject;
+        }
+    }
+
+    private void getYVector()
+    {
         if (isJamp)
         {
             g.IsGround();
@@ -116,7 +139,8 @@ public class EnemyBehavior : MonoBehaviour
                 judgeTime = 0.0f;
             }
             judgeTime += Time.deltaTime;
-        }else if (isFly)
+        }
+        else if (isFly)
         {
 
             player = GameObject.Find("Player");
@@ -125,11 +149,12 @@ public class EnemyBehavior : MonoBehaviour
                 beforePos = transform.position;
                 posSet = true;
             }
-            if(judgeTime < 1.5f)
+            if (judgeTime < 1.5f)
             {
                 p = player.transform.position;
                 toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
-            }else if(judgeTime >= 1.5f && judgeTime < 2.5f)
+            }
+            else if (judgeTime >= 1.5f && judgeTime < 2.5f)
             {
                 toVector = Vector2.MoveTowards(transform.position, beforePos, enemySpeed * Time.deltaTime);
                 Debug.Log(toVector);
@@ -140,52 +165,46 @@ public class EnemyBehavior : MonoBehaviour
             }
             judgeTime += Time.deltaTime;
         }
-        else
+        else//飛行もジャンプもしない場合
         {
-
             yVector = -gravity;
-        }
-
-        anim.SetBool("Run", true);
-        if (DirectionRight)//動く方向が右方向の場合
-        {
-
-            xVector = 1;
-            transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y);
-            count2--;
-            if (count2 == 0 || transform.position.x >= Rlim.transform.position.x)//移動方向を転換
-            {
-                count2 = 0;
-                DirectionRight = false;
-            }
-        }
-        else//動く方向が左方向の場合
-        {
-            xVector = -1;
-            transform.localScale = new Vector2(-(Math.Abs(transform.localScale.x)), transform.localScale.y);
-            count2++;
-            if (count2 == DirectionChangeCount || transform.position.x <= LLim.transform.position.x)//移動方向を転換
-            {
-                count2 = DirectionChangeCount;
-                DirectionRight = true;
-            }
-        }
-        if (isFly)
-        {
-            rb.MovePosition(toVector);
-        }
-        else
-        {
-            rb.velocity = new Vector2(xVector * enemySpeed, yVector);
         }
     }
 
-    private void getAllChildren()
+    private void getXVector()
     {
-        children = new GameObject[gameObject.transform.childCount];
-        for (int i = 0; i < gameObject.transform.childCount; i++)
+        Debug.Log(g.IsGround());
+        if (isJamp == false && isFly == false && g.IsGround() == false)
         {
-            children[i] = gameObject.transform.GetChild(i).gameObject;
+            anim.SetBool("Run", false);
+            xVector = 0;
+        }
+        else if (g.IsGround() == true)
+        {
+            anim.SetBool("Run", true);
+            if (DirectionRight)//動く方向が右方向の場合
+            {
+
+                xVector = 1;
+                transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y);
+                count2--;
+                if (count2 == 0 || transform.position.x >= Rlim.transform.position.x)//移動方向を転換
+                {
+                    count2 = 0;
+                    DirectionRight = false;
+                }
+            }
+            else//動く方向が左方向の場合
+            {
+                xVector = -1;
+                transform.localScale = new Vector2(-(Math.Abs(transform.localScale.x)), transform.localScale.y);
+                count2++;
+                if (count2 == DirectionChangeCount || transform.position.x <= LLim.transform.position.x)//移動方向を転換
+                {
+                    count2 = DirectionChangeCount;
+                    DirectionRight = true;
+                }
+            }
         }
     }
 }
