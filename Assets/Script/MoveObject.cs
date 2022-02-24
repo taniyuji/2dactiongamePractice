@@ -10,6 +10,7 @@ public class MoveObject : MonoBehaviour
     public bool onPlay = false;
     public float speed = 20.0f;
     public bool stopMove = false;
+    public bool Move = true;
 
     private Rigidbody2D rb = null;
     private GameObject pObj;
@@ -39,69 +40,79 @@ public class MoveObject : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    { 
+    {
         if (movePoint != null && movePoint.Length > 1 && rb != null)
         {
-            if (!returnPoint)//帰ってない場合
+            if (Move == true)
             {
-                Vector2 toVector;
-                int nextPoint;
-                if (onPlay == true && (player.isDead == true || GameManager.instance.isFallDead == true))//onPlayでプレイヤーが死亡した場合
+                if (!returnPoint)//帰ってない場合
                 {
-                    toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
-                    nowPoint = 0;
-                    playerOn = false;
-                    rb.MovePosition(toVector);
-                }
-                else if (onPlay == false || (onPlay == true && playerOn == true))//プレイヤーが死亡していない場合
-                {
-                    nextPoint = nowPoint + 1;
-                    if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
+                    Vector2 toVector;
+                    int nextPoint;
+                    if (onPlay == true && (player.isDead == true || GameManager.instance.isFallDead == true))//onPlayでプレイヤーが死亡した場合
                     {
-                        toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
+                        toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
+                        nowPoint = 0;
+                        playerOn = false;
+                        rb.MovePosition(toVector);
                     }
-                    else
+                    else if (onPlay == false || (onPlay == true && playerOn == true))//プレイヤーが死亡していない場合
                     {
-                        toVector = movePoint[nextPoint].transform.position;
-                        ++nowPoint;
+                        nextPoint = nowPoint + 1;
+                        if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
+                        {
+                            toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
+                        }
+                        else
+                        {
+                            toVector = movePoint[nextPoint].transform.position;
+                            ++nowPoint;
+                        }
+                        rb.MovePosition(toVector);
                     }
-                    rb.MovePosition(toVector);
+                    if (nowPoint + 1 > movePoint.Length - 1)
+                    {
+                        if (stopMove == true)
+                        {
+                            Move = false;
+                        }
+                        else
+                        {
+                            returnPoint = true;
+                        }
+                    }
                 }
-                if (nowPoint + 1 > movePoint.Length - 1)
+                else
                 {
-                    returnPoint = true;
+                    int nextPoint;
+                    Vector2 toVector;
+                    if (onPlay == true && (player.isDead == true || GameManager.instance.isFallDead == true))
+                    {
+                        toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
+                        nowPoint = 0;
+                        rb.MovePosition(toVector);
+                        playerOn = false;
+                    }
+                    else if (onPlay == false || (onPlay == true && playerOn == true))
+                    {
+                        nextPoint = nowPoint - 1;
+                        if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
+                        {
+                            toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
+                        }
+                        else
+                        {
+                            toVector = movePoint[nextPoint].transform.position;
+                            --nowPoint;
+                        }
+                        rb.MovePosition(toVector);
+                    }
+                    if (nowPoint - 1 < 0)
+                    {
+                        returnPoint = false;
+                    }
                 }
             }
-            else
-            {
-                int nextPoint;
-                Vector2 toVector;
-                if (onPlay == true && (player.isDead == true || GameManager.instance.isFallDead == true))
-                {
-                    toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
-                    nowPoint = 0;
-                    rb.MovePosition(toVector);
-                    playerOn = false;
-                }
-                else if (onPlay == false || (onPlay == true && playerOn == true))
-                {
-                    nextPoint = nowPoint - 1;
-                    if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
-                    {
-                        toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
-                    }
-                    else
-                    {
-                        toVector = movePoint[nextPoint].transform.position;
-                        --nowPoint;
-                    }
-                    rb.MovePosition(toVector);
-                }
-                if (nowPoint -1 < 0)
-                {
-                    returnPoint = false;
-                }
-            }        
         }
         mvVelocity = (rb.position - oldPos) / Time.deltaTime;
         oldPos = rb.position;
