@@ -9,6 +9,7 @@ public class MoveObject : MonoBehaviour
     public int nowPoint = 0;
     public bool onPlay = false;
     public float speed = 20.0f;
+    public bool stopMove = false;
 
     private Rigidbody2D rb = null;
     private GameObject pObj;
@@ -22,7 +23,7 @@ public class MoveObject : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        if(movePoint != null && movePoint.Length > 0 && rb != null)
+        if(movePoint != null && movePoint.Length > 0 && rb != null)//オブジェクトを初期位置に設定
         {
             rb.position = movePoint[0].transform.position;
             oldPos = rb.position;
@@ -31,7 +32,7 @@ public class MoveObject : MonoBehaviour
         player = pObj.GetComponent<Player>();
     }
 
-    public Vector2 GetVelocity()
+    public Vector2 GetVelocity()//外部からこのオブジェクトのvelocityを入手
     {
         return mvVelocity;
     }
@@ -41,17 +42,18 @@ public class MoveObject : MonoBehaviour
     { 
         if (movePoint != null && movePoint.Length > 1 && rb != null)
         {
-            if (!returnPoint)
+            if (!returnPoint)//帰ってない場合
             {
                 Vector2 toVector;
                 int nextPoint;
-                if (onPlay == true && GameManager.instance.isFallDead == true)
+                if (onPlay == true && (player.isDead == true || GameManager.instance.isFallDead == true))//onPlayでプレイヤーが死亡した場合
                 {
                     toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
                     nowPoint = 0;
+                    playerOn = false;
                     rb.MovePosition(toVector);
                 }
-                else if (onPlay == false || (onPlay == true && playerOn == true))
+                else if (onPlay == false || (onPlay == true && playerOn == true))//プレイヤーが死亡していない場合
                 {
                     nextPoint = nowPoint + 1;
                     if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
@@ -74,11 +76,12 @@ public class MoveObject : MonoBehaviour
             {
                 int nextPoint;
                 Vector2 toVector;
-                if (onPlay == true && GameManager.instance.isFallDead == true)
+                if (onPlay == true && (player.isDead == true || GameManager.instance.isFallDead == true))
                 {
                     toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
                     nowPoint = 0;
                     rb.MovePosition(toVector);
+                    playerOn = false;
                 }
                 else if (onPlay == false || (onPlay == true && playerOn == true))
                 {
@@ -109,14 +112,6 @@ public class MoveObject : MonoBehaviour
         if(collision.collider.tag == "player")
         {
             playerOn = true;
-        }
-    }
-
-    public void OnCollisionExit2D(Collision2D collision)
-    {
-        if(collision.collider.tag == "player")
-        {
-            playerOn = false;
         }
     }
 }
