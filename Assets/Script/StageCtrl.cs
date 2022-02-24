@@ -47,7 +47,6 @@ public class StageCtrl : MonoBehaviour
         if (Fnum.connectContinuePos == continueNum)
         {
             fallDeadPos = nextFallDeadPos;
-            Debug.Log(fallDeadPos);
             nextFallDeadPos++;
         }
 

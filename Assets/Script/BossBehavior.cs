@@ -145,7 +145,6 @@ public class BossBehavior : MonoBehaviour
         }
         else if(isAttack == false)//プレイヤーと衝突しておらず、攻撃中でない場合
         {
-            Debug.Log("うごきます");
             //プレイヤーの位置によって、動き始める
             var leftBossStopWidth = transform.position.x - stopWidth;
             var rightBossStopWidth = transform.position.x + stopWidth;

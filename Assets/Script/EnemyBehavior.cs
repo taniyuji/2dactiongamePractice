@@ -151,13 +151,15 @@ public class EnemyBehavior : MonoBehaviour
             }
             if (judgeTime < 1.5f)
             {
-                p = player.transform.position;
-                toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
+                if (player.activeSelf == true)
+                {
+                    p = player.transform.position;
+                    toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
+                }
             }
             else if (judgeTime >= 1.5f && judgeTime < 2.5f)
             {
                 toVector = Vector2.MoveTowards(transform.position, beforePos, enemySpeed * Time.deltaTime);
-                Debug.Log(toVector);
             }
             else
             {
@@ -173,7 +175,6 @@ public class EnemyBehavior : MonoBehaviour
 
     private void getXVector()
     {
-        Debug.Log(g.IsGround());
         if (isJamp == false && isFly == false && g.IsGround() == false)
         {
             anim.SetBool("Run", false);

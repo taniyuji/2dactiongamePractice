@@ -8,10 +8,11 @@ public class MoveObject : MonoBehaviour
 
     public int nowPoint = 0;
     public bool onPlay = false;
+    public float speed = 20.0f;
 
     private Rigidbody2D rb = null;
-
-    private float speed = 20.0f;
+    private GameObject pObj;
+    private Player player;
     private bool returnPoint = false;
     private Vector2 oldPos = Vector2.zero;
     private Vector2 mvVelocity = Vector2.zero;
@@ -26,6 +27,8 @@ public class MoveObject : MonoBehaviour
             rb.position = movePoint[0].transform.position;
             oldPos = rb.position;
         }
+        pObj = GameObject.Find("Player");
+        player = pObj.GetComponent<Player>();
     }
 
     public Vector2 GetVelocity()
@@ -35,53 +38,67 @@ public class MoveObject : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    {
-        if(onPlay == false || (onPlay == true && playerOn == true)){
-            if (movePoint != null && movePoint.Length > 1 && rb != null)
+    { 
+        if (movePoint != null && movePoint.Length > 1 && rb != null)
+        {
+            if (!returnPoint)
             {
-                if (!returnPoint)
+                Vector2 toVector;
+                int nextPoint;
+                if (onPlay == true && GameManager.instance.isFallDead == true)
                 {
-                    int nextPoint = nowPoint + 1;
-                    if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
-                    {
-                        Vector2 toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
-
-                        rb.MovePosition(toVector);
-                    }
-                    else
-                    {
-                        rb.MovePosition(movePoint[nextPoint].transform.position);
-                        ++nowPoint;
-
-                        if (nowPoint + 1 >= movePoint.Length)
-                        {
-                            returnPoint = true;
-                        }
-                    }
+                    toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
+                    nowPoint = 0;
+                    rb.MovePosition(toVector);
                 }
-                else
+                else if (onPlay == false || (onPlay == true && playerOn == true))
                 {
-                    int nextPoint = nowPoint - 1;
-
+                    nextPoint = nowPoint + 1;
                     if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
                     {
-                        Vector2 toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
-
-                        rb.MovePosition(toVector);
+                        toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
                     }
                     else
                     {
-                        rb.MovePosition(movePoint[nextPoint].transform.position);
-                        --nowPoint;
-
-                        if (nowPoint - 1 < 0)
-                        {
-                            returnPoint = false;
-                        }
+                        toVector = movePoint[nextPoint].transform.position;
+                        ++nowPoint;
                     }
+                    rb.MovePosition(toVector);
+                }
+                if (nowPoint + 1 > movePoint.Length - 1)
+                {
+                    returnPoint = true;
                 }
             }
-            
+            else
+            {
+                int nextPoint;
+                Vector2 toVector;
+                if (onPlay == true && GameManager.instance.isFallDead == true)
+                {
+                    toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
+                    nowPoint = 0;
+                    rb.MovePosition(toVector);
+                }
+                else if (onPlay == false || (onPlay == true && playerOn == true))
+                {
+                    nextPoint = nowPoint - 1;
+                    if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
+                    {
+                        toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
+                    }
+                    else
+                    {
+                        toVector = movePoint[nextPoint].transform.position;
+                        --nowPoint;
+                    }
+                    rb.MovePosition(toVector);
+                }
+                if (nowPoint -1 < 0)
+                {
+                    returnPoint = false;
+                }
+            }        
         }
         mvVelocity = (rb.position - oldPos) / Time.deltaTime;
         oldPos = rb.position;
@@ -92,6 +109,14 @@ public class MoveObject : MonoBehaviour
         if(collision.collider.tag == "player")
         {
             playerOn = true;
+        }
+    }
+
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.collider.tag == "player")
+        {
+            playerOn = false;
         }
     }
 }

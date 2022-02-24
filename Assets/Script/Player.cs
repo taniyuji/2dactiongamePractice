@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     [Header("設置判定")] public GroudCheck ground;
     [Header("頭をぶつけた判定")] public GroudCheck head;
     [HideInInspector] public bool EnemyCollision = false;
+    [HideInInspector] public bool isDead = false;
     public GameObject RLimitObj;
     public GameObject LLimitObj;
     public GameObject deadPos = null;
@@ -38,7 +39,6 @@ public class Player : MonoBehaviour
     private bool isContinue = false;
     private bool isMovingGround = false;
     private bool isBoss = false;
-    private bool isDead = false;
     private float continueTime = 0.0f;
     private float blinkTime = 0.0f;
     private SpriteRenderer sr = null;
@@ -111,6 +111,7 @@ public class Player : MonoBehaviour
             downBehavior();
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
+
         rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;    
     }
 
