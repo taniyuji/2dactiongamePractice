@@ -22,6 +22,11 @@ public class Player : MonoBehaviour
     public GameObject LLimitObj;
     public GameObject deadPos = null;
     public bool testMode = false;
+    public AudioSource JampSE;
+    public AudioSource JampDownSE;
+    public AudioSource EnemyStepSE;
+    public AudioSource GetDamagedSE;
+    public AudioSource RunningSE;
     //プライベート変数
     private Animator anim = null;
     private Rigidbody2D rb = null;
@@ -57,6 +62,7 @@ public class Player : MonoBehaviour
     private GameObject goBossPos;
     private AnimatorStateInfo currentState;
     private bool enemyOnRight = false;
+    private bool wasJamp = false;
     ///////////////////////////////////メイン///////////////////////////////////
     void Start()
     {
@@ -139,6 +145,10 @@ public class Player : MonoBehaviour
                 {
                     if (b.isAttack)//ボスが攻撃中の場合
                     {
+                        if (GetDamagedSE != null)
+                        {
+                            GetDamagedSE.Play();
+                        }
                         b.playerStepOn2 = false;
                         anim.Play("Player_Down");
                         isDown = true;
@@ -152,12 +162,20 @@ public class Player : MonoBehaviour
                 }
                 else//ザコ敵の場合
                 {
-                        otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
-                        o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
+                    otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
+                    o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
+                    if (EnemyStepSE != null)
+                    {
+                        EnemyStepSE.Play();
+                    }
                 }
             }
         }else if(collision.collider.tag == "Enemy_Body" && !testMode)
         {
+            if (GetDamagedSE != null)
+            {
+                GetDamagedSE.Play();
+            }
             anim.Play("Player_Down");
             isDown = true;
             GameManager.instance.hpNum -= 0.1m;
@@ -185,37 +203,69 @@ public class Player : MonoBehaviour
         float horizontalkey = Input.GetAxisRaw("Horizontal") * Time.deltaTime;
         float xspeed;
 
-            //右矢印キーが押された場合
-            if (horizontalkey > 0)
+        //右矢印キーが押された場合
+        if (horizontalkey > 0)
+        {
+            if (RunningSE != null)
             {
+                if (isGround)
+                {
+                    if (dashTime < 0.02f || wasJamp)
+                    {
+                        RunningSE.Play();
+                    }
+                }
+                else
+                {
+                    RunningSE.Pause();
+                }
+            }
                 transform.localScale = new Vector3(-1 * Math.Abs(transform.localScale.x), transform.localScale.y, 1);
-                isRun = true;
-                dashTime += Time.deltaTime;
-                xspeed = speed;
-            }//左矢印キーが押された場合
-            else if (horizontalkey < 0)
+            isRun = true;
+            dashTime += Time.deltaTime;
+            xspeed = speed;
+        }//左矢印キーが押された場合
+        else if (horizontalkey < 0)
+        {
+            if (RunningSE != null)
             {
-                transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, 1);
-                isRun = true;
-                dashTime += Time.deltaTime;
-                xspeed = -speed;
-            }//入力がない場合
-            else
-            {
-                isRun = false;
-                dashTime = 0.0f;
-                xspeed = 0.0f;
+                if (isGround)
+                {
+                    if (dashTime < 0.02f || wasJamp)
+                    {
+                        RunningSE.Play();
+                    }
+                }
+                else
+                {
+                    RunningSE.Pause();
+                }
             }
+            transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, 1);
+            isRun = true;
+            dashTime += Time.deltaTime;
+            xspeed = -speed;
+        }//入力がない場合
+        else
+        {
+            if (RunningSE != null)
+            {
+                RunningSE.Pause();
+            }
+            isRun = false;
+            dashTime = 0.0f;
+            xspeed = 0.0f;
+        }
 
-            //直前に押されていたキーと違うキーが押された場合
-            if (horizontalkey > 0 && beforeKey < 0)
-            {
-                dashTime = 0.0f;
-            }
-            else if (horizontalkey < 0 && beforeKey > 0)
-            {
-                dashTime = 0.0f;
-            }
+        //直前に押されていたキーと違うキーが押された場合
+        if (horizontalkey > 0 && beforeKey < 0)
+        {
+            dashTime = 0.0f;
+        }
+        else if (horizontalkey < 0 && beforeKey > 0)
+        {
+            dashTime = 0.0f;
+        }
 
         //直前に押されていたキーを入手
         beforeKey = horizontalkey;
@@ -254,7 +304,11 @@ public class Player : MonoBehaviour
         }
         else if (isGround)//接地している場合
         {
-
+            if (wasJamp && JampDownSE!= null)
+            {
+                JampDownSE.Play();
+                wasJamp = false;
+            }
             isJampDown = false;
             //上矢印キーが押された場合
             if (VerticalKey > 0)
@@ -264,6 +318,10 @@ public class Player : MonoBehaviour
                 //isJumpに飛ぶ
                 isJump = true;
                 jumpTime = 0.0f;
+                if (JampSE != null)
+                {
+                    JampSE.Play();
+                }
             }//下矢印キーが押された場合
             else if (VerticalKey < 0)
             {
@@ -322,6 +380,7 @@ public class Player : MonoBehaviour
         else
         {
             isJampDown = true;
+            wasJamp = true;
         }
 
         if (isJump || isOtherJump)//ジャンプ表現を付与

@@ -9,6 +9,7 @@ public class Item : MonoBehaviour
     public EnemyBehavior enemy = null;
     public BossBehavior boss = null;
     public int bossHpJudge;
+    public AudioSource GetItemSound;
 
     private SpriteRenderer sr;
     private BoxCollider2D box;
@@ -44,6 +45,10 @@ public class Item : MonoBehaviour
             {
                 sr.enabled = false;
                 box.enabled = false;
+                if (GetItemSound != null)
+                {
+                    GetItemSound.Play();
+                }
                 if (!added)
                 {
                     GameManager.instance.hpNum += healScore;

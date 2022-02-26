@@ -39,6 +39,7 @@ public class BossBehavior : MonoBehaviour
     private bool playerHit = false;
     private float backTime = 0.0f;
     private bool inBoundary = false;
+    private int xLocalScale;
 
     private void Start()
     {
@@ -148,7 +149,7 @@ public class BossBehavior : MonoBehaviour
         {
             //プレイヤーの位置によって、動き始める
 
-            int xLocalScale = 1;
+            xLocalScale = 1;
             if (!moveRight)//プレイヤーが左側にいる場合
             {
                 anim.SetBool("Run", true);
@@ -237,6 +238,7 @@ public class BossBehavior : MonoBehaviour
             anim.SetBool("Run", false);
             AttackAnimFin = false;
             xVector = moveRight ? 1 : -1;
+            xLocalScale = moveRight ? 1 : -1;
         }
         else if (time >= 1f && AttackAnimFin == false)
         {

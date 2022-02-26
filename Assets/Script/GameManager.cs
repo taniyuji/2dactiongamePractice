@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public int score;
     public int stageNum;//どのステージに居るか
     public decimal hpNum = 0.5m;
+    public AudioSource BossBGM;
 
     public CinemachineVirtualCamera Cam;
     public Camera cam;
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool goBossBattle = false;
     [HideInInspector] public bool isFallDead = false;
 
+    private bool Play = false;
 
     private void Awake()
     {
@@ -63,6 +65,11 @@ public class GameManager : MonoBehaviour
 
         if(bossIsvisble && !isBossDead)
         {
+            if (!Play)
+            {
+                BossBGM.Play();
+                Play = true;
+            }
             if (Cam.m_Lens.OrthographicSize < 30)
             {
                 Cam.m_Lens.OrthographicSize += 0.2f;
@@ -71,7 +78,7 @@ public class GameManager : MonoBehaviour
 
         if (isBossDead)
         {
-          
+            BossBGM.volume -= 0.001f;
             if (Cam.m_Lens.OrthographicSize > 20)
             {
                 Cam.m_Lens.OrthographicSize -= 0.2f;
