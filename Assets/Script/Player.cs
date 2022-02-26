@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
     public bool testMode = false;
     public AudioSource JampSE;
     public AudioSource JampDownSE;
-    public AudioSource EnemyStepSE;
+    public AudioSource EnemyOrBossStepSE;
     public AudioSource GetDamagedSE;
     public AudioSource RunningSE;
     //プライベート変数
@@ -156,17 +156,22 @@ public class Player : MonoBehaviour
                     }
                     else
                     {
+
                         otherJumpHeight = b.BoundHeight;//ボススクリプトから跳ねる高さを取得
                         b.playerStepOn2 = true;//踏んだことをボスに通知
+                        if (EnemyOrBossStepSE != null)
+                        {
+                            EnemyOrBossStepSE.Play();
+                        }
                     }
                 }
                 else//ザコ敵の場合
                 {
                     otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
                     o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
-                    if (EnemyStepSE != null)
+                    if (EnemyOrBossStepSE != null)
                     {
-                        EnemyStepSE.Play();
+                        EnemyOrBossStepSE.Play();
                     }
                 }
             }

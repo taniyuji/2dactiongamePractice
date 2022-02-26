@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
 
         if (isBossDead)
         {
-            BossBGM.volume -= 0.001f;
+            BossBGM.volume -= 0.01f;
             if (Cam.m_Lens.OrthographicSize > 20)
             {
                 Cam.m_Lens.OrthographicSize -= 0.2f;

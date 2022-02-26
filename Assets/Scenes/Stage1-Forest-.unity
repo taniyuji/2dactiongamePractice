@@ -675,6 +675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a10690a81cded4608994d7448ee9c05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioList: []
 --- !u!4 &224018535
 Transform:
   m_ObjectHideFlags: 0
@@ -10146,7 +10147,7 @@ MonoBehaviour:
   - {fileID: 1465255413}
   - {fileID: 1957410633}
   continueButton: {fileID: 2084800976}
-  continueNum: 0
+  continueNum: 2
 --- !u!4 &1152320169
 Transform:
   m_ObjectHideFlags: 0
