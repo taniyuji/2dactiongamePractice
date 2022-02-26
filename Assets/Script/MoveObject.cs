@@ -49,14 +49,14 @@ public class MoveObject : MonoBehaviour
                 {
                     Vector2 toVector;
                     int nextPoint;
-                    if (onPlay == true && (player.isDead == true || GameManager.instance.isFallDead == true))//onPlayでプレイヤーが死亡した場合
+                    if (onPlay && (player.isDead || GameManager.instance.isFallDead))//onPlayでプレイヤーが死亡した場合
                     {
                         toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
                         nowPoint = 0;
                         playerOn = false;
                         rb.MovePosition(toVector);
                     }
-                    else if (onPlay == false || (onPlay == true && playerOn == true))//プレイヤーが死亡していない場合
+                    else if (!onPlay || (onPlay && playerOn))//プレイヤーが死亡していない場合
                     {
                         nextPoint = nowPoint + 1;
                         if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
@@ -72,7 +72,7 @@ public class MoveObject : MonoBehaviour
                     }
                     if (nowPoint + 1 > movePoint.Length - 1)
                     {
-                        if (stopMove == true)
+                        if (stopMove)
                         {
                             Move = false;
                         }
@@ -86,14 +86,14 @@ public class MoveObject : MonoBehaviour
                 {
                     int nextPoint;
                     Vector2 toVector;
-                    if (onPlay == true && (player.isDead == true || GameManager.instance.isFallDead == true))
+                    if (onPlay && (player.isDead || GameManager.instance.isFallDead))
                     {
                         toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
                         nowPoint = 0;
                         rb.MovePosition(toVector);
                         playerOn = false;
                     }
-                    else if (onPlay == false || (onPlay == true && playerOn == true))
+                    else if (!onPlay || (onPlay && playerOn))
                     {
                         nextPoint = nowPoint - 1;
                         if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)

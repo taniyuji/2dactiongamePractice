@@ -121,18 +121,9 @@ public class Player : MonoBehaviour
     {
         o = collision.transform.root.gameObject.GetComponent<EnemyBehavior>();
         b = collision.transform.root.gameObject.GetComponent<BossBehavior>();
-        if(b!= null)
-        {
-            isBoss = true;
-        }
-        if (collision.collider.transform.position.x <= transform.position.x)
-        {
-            enemyOnRight = true;
-        }
-        else
-        {
-            enemyOnRight = false;
-        }
+
+        isBoss = b != null;
+        enemyOnRight = collision.collider.transform.position.x <= transform.position.x;
 
         if (collision.collider.tag == "Enemy_Head")
         {
@@ -143,14 +134,10 @@ public class Player : MonoBehaviour
                 isOtherJump = true;
                 isJump = false;
                 jumpTime = 0.0f;
-                if (o != null) //ザコ敵の場合
+
+                if(isBoss)//ボスの場合
                 {
-                    otherJumpHeight = o.BoundHeight;//踏んづけたものから跳ねる高さを取得
-                    o.playerStepOn = true;//踏んづけたものに対して踏んづけたことを通知
-                }
-                else if (b != null)//ボスの場合
-                {
-                    if (b.isAttack == true)
+                    if (b.isAttack)//ボスが攻撃中の場合
                     {
                         b.playerStepOn2 = false;
                         anim.Play("Player_Down");
@@ -159,11 +146,14 @@ public class Player : MonoBehaviour
                     }
                     else
                     {
-                    
-                        //Debug.Log("踏んづけた！");
-                        otherJumpHeight = b.BoundHeight;
-                        b.playerStepOn2 = true;
+                        otherJumpHeight = b.BoundHeight;//ボススクリプトから跳ねる高さを取得
+                        b.playerStepOn2 = true;//踏んだことをボスに通知
                     }
+                }
+                else//ザコ敵の場合
+                {
+                        otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
+                        o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
                 }
             }
         }else if(collision.collider.tag == "Enemy_Body" && !testMode)
@@ -353,7 +343,12 @@ public class Player : MonoBehaviour
 
     public void downBehavior()
     {
-        if (!isDead)
+        if (isDead)
+        {
+            xspeed = 0;
+            yspeed = -gravity;
+        }
+        else
         {
             if (isBoss)
             {
@@ -364,11 +359,6 @@ public class Player : MonoBehaviour
                 enemyDownBehavior();
             }
             downTime += Time.deltaTime;
-        }
-        else
-        {
-            xspeed = 0;
-            yspeed = -gravity;
         }
     }
 
@@ -461,10 +451,10 @@ public class Player : MonoBehaviour
 
     public bool IsContinueWating()//コンティニュー待ちか。結果をstagectrlのupdateに送る。
     {
-        if (GameManager.instance.hpNum <= 0 && GameManager.instance.isFallDead == false)
+        if (GameManager.instance.hpNum <= 0 && !GameManager.instance.isFallDead)
         {
             return IsDownAnimEnd();
-        }else if (GameManager.instance.isFallDead == true)
+        }else if (GameManager.instance.isFallDead)
         {
             gameObject.SetActive(false);
             return true;
@@ -477,8 +467,16 @@ public class Player : MonoBehaviour
 
     private bool IsDownAnimEnd()//ダウンアニメーションの最中か
     {
-        if(isDown && anim != null)//ダウン状態で、アニメーションコンポーネントがある場合
+        if (!isDown)
         {
+            return false;
+        }
+        else if(anim == null)
+        {
+            return false;
+        }
+        else//ダウン状態で、アニメーションコンポーネントがある場合
+        { 
             currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
             if (currentState.IsName("Player_Down"))//ダウンアニメーションの場合
             {

@@ -35,37 +35,40 @@ public class StageCtrl : MonoBehaviour
 
     void Update()
     {
-        if (fallDeadPoint.Length > nextFallDeadPos)
+        if (fallDeadPoint.Length >= 1)
         {
-            Fnum = fallDeadPoint[nextFallDeadPos].GetComponent<FallDeadNum>();
-        }
-        else
-        {
-            Fnum.connectContinuePos = -1;
-        }
-
-        if (Fnum.connectContinuePos == continueNum)
-        {
-            fallDeadPos = nextFallDeadPos;
-            nextFallDeadPos++;
-        }
-
-        isFallDead();
-
-        if (continuePoint.Length > nextSpawn)
-        {
-            if (playerObj.transform.position.x <= continuePoint[nextSpawn].transform.position.x)
+            if (fallDeadPoint.Length > nextFallDeadPos)
             {
-                continueNum = nextSpawn;
-                nextSpawn++;
+                Fnum = fallDeadPoint[nextFallDeadPos].GetComponent<FallDeadNum>();
             }
-            
-        }
+            else
+            {
+                Fnum.connectContinuePos = -1;
+            }
 
-        if (p != null && p.IsContinueWating())
-        {
-            continueButton.SetActive(true);
+            if (Fnum.connectContinuePos == continueNum)
+            {
+                fallDeadPos = nextFallDeadPos;
+                nextFallDeadPos++;
+            }
+
+            isFallDead();
         }
+            if (continuePoint.Length > nextSpawn)
+            {
+                if (playerObj.transform.position.x <= continuePoint[nextSpawn].transform.position.x)
+                {
+                    continueNum = nextSpawn;
+                    nextSpawn++;
+                }
+
+            }
+
+            if (p != null && p.IsContinueWating())
+            {
+                continueButton.SetActive(true);
+            }
+        
     }
 
     public void onClickContinue()

@@ -61,7 +61,7 @@ public class EnemyBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (playerStepOn == false)
+        if (!playerStepOn)
         {
             //カメラに写っているかどうか（シーンビューに映る際も適応される）
             if (sr.isVisible || nonVisible)
@@ -101,7 +101,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         getYVector();
         getXVector();
-        if (isFly == true)
+        if (isFly)
         {
             rb.MovePosition(toVector);
         }
@@ -130,11 +130,11 @@ public class EnemyBehavior : MonoBehaviour
             {
                 yVector = 5f;
             }
-            else if (judgeTime >= 1f && g.IsGround() == false)
+            else if (judgeTime >= 1f && !g.IsGround())
             {
                 yVector = -gravity;
             }
-            else if (g.IsGround() == true)
+            else if (g.IsGround())
             {
                 judgeTime = 0.0f;
             }
@@ -151,7 +151,7 @@ public class EnemyBehavior : MonoBehaviour
             }
             if (judgeTime < 1.5f)
             {
-                if (player.activeSelf == true)
+                if (player.activeSelf)
                 {
                     p = player.transform.position;
                     toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
@@ -175,12 +175,12 @@ public class EnemyBehavior : MonoBehaviour
 
     private void getXVector()
     {
-        if (isJamp == false && isFly == false && g.IsGround() == false)
+        if (!isJamp && !isFly && !g.IsGround())
         {
             anim.SetBool("Run", false);
             xVector = 0;
         }
-        else if (g.IsGround() == true)
+        else if (g.IsGround())
         {
             anim.SetBool("Run", true);
             if (DirectionRight)//動く方向が右方向の場合
