@@ -31,10 +31,10 @@ public class EnemyBehavior : MonoBehaviour
     private float xVector;
     private float yVector;
     private float judgeTime;
-    private bool isJamping = false;
     private GameObject player;
     private Vector2 p;
     private Vector2 toVector;
+    private bool isPlayerPos = false;
 
     private void Start()
     {
@@ -45,17 +45,15 @@ public class EnemyBehavior : MonoBehaviour
         getAllChildren();
         Rlim = GameObject.Find("RightMoveLimit");
         LLim = GameObject.Find("LeftMoveLimit");
-        if (isJamp)
-        {
-            isFly = false;
-        }else if (isFly)
+        //飛行とジャンプを両方入力してしまった場合の修正
+        if (isFly) 
         {
             isJamp = false;
         }
 
         if (isJamp)
         {
-            isJamping = true;
+            isFly = false;
         }
     }
 
@@ -99,14 +97,15 @@ public class EnemyBehavior : MonoBehaviour
 
     private void Move() //敵キャラの動き
     {
-        getYVector();
-        getXVector();
         if (isFly)
         {
+            getFlyingBehavior();
             rb.MovePosition(toVector);
         }
         else
         {
+            getYVector();
+            getXVector();
             rb.velocity = new Vector2(xVector * enemySpeed, yVector);
         }
     }
@@ -135,33 +134,6 @@ public class EnemyBehavior : MonoBehaviour
                 yVector = -gravity;
             }
             else if (g.IsGround())
-            {
-                judgeTime = 0.0f;
-            }
-            judgeTime += Time.deltaTime;
-        }
-        else if (isFly)
-        {
-
-            player = GameObject.Find("Player");
-            if (!posSet)
-            {
-                beforePos = transform.position;
-                posSet = true;
-            }
-            if (judgeTime < 1.5f)
-            {
-                if (player.activeSelf)
-                {
-                    p = player.transform.position;
-                    toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
-                }
-            }
-            else if (judgeTime >= 1.5f && judgeTime < 2.5f)
-            {
-                toVector = Vector2.MoveTowards(transform.position, beforePos, enemySpeed * Time.deltaTime);
-            }
-            else
             {
                 judgeTime = 0.0f;
             }
@@ -207,5 +179,47 @@ public class EnemyBehavior : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void getFlyingBehavior()
+    {
+        player = GameObject.Find("Player");
+        if (!posSet)
+        {
+            beforePos = transform.position;
+            posSet = true;
+        }
+        if (judgeTime < 0.5f)
+        {
+            p = player.transform.position;
+            toVector = transform.position;
+        }
+        else if (judgeTime >= 0.5f && !isPlayerPos)
+        {
+            if (p != null)
+            {
+                toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
+                if (ComparePos(p))
+                {
+                    Debug.Log("はいった");
+                    isPlayerPos = true;
+                }
+            }
+        }
+        else if (isPlayerPos)
+        {
+            toVector = Vector2.MoveTowards(transform.position, beforePos, enemySpeed * Time.deltaTime);
+            if (ComparePos(beforePos))
+            {
+                judgeTime = 0.0f;
+                isPlayerPos = false;
+            }
+        }
+        judgeTime += Time.deltaTime;
+    }
+
+    private bool ComparePos(Vector2 v)
+    {
+        return (int)transform.position.x == (int)v.x && (int)transform.position.y == (int)transform.position.y;
     }
 }

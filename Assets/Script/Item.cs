@@ -19,7 +19,7 @@ public class Item : MonoBehaviour
     private bool enemyDead = false;
     private bool bossDamaged = false;
     private int bosshp;
-   
+
 
     private void Start()
     {
@@ -57,7 +57,7 @@ public class Item : MonoBehaviour
             }
         }
 
-        
+
     }
 
     private void judgeTrigger()
@@ -75,7 +75,8 @@ public class Item : MonoBehaviour
             if (enemy != null)
             {
                 getEnable();
-            }else if(boss != null && bosshp == bossHpJudge)
+            }
+            else if (boss != null && bosshp == bossHpJudge)
             {
                 getEnable();
             }
@@ -84,10 +85,11 @@ public class Item : MonoBehaviour
 
     private void keepMoving()
     {
-        if(enemy != null)
+        if (enemy != null)
         {
             rb.MovePosition(enemy.transform.position);
-        }else if(boss != null)
+        }
+        else if (boss != null)
         {
             rb.MovePosition(boss.transform.position);
         }
@@ -111,7 +113,8 @@ public class Item : MonoBehaviour
         if (enemy != null)
         {
             enemyDead = true;
-        }else if(boss != null)
+        }
+        else if (boss != null)
         {
             bossDamaged = true;
         }
