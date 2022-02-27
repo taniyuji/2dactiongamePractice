@@ -15,15 +15,13 @@ public class EnemyCollisionCheck : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Ground" || collision.tag == "Enemy")
+        if (collision.tag == "Ground")
         {
-            //Debug.Log("地面にあたった！");
             if (enm != null)
             {
                 enm.DirectionRight = !enm.DirectionRight;
             }else if(bos != null)
             {
-                //Debug.Log("方向変えろ！");
                 bos.hitGround = true;
             }
         }

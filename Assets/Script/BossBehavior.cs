@@ -56,16 +56,20 @@ public class BossBehavior : MonoBehaviour
     {
         if (isStamped)
         {
-            blink();//このメソッド内でisStampedをfalseにすることで一回だけ実行させる
-            if (bossHp > 0)
+            Debug.Log("はいった");
+            BlinkObject.instance.blinkObject(sr);
+            if (!BlinkObject.instance.isBlink)
             {
-                playerStepOn2 = false;
-            }
+                if (bossHp > 0)
+                {
+                    playerStepOn2 = false;
+                }
 
-            if (bossHp <= 0)
-            {
-                Debug.Log("はいった");
-                setBossDead();
+                if (bossHp <= 0)
+                {
+                    setBossDead();
+                }
+                isStamped = false;
             }
         }
        
@@ -82,7 +86,6 @@ public class BossBehavior : MonoBehaviour
                 GameManager.instance.bossIsvisble = true;
                 judgeMoveDir();
                 Move();
-
                 if (hitGround == false)
                 {
                     bossAttack();
@@ -95,11 +98,12 @@ public class BossBehavior : MonoBehaviour
         }
         else//踏まれた場合
         {
-            if (!isBlink)
+            if (!BlinkObject.instance.isBlink)
             {
                 bossHp -= 1;
                 isStamped = true;
             }
+            Move();
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
         rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
@@ -132,7 +136,7 @@ public class BossBehavior : MonoBehaviour
         }
         else if (playerHit && !isAttack)//プレイヤーと衝突し、攻撃中ではない場合
         {
-            if (backTime < 0.3f)
+            if ((!playerStepOn2 && backTime < 0.3f) || (playerStepOn2 && backTime < 0.6f))
             {
                 enemySpeed += 2f;
                 xVector = moveRight ? -1 : 1;
@@ -145,10 +149,8 @@ public class BossBehavior : MonoBehaviour
             }
             backTime += Time.deltaTime;
         }
-        else if(!isAttack)//プレイヤーと衝突しておらず、攻撃中でない場合
+        else if(!isAttack && !playerHit)//プレイヤーと衝突しておらず、攻撃中でない場合
         {
-            //プレイヤーの位置によって、動き始める
-
             xLocalScale = 1;
             if (!moveRight)//プレイヤーが左側にいる場合
             {
@@ -156,7 +158,7 @@ public class BossBehavior : MonoBehaviour
                 xVector = -1;
                 xLocalScale = -1;
             }
-            else if (moveRight)//プレイヤーが右側にいる場合
+            else if(moveRight)//プレイヤーが右側にいる場合
             {
                 anim.SetBool("Run", true);
                 xVector = 1;
@@ -169,40 +171,6 @@ public class BossBehavior : MonoBehaviour
                 xLocalScale = moveRight ? 1 : -1;
             }
             transform.localScale = new Vector3(xLocalScale * Math.Abs(transform.localScale.x), transform.localScale.y);
-        }
-    }
-
-    public void blink()//点滅消滅
-    {
-        isBlink = true;
-        //0.2秒以降は、人通りすべてのif条件を通るように
-        if (blinkTime > 0.2f)
-        {
-            sr.enabled = true;//スプライトーレンダラーを表示
-            blinkTime = 0.0f;
-        }
-        else if (blinkTime > 0.1f)
-        {
-            sr.enabled = false;//スプライトーレンダラーを非表示
-        }
-        else
-        {
-            sr.enabled = true;
-        }
-
-        if (continueTime > 1.0f)//リスポーン表現の時間が1秒より大きくなった場合
-        {
-            //Debug.Log("blinkEnd");
-            blinkTime = 0f;
-            continueTime = 0f;
-            sr.enabled = true;
-            isBlink = false;
-            isStamped = false;
-        }
-        else
-        {
-            blinkTime += Time.deltaTime;
-            continueTime += Time.deltaTime;
         }
     }
 

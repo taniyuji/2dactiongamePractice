@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
     public AudioSource EnemyOrBossStepSE;
     public AudioSource GetDamagedSE;
     public AudioSource RunningSE;
+    public AudioSource EnemyStepSE2;
+
     //プライベート変数
     private Animator anim = null;
     private Rigidbody2D rb = null;
@@ -78,7 +80,11 @@ public class Player : MonoBehaviour
     {
         if (isContinue)//コンティニュー表現中か
         {
-            blink();//プレイヤーを点滅
+            BlinkObject.instance.blinkObject(sr);//プレイヤーを点滅
+            if (!BlinkObject.instance.isBlink)
+            {
+                isContinue = false;
+            }
         }
     }
 
@@ -156,23 +162,26 @@ public class Player : MonoBehaviour
                     }
                     else
                     {
-
-                        otherJumpHeight = b.BoundHeight;//ボススクリプトから跳ねる高さを取得
-                        b.playerStepOn2 = true;//踏んだことをボスに通知
                         if (EnemyOrBossStepSE != null)
                         {
                             EnemyOrBossStepSE.Play();
                         }
+                        otherJumpHeight = b.BoundHeight;//ボススクリプトから跳ねる高さを取得
+                        b.playerStepOn2 = true;//踏んだことをボスに通知
                     }
                 }
                 else//ザコ敵の場合
                 {
-                    otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
-                    o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
-                    if (EnemyOrBossStepSE != null)
+                    if (o.enemyHp > 1)//エネミーに踏んづけたことを通知する前に処理するためあえて1としている
+                    {
+                        EnemyStepSE2.Play();
+                    }
+                    else
                     {
                         EnemyOrBossStepSE.Play();
                     }
+                    otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
+                    o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
                 }
             }
         }else if(collision.collider.tag == "Enemy_Body" && !testMode)
@@ -409,6 +418,7 @@ public class Player : MonoBehaviour
     {
         if (isDead)
         {
+            RunningSE.Pause();
             xspeed = 0;
             yspeed = -gravity;
         }
@@ -564,37 +574,6 @@ public class Player : MonoBehaviour
         isRun = false;
         isContinue = true;
         isDead = false;
-    }
-
-    public void blink()//点滅表現
-    {
-        //0.2秒以降は、人通りすべてのif条件を通るように
-        if (blinkTime > 0.2f)
-        {
-            sr.enabled = true;//スプライトーレンダラーを表示
-            blinkTime = 0.0f;
-        }
-        else if (blinkTime > 0.1f)
-        {
-            sr.enabled = false;//スプライトーレンダラーを非表示
-        }
-        else
-        {
-            sr.enabled = true;
-        }
-
-        if (continueTime > 1.0f)//リスポーン表現の時間が1秒より大きくなった場合
-        {
-            isContinue = false;
-            blinkTime = 0f;
-            continueTime = 0f;
-            sr.enabled = true;
-        }
-        else
-        {
-            blinkTime += Time.deltaTime;
-            continueTime += Time.deltaTime;
-        }
     }
 /*
         if (collision.collider.tag == enemyTag || collision.collider.tag == "Boss")
