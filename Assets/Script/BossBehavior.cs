@@ -25,7 +25,7 @@ public class BossBehavior : MonoBehaviour
     private Rigidbody2D rb;
     private bool isDead;
     private bool isBlink = false;
-    private bool isStamped = false;
+    private bool isSet = false;
     private float blinkTime = 0.0f;
     private float continueTime = 0.0f;
     private GameObject player;
@@ -59,38 +59,38 @@ public class BossBehavior : MonoBehaviour
 
     private void Update()
     {
-        if (isStamped)
+        if (isSet)//HP減少がセットされた場合
         {
-            if (!BlinkObject.instance.isBlinkFin)
+            if (!BlinkObject.instance.isBlinkFin)//点滅作業が終了していない場合
             {
                 BlinkObject.instance.blinkObject(sr);
             }
-            else
+            else//点滅作業が終了した場合
             {
                 if (bossHp > 0)
                 {
+                    //エネミー生成攻撃一回目の一体目、または二回目の一体目のエネミー生成の場合
                     if ((CountGenerate == 0 && generateTime == 0) || (CountGenerate == 1 && generateTime == 5))
                     {
-                        isGenerating = true;
+                        isGenerating = true;//生成中のフラグを建てる
                     }
 
-                    if ((bossHp == 8 || bossHp == 4) && isGenerating)
+                    if ((bossHp == 8 || bossHp == 4) && isGenerating)//HPが8または4かつ生成作業中の場合
                     {
-                        Debug.Log("はいった");
                         enemySpeed = 0;
                         GenerateEnemy();
                     }
-                    else
+                    else//HPが上記の該当外または、生成作業が終了した場合
                     {
                         enemySpeed = beforeSpeed;
                         anim.SetBool("Generate", false);
                         CountGenerate++;
                         playerStepOn2 = false;
                         BlinkObject.instance.isBlinkFin = false;
-                        isStamped = false;
+                        isSet = false;
                     }
                 }
-                else
+                else//ボスのHPが0の場合
                 {
                     setBossDead();
                 }
@@ -102,7 +102,7 @@ public class BossBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!playerStepOn2)
+        if (!playerStepOn2)//プレイヤーが踏んでいない場合
         {
             //カメラに写っているかどうか（シーンビューに映る際も適応される）
             if (sr.isVisible || nonVisible)
@@ -122,12 +122,12 @@ public class BossBehavior : MonoBehaviour
         }
         else//踏まれた場合
         {
-            if (!isAttack && !isGenerating && !isStamped)
+            if (!isAttack && !isGenerating && !isSet)//攻撃中でない、生成中でない、体力減少をセットしていない場合
             {
                 bossHp -= 1;
-                isStamped = true;
+                isSet = true;
             }
-            if (!isGenerating)
+            if (!isGenerating)//生成攻撃中は動かさない
             {
                 Move();
             }
@@ -157,6 +157,7 @@ public class BossBehavior : MonoBehaviour
     {
         if (playerHit && !isAttack)//プレイヤーと衝突し、攻撃中ではない場合
         {
+            //踏まれていない場合と踏まれた場合で下がる距離を分ける
             if ((!playerStepOn2 && backTime < 0.3f) || (playerStepOn2 && backTime < 0.6f))
             {
                 enemySpeed += 2f;
@@ -197,7 +198,7 @@ public class BossBehavior : MonoBehaviour
 
     private void setBossDead()//ボス死亡時
     {
-        if (!isBlink)
+        if (!isBlink)//点滅中でない場合
         {
             GameManager.instance.isBossDead = true;
             gameObject.SetActive(false);
@@ -240,8 +241,9 @@ public class BossBehavior : MonoBehaviour
                 {
                         enemySpeed += 1f;
                 }
-                else if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
+                else if (currentState.normalizedTime >= 1　|| playerHit)//1で100%再生。再生し終わってるかを判断
                 {
+                    playerHit = false;
                     attackNum = 0;
                     time = 0f;
                     isAttack = false;
@@ -256,27 +258,28 @@ public class BossBehavior : MonoBehaviour
         time += Time.deltaTime;
     }
 
-    private void GenerateEnemy()
+    private void GenerateEnemy()//エネミー生成攻撃の挙動
     {
         anim.SetBool("Generate", true);
-            if ((CountGenerate == 0 && generateTime < 5) || (CountGenerate == 1 && generateTime < 10))
+        //一回の攻撃につき、五体のエネミーを生成。
+        if ((CountGenerate == 0 && generateTime < 5) || (CountGenerate == 1 && generateTime < 10))
+        {
+            var script = enemies[generateTime].GetComponent<EnemyBehavior>();
+            if (generatingTime > 1f && !script.isGenerated)//ゲーム内時間１秒につき、一体生成
             {
-                var script = enemies[generateTime].GetComponent<EnemyBehavior>();
-                if (generatingTime > 1f && !script.isGenerated)
-                {
-                    script.generateItSelf();
-                }
-                else if(script.isGenerated)
-                {
-                    generateTime++;
-                    generatingTime = 0.0f;
-                }
+                script.generateItSelf();//各エネミーのスクリプトでenableをtrueにする。
             }
-            else if (generateTime == 5 || generateTime == 10)
+            else if(script.isGenerated)//エネミースクリプト側で生成動作が終了した場合
             {
+                generateTime++;
                 generatingTime = 0.0f;
-                isGenerating = false;
             }
+        }
+        else if (generateTime == 5 || generateTime == 10)//攻撃毎に、5体生成した場合
+        {
+            generatingTime = 0.0f;
+            isGenerating = false;
+        }
         generatingTime += Time.deltaTime;
     }
 
