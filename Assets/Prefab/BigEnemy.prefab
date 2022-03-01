@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3115693595324206854}
   - component: {fileID: 6842365989476714818}
   - component: {fileID: 3918409673346218756}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BoxCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 1147646375463163054}
   - component: {fileID: 1147646375463163055}
   - component: {fileID: 1147646375463163053}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BigEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -142,12 +142,14 @@ MonoBehaviour:
   BoundHeight: 5
   enemySpeed: 15
   gravity: 20
-  DirectionChangeCount: 400
+  enemyHp: 1
   nonVisible: 0
   DirectionRight: 1
   isJamp: 0
   myScore: 0
   g: {fileID: 7301626849824427113}
+  isFly: 0
+  ofBoss: 0
   playerStepOn: 0
 --- !u!212 &1147646375463163055
 SpriteRenderer:
@@ -231,7 +233,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7847491611664090840}
   - component: {fileID: 3932636057987035678}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Enemy_Body
   m_Icon: {fileID: 0}
@@ -291,7 +293,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3490494118827729260}
   - component: {fileID: 2275355700278193463}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Head
   m_TagString: Enemy_Head
   m_Icon: {fileID: 0}
@@ -351,7 +353,7 @@ GameObject:
   - component: {fileID: 7301626849824427119}
   - component: {fileID: 7301626849824427112}
   - component: {fileID: 7301626849824427113}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

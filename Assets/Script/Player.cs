@@ -149,7 +149,7 @@ public class Player : MonoBehaviour
 
                 if(isBoss)//ボスの場合
                 {
-                    if (b.isAttack)//ボスが攻撃中の場合
+                    if (b.isAttack || b.isGenerating)//ボスが攻撃中の場合
                     {
                         if (GetDamagedSE != null)
                         {

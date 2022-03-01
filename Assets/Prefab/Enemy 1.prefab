@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 834535117848641299}
   - component: {fileID: 834535117848641311}
   - component: {fileID: 834535117848641309}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy 1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -72,12 +72,14 @@ MonoBehaviour:
   BoundHeight: 7
   enemySpeed: 10
   gravity: 20
-  DirectionChangeCount: 400
+  enemyHp: 1
   nonVisible: 0
   DirectionRight: 1
   isJamp: 1
   myScore: 10
   g: {fileID: 8082390524828616886}
+  isFly: 0
+  ofBoss: 0
   playerStepOn: 0
 --- !u!212 &834535117848641311
 SpriteRenderer:
@@ -162,7 +164,7 @@ GameObject:
   - component: {fileID: 4321016253216374218}
   - component: {fileID: 6780979246301567304}
   - component: {fileID: 8082390524828616886}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,7 +235,7 @@ GameObject:
   - component: {fileID: 564572452056169976}
   - component: {fileID: 538407675259508258}
   - component: {fileID: 6705741333915892137}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DirectionCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +304,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5556015365599316832}
   - component: {fileID: 3115561026358233798}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Head
   m_TagString: Enemy_Head
   m_Icon: {fileID: 0}
@@ -369,7 +371,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8243703721794803528}
   - component: {fileID: 2274992205849886220}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Enemy_Body
   m_Icon: {fileID: 0}

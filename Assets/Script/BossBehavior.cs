@@ -12,9 +12,11 @@ public class BossBehavior : MonoBehaviour
     public int myScore;
     public int bossHp;
     public int stopWidth = 25;
+    public List<GameObject> enemies;
     public EnemyCollisionCheck enc;
     [HideInInspector] public bool hitGround = false;
     [HideInInspector] public bool isAttack = false;
+    [HideInInspector] public bool isGenerating = false;
 
     [HideInInspector] public bool playerStepOn2 = false; //敵を踏んだかどうか判断、インスペクターでは非表示
     private int count2;
@@ -40,7 +42,10 @@ public class BossBehavior : MonoBehaviour
     private float backTime = 0.0f;
     private bool inBoundary = false;
     private int xLocalScale;
-
+    private int generateTime = 0;
+    private int CountGenerate = 0;
+    private float generatingTime = 0.0f;
+    
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -56,20 +61,39 @@ public class BossBehavior : MonoBehaviour
     {
         if (isStamped)
         {
-            Debug.Log("はいった");
-            BlinkObject.instance.blinkObject(sr);
-            if (!BlinkObject.instance.isBlink)
+            if (!BlinkObject.instance.isBlinkFin)
+            {
+                BlinkObject.instance.blinkObject(sr);
+            }
+            else
             {
                 if (bossHp > 0)
                 {
-                    playerStepOn2 = false;
-                }
+                    if ((CountGenerate == 0 && generateTime == 0) || (CountGenerate == 1 && generateTime == 5))
+                    {
+                        isGenerating = true;
+                    }
 
-                if (bossHp <= 0)
+                    if ((bossHp == 8 || bossHp == 4) && isGenerating)
+                    {
+                        Debug.Log("はいった");
+                        enemySpeed = 0;
+                        GenerateEnemy();
+                    }
+                    else
+                    {
+                        enemySpeed = beforeSpeed;
+                        anim.SetBool("Generate", false);
+                        CountGenerate++;
+                        playerStepOn2 = false;
+                        BlinkObject.instance.isBlinkFin = false;
+                        isStamped = false;
+                    }
+                }
+                else
                 {
                     setBossDead();
                 }
-                isStamped = false;
             }
         }
        
@@ -98,12 +122,15 @@ public class BossBehavior : MonoBehaviour
         }
         else//踏まれた場合
         {
-            if (!BlinkObject.instance.isBlink)
+            if (!isAttack && !isGenerating && !isStamped)
             {
                 bossHp -= 1;
                 isStamped = true;
             }
-            Move();
+            if (!isGenerating)
+            {
+                Move();
+            }
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
         rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
@@ -128,13 +155,7 @@ public class BossBehavior : MonoBehaviour
       ///メソッドたち///
     private void Move() //敵キャラの動き
     {
-        if (hitGround)//壁にあたっている場合
-        {
-            anim.SetBool("Run", false);
-            //Debug.Log("静止します");
-            xVector = 0;
-        }
-        else if (playerHit && !isAttack)//プレイヤーと衝突し、攻撃中ではない場合
+        if (playerHit && !isAttack)//プレイヤーと衝突し、攻撃中ではない場合
         {
             if ((!playerStepOn2 && backTime < 0.3f) || (playerStepOn2 && backTime < 0.6f))
             {
@@ -174,7 +195,7 @@ public class BossBehavior : MonoBehaviour
         }
     }
 
-    public void setBossDead()//ボス死亡時
+    private void setBossDead()//ボス死亡時
     {
         if (!isBlink)
         {
@@ -184,7 +205,7 @@ public class BossBehavior : MonoBehaviour
         }
     }
 
-    public void bossAttack()//ボスの攻撃処理
+    private void bossAttack()//ボスの攻撃処理
     {
         if (gameObject.tag != "Enemy")
         {
@@ -199,7 +220,7 @@ public class BossBehavior : MonoBehaviour
         }
     }
 
-    public void bossAttackBehavior()//ボスの攻撃動作
+    private void bossAttackBehavior()//ボスの攻撃動作
     {
         if (time < 1f)
         {
@@ -235,7 +256,31 @@ public class BossBehavior : MonoBehaviour
         time += Time.deltaTime;
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    private void GenerateEnemy()
+    {
+        anim.SetBool("Generate", true);
+            if ((CountGenerate == 0 && generateTime < 5) || (CountGenerate == 1 && generateTime < 10))
+            {
+                var script = enemies[generateTime].GetComponent<EnemyBehavior>();
+                if (generatingTime > 1f && !script.isGenerated)
+                {
+                    script.generateItSelf();
+                }
+                else if(script.isGenerated)
+                {
+                    generateTime++;
+                    generatingTime = 0.0f;
+                }
+            }
+            else if (generateTime == 5 || generateTime == 10)
+            {
+                generatingTime = 0.0f;
+                isGenerating = false;
+            }
+        generatingTime += Time.deltaTime;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
 
         if(collision.collider.tag == "player")

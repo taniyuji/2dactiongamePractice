@@ -5,9 +5,11 @@ using UnityEngine;
 public class BlinkObject : MonoBehaviour
 {
     [HideInInspector] public bool isBlink = false;
+    [HideInInspector] public bool isBlinkFin = false;
     public static BlinkObject instance = null;
     private float blinkTime;
     private float continueTime;
+    
 
     private void Start()
     {
@@ -45,6 +47,7 @@ public class BlinkObject : MonoBehaviour
             continueTime = 0f;
             sr.enabled = true;
             isBlink = false;
+            isBlinkFin = true;
         }
         else
         {

@@ -16,7 +16,10 @@ public class EnemyBehavior : MonoBehaviour
     public int myScore;
     public GroudCheck g;
     public bool isFly;
+    public bool ofBoss;
+    public GameObject boss;
     [HideInInspector]public bool playerStepOn = false; //敵を踏んだかどうか判断、インスペクターでは非表示
+    [HideInInspector]public bool isGenerated = false;
 
     private Animator anim = null;
     private SpriteRenderer sr;
@@ -44,6 +47,14 @@ public class EnemyBehavior : MonoBehaviour
         getAllChildren();
         Rlim = GameObject.Find("RightMoveLimit");
         LLim = GameObject.Find("LeftMoveLimit");
+        if (ofBoss)
+        {
+            sr.enabled = false;
+            foreach(var i in children)
+            {
+                i.SetActive(false);
+            }
+        }
         //飛行とジャンプを両方入力してしまった場合の修正
         if (isFly) 
         {
@@ -54,10 +65,24 @@ public class EnemyBehavior : MonoBehaviour
         {
             isFly = false;
         }
+
     }
 
     void FixedUpdate()
     {
+        if (ofBoss)
+        {
+            if (!isGenerated)
+            {
+                Debug.Log(boss);
+                var fixedBossPos = new Vector2(boss.transform.position.x, boss.transform.position.y - 21);
+                rb.MovePosition(fixedBossPos);
+            }
+            else
+            {
+                ofBoss = false;
+            }
+        }
         if (!playerStepOn)
         {
             //カメラに写っているかどうか（シーンビューに映る際も適応される）
@@ -122,6 +147,16 @@ public class EnemyBehavior : MonoBehaviour
                 transform.Rotate(new Vector3(0, 0, 5));
             }
         }
+    }
+
+    public void generateItSelf()
+    {
+        sr.enabled = true;
+        foreach(var i in children)
+        {
+            i.SetActive(true);
+        }
+        isGenerated = true;
     }
 
     private void Move() //敵キャラの動き
