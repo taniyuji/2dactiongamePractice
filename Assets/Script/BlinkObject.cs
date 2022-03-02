@@ -30,7 +30,7 @@ public class BlinkObject : MonoBehaviour
         if (blinkTime > 0.2f)
         {
             sr.enabled = true;//スプライトーレンダラーを表示
-            blinkTime = 0.0f;
+            blinkTime = 0.0f;//ここでリセット
         }
         else if (blinkTime > 0.1f)
         {

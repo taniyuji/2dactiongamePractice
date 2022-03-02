@@ -22,7 +22,7 @@ TagManager:
   - MovingGround
   - Item
   - FlyingEnemy
-  - 
+  - OnlyEnemyGround
   - 
   - 
   - 
@@ -54,6 +54,9 @@ TagManager:
   - name: Ground
     uniqueID: 1074083037
     locked: 0
+  - name: Player
+    uniqueID: 2470755755
+    locked: 0
   - name: Boss
     uniqueID: 2109188699
     locked: 0
@@ -65,7 +68,4 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: New Layer
-    uniqueID: 2195293907
     locked: 0

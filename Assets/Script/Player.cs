@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     [Header("ダッシュの速さ表現")] public AnimationCurve DashCurve;
     [Header("ジャンプの速さ表現")] public AnimationCurve JampCurve;
     [Header("設置判定")] public GroudCheck ground;
+    public BoxCollider2D boxRight;
+    public BoxCollider2D boxLeft;
     [Header("頭をぶつけた判定")] public GroudCheck head;
     [HideInInspector] public bool EnemyCollision = false;
     [HideInInspector] public bool isDead = false;
@@ -44,18 +46,16 @@ public class Player : MonoBehaviour
     private bool isDown = false;
     private bool isOtherJump = false;
     private bool isContinue = false;
-    private bool isMovingGround = false;
     private bool isBoss = false;
-    private float continueTime = 0.0f;
-    private float blinkTime = 0.0f;
+    private bool isSet = false;
     private SpriteRenderer sr = null;
     private float jumpPos = 0.0f;
     private float jumpTime = 0.0f;
     private float downTime = 0.0f;
     private float dashTime = 0.0f;
+    private float time = 0.0f;
     private float beforeKey = 0.0f;
     private float otherJumpHeight = 0.0f;
-    private string enemyTag = "Enemy";
     private EnemyBehavior o = null;
     private BossBehavior b = null;
     private Vector2 addVelocity;
@@ -65,6 +65,9 @@ public class Player : MonoBehaviour
     private AnimatorStateInfo currentState;
     private bool enemyOnRight = false;
     private bool wasJamp = false;
+    private bool invincibleMode;//無敵状態
+    private bool beforeDown = false;
+    private bool inEnemy = false;
     ///////////////////////////////////メイン///////////////////////////////////
     void Start()
     {
@@ -100,7 +103,14 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.goBossBattle = true;
         }
-      
+        if(isDown || invincibleMode)
+        {
+            BlinkObject.instance.blinkObject(sr);
+        }
+        else
+        {
+            sr.enabled = true;
+        }
         //プレイヤーがダウンしていない場合
         if (!isDown)
         {
@@ -116,14 +126,25 @@ public class Player : MonoBehaviour
                     addVelocity = moveObj.GetVelocity();
                 }
             }
-           
+            if (beforeDown)
+            {
+                InVincibleMode(2.0f);
+                isSet = false;
+                if (isGround && yspeed <= 0)
+                {
+                    yspeed = 0;
+                }
+                if (!invincibleMode)
+                {
+                    beforeDown = false;
+                }
+            }
         }
         else if (isDown && !testMode)
         {//プレイヤーがダウンしている場合
             downBehavior();
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
-
         rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;    
     }
 
@@ -135,7 +156,7 @@ public class Player : MonoBehaviour
         b = collision.transform.root.gameObject.GetComponent<BossBehavior>();
 
         isBoss = b != null;
-        enemyOnRight = collision.collider.transform.position.x <= transform.position.x;
+        enemyOnRight = collision.collider.transform.position.x > transform.position.x;
 
         if (collision.collider.tag == "Enemy_Head")
         {
@@ -156,7 +177,6 @@ public class Player : MonoBehaviour
                             GetDamagedSE.Play();
                         }
                         b.playerStepOn2 = false;
-                        anim.Play("Player_Down");
                         isDown = true;
                         GameManager.instance.hpNum -= 0.1m;
                     }
@@ -184,33 +204,50 @@ public class Player : MonoBehaviour
                     o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
                 }
             }
-        }else if(collision.collider.tag == "Enemy_Body" && !testMode)
+        }else if(collision.collider.tag == "Enemy_Body" && !invincibleMode)
         {
-            if (GetDamagedSE != null)
-            {
-                GetDamagedSE.Play();
-            }
-            anim.Play("Player_Down");
-            isDown = true;
-            GameManager.instance.hpNum -= 0.1m;
+                beforeDown = true;
+                isDown = true;       
         }else if(collision.collider.tag == "MovingGround")
         {
             moveObj = collision.gameObject.GetComponent<MoveObject>();
+        }else if(invincibleMode && collision.collider.tag == "Ground")
+        {
+            boxRight.isTrigger = false;
+            boxLeft.isTrigger = false;
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.collider.tag == "MovingGround")
+        if (collision.tag == "MovingGround")
         {
             moveObj = null;
         }
     }
 
 
-
     //////////////////////////////////////メソッド///////////////////////////////
-    ///
+    private void InVincibleMode(float invincibleTime)
+    {
+        boxRight.enabled = true;
+        boxLeft.enabled = true;
+        invincibleMode = true;
+        capcol.isTrigger = true;
+        if (time > invincibleTime)
+        {
+            sr.enabled = true;
+            boxRight.enabled = false;
+            boxLeft.enabled = false;
+            invincibleMode = false;
+            time = 0.0f;
+            capcol.isTrigger = false;
+        }
+        else
+        {
+            time += Time.deltaTime;
+        }
+    }
     private float GetXspeed()//X軸の移動
     {
         //定義
@@ -416,19 +453,28 @@ public class Player : MonoBehaviour
 
     public void downBehavior()
     {
+        if (!isSet)
+        {
+            if (GetDamagedSE != null)
+            {
+                GetDamagedSE.Play();
+            }
+            GameManager.instance.hpNum -= 0.1m;
+            isSet = true;
+        }
+        RunningSE.Pause();
+        anim.Play("Player_Down");
         if (isDead)
         {
-            RunningSE.Pause();
-            xspeed = 0;
-            yspeed = -gravity;
+            gameObject.SetActive(false);
         }
         else
         {
             if (isBoss)
-            {
+            { 
                 bossDownBehavior();
             }
-            else if (!isBoss)
+            else
             {
                 enemyDownBehavior();
             }
@@ -438,34 +484,23 @@ public class Player : MonoBehaviour
 
     public void enemyDownBehavior()
     {
-
-        if (downTime < 0.2f)
+        if (downTime < 0.5f)
         {
-            if (enemyOnRight)
+            capcol.isTrigger = true;
+            rb.isKinematic = true;
+            if (!isGround)
             {
-                xspeed = speed + 0.3f;
-                yspeed = 10f;
+                xspeed = enemyOnRight ? -20: 20;
+                yspeed = -1f;
             }
             else
             {
-                xspeed = -(speed + 0.3f);
-                yspeed = 10f;
+                xspeed = 0;
+                yspeed = 0;
             }
-        }
-        else if (downTime >= 0.2f && downTime < 0.6f && !isGround)
+        }else if(downTime >= 0.5f)
         {
-            if (enemyOnRight)
-            {
-                xspeed = speed;
-                yspeed = -10f;
-            }
-            else
-            {
-                xspeed = -speed;
-                yspeed = -10f;
-            }
-        }else if(downTime >= 0.6f || isGround)
-        {
+            rb.isKinematic = false;
             if (GameManager.instance.hpNum > 0m)
             {
                 anim.Play("Player_Stand");
@@ -485,12 +520,12 @@ public class Player : MonoBehaviour
         {
             if (enemyOnRight)
             {
-                xspeed = speed + 1f;
+                xspeed = -(speed + 1f);
                 yspeed = 20f;
             }
             else
             {
-                xspeed = -(speed + 1f);
+                xspeed = speed + 1f;
                 yspeed = 20f;
             }
         }
@@ -498,16 +533,16 @@ public class Player : MonoBehaviour
         {
             if (enemyOnRight)
             {
-                xspeed = speed;
+                xspeed = -speed;
                 yspeed = -20f;
             }
             else
             {
-                xspeed = -speed;
+                xspeed = speed;
                 yspeed = -20f;
             }
         }
-        else if (downTime >= 0.6f || isGround)
+        else if ((downTime >= 0.6f || isGround) && !invincibleMode)
         {
             if (GameManager.instance.hpNum > 0m)
             {
@@ -565,6 +600,8 @@ public class Player : MonoBehaviour
 
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
+        rb.isKinematic = false;
+        capcol.enabled = true;
         GameManager.instance.hpNum = 0.5m;
         gameObject.SetActive(true);
         isDown = false;

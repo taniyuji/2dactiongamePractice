@@ -110,10 +110,10 @@ public class EnemyBehavior : MonoBehaviour
                         enemyHp -= 1;
                         isSet = true;
                     }
+                    rb.isKinematic = true;
                     BlinkObject.instance.blinkObject(sr);
                     if (BlinkObject.instance.isBlink)
                     {
-                        rb.isKinematic = true;
                         foreach (var i in children)//スプライトがあるため、親オブジェクトだけ消したくない
                         {
                             i.SetActive(false);
@@ -148,7 +148,13 @@ public class EnemyBehavior : MonoBehaviour
             }
         }
     }
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.tag == "player")
+        {
+            DirectionRight = !DirectionRight;
+        }
+    }
     public void generateItSelf()
     {
         sr.enabled = true;
