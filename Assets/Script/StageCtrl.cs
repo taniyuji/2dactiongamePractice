@@ -9,7 +9,7 @@ public class StageCtrl : MonoBehaviour
     public GameObject[] fallDeadPoint;
     public GameObject continueButton;
     public int continueNum; //リスポーンする地点
-    
+
     private Player p;
     private int nextSpawn = 1;
     private int nextFallDeadPos = 1;

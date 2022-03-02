@@ -8,21 +8,28 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public FadeScript fade;
-    private bool goNextScene = false;
+    
     public static GameManager instance = null;
     public int score;
     public int stageNum;//どのステージに居るか
     public decimal hpNum = 0.5m;
     public AudioSource BossBGM = null;
-
     public CinemachineVirtualCamera Cam;
     public Camera cam;
+    public GameObject BackGroundChangePos;
+    public GameObject player;
     [HideInInspector] public bool bossIsvisble;
     [HideInInspector] public bool isBossDead = false;
     [HideInInspector] public bool goBossBattle = false;
     [HideInInspector] public bool isFallDead = false;
 
     private bool Play = false;
+    private bool goNextScene = false;
+    private float BackColorR;
+    private float BackColorG;
+    private float BackColorB;
+
+
 
     private void Awake()
     {
@@ -36,6 +43,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        BackColorR = cam.backgroundColor.r;
+        BackColorG = cam.backgroundColor.g;
+        BackColorB = cam.backgroundColor.b;
     }
 
     public void startFadeOut()
@@ -45,6 +55,25 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (player != null)
+        {
+            if (player.transform.position.y < BackGroundChangePos.transform.position.y)
+            {
+                if (BackColorR > 0.08f)
+                {
+                    BackColorR -= 0.01f;
+                }
+                else if (BackColorG > 0.055f)
+                {
+                    BackColorG -= 0.01f;
+                }
+                else if (BackColorB > 0.31f)
+                {
+                    BackColorB -= 0.01f;
+                }
+                cam.backgroundColor = new Color(BackColorR, BackColorG, BackColorB, 0);
+            }
+        }
 
         if(hpNum >= 1m)
         {
@@ -85,33 +114,4 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    /*
-                 if(BackColorR > 0.07f)
-            {
-                BackColorR -= 0.1f;
-            }else if(BackColorG > 0.6f)
-            {
-                BackColorG -= 0.1f;
-            }else if (BackColorB > 0.6f)
-            {
-                BackColorB -= 0.1f;
-            }
-            cam.backgroundColor = new Color(BackColorR, BackColorG, BackColorB, 0);
-            if (LIntensity >= 0.4f && LIntensity <= 1f)
-            {
-                LIntensity -= 0.05f;
-                slight.GetComponent<Light>().intensity = LIntensity;
-            }
-
-      if (BackColorR < 0.67f)
-            {
-                BackColorR += 0.1f;
-            }
-                BackColorG = 1f;
-                BackColorB = 1f;
-    
-            cam.backgroundColor = new Color(BackColorR, BackColorG, BackColorB, 0);
-            LIntensity = 1f;
-            slight.GetComponent<Light>().intensity = LIntensity;
-     */
 }
