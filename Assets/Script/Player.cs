@@ -68,6 +68,8 @@ public class Player : BlinkObject
     private bool invincibleMode;//無敵状態
     private bool beforeDown = false;
     private bool inEnemy = false;
+    private float onGroundPos;
+    private bool DontFall = false;
     ///////////////////////////////////メイン///////////////////////////////////
     void Start()
     {
@@ -93,6 +95,7 @@ public class Player : BlinkObject
 
     private void FixedUpdate()
     {
+        Debug.Log(inEnemy);
         //接地しているか、頭があたってないかを判定
         isGround = ground.IsGround();
         isHead = head.IsGround();
@@ -103,10 +106,7 @@ public class Player : BlinkObject
         {
             GameManager.instance.goBossBattle = true;
         }
-        if(isDown || invincibleMode)
-        {
-           GetBlink(sr);
-        }
+
         else
         {
             sr.enabled = true;
@@ -132,10 +132,17 @@ public class Player : BlinkObject
                 isSet = false;
                 if (isGround && yspeed <= 0)
                 {
-                    yspeed = 0;
+                    rb.constraints = RigidbodyConstraints2D.FreezePositionY
+                        | RigidbodyConstraints2D.FreezeRotation;
                 }
+                else
+                {
+                    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                }
+
                 if (!invincibleMode)
                 {
+                    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                     beforeDown = false;
                 }
             }
@@ -145,7 +152,8 @@ public class Player : BlinkObject
             downBehavior();
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
-        rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;    
+        rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;
+
     }
 
     
@@ -217,9 +225,28 @@ public class Player : BlinkObject
             boxLeft.isTrigger = false;
         }
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Enemy" || collision.tag == "Boss")
+        {
+            inEnemy = true;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy_Body" || collision.tag == "Boss")
+        {
+            inEnemy = true;
+        }
+    }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (collision.tag == "Enemy_Body" || collision.tag == "Boss")
+        {
+            inEnemy = false;
+        }
         if (collision.tag == "MovingGround")
         {
             moveObj = null;
@@ -230,23 +257,26 @@ public class Player : BlinkObject
     //////////////////////////////////////メソッド///////////////////////////////
     private void InVincibleMode(float invincibleTime)
     {
-        boxRight.enabled = true;
-        boxLeft.enabled = true;
-        invincibleMode = true;
-        capcol.isTrigger = true;
-        if (time > invincibleTime)
-        {
-            sr.enabled = true;
-            boxRight.enabled = false;
-            boxLeft.enabled = false;
-            invincibleMode = false;
-            time = 0.0f;
-            capcol.isTrigger = false;
+        if (time <= invincibleTime) { 
+            GetBlink(sr);
+            boxRight.enabled = true;
+            boxLeft.enabled = true;
+            invincibleMode = true;
+            capcol.isTrigger = true;
         }
-        else
+        else if (time > invincibleTime)
         {
-            time += Time.deltaTime;
+            if (!inEnemy)
+            {
+                sr.enabled = true;
+                boxRight.enabled = false;
+                boxLeft.enabled = false;
+                invincibleMode = false;
+                time = 0.0f;
+                capcol.isTrigger = false;
+            }
         }
+        time += Time.deltaTime;
     }
     private float GetXspeed()//X軸の移動
     {
@@ -320,8 +350,6 @@ public class Player : BlinkObject
 
         //直前に押されていたキーを入手
         beforeKey = horizontalkey;
-        //移動表現を代入
-        xspeed *= DashCurve.Evaluate(dashTime);
 
         return xspeed;
     }
@@ -466,6 +494,7 @@ public class Player : BlinkObject
         anim.Play("Player_Down");
         if (isDead)
         {
+            beforeDown = false;
             gameObject.SetActive(false);
         }
         else
@@ -613,51 +642,5 @@ public class Player : BlinkObject
         isContinue = true;
         isDead = false;
     }
-/*
-        if (collision.collider.tag == enemyTag || collision.collider.tag == "Boss")
-        {
-            //踏みつけ判定になる高さ
-            float stepOnHeight = (capcol.size.y * (stepOnRate / 100f));
-            //=0.5
-
-            //踏みつけ判定のワールド座標
-            float judgePos = transform.position.y - (capcol.size.y / 2f) + stepOnHeight;
-
-            //一つでも敵にあたってしまった衝突データがないか調べる
-            foreach (ContactPoint2D p in collision.contacts)
-            {
-                Debug.Log("衝突データのY座標(p) = " + p.point.y);
-                Debug.Log("踏みつけ判定の座標(judgePos) = " + judgePos);
-                if (p.point.y < judgePos)//衝突データが踏みつけ判定座標より下の場合
-                {
-
-                    EnemyBehavior o = collision.gameObject.GetComponent<EnemyBehavior>();
-                    BossBehavior b = collision.gameObject.GetComponent<BossBehavior>();
-                    if (o != null || b != null)
-                    {
-                        otherJumpHeight = o.BoundHeight;//踏んづけたものから跳ねる高さを取得
-                        jumpPos = transform.position.y;//ジャンプした位置を記録する
-                        isOtherJump = true;
-                        isJump = false;
-                        jumpTime = 0.0f;
-                        if(o != null) //踏んづけたものに対して踏んづけたことを通知
-                        {
-                            o.playerStepOn = true;
-                        }else if(b != null)
-                        {
-                            b.playerStepOn2 = true;
-                        }
-                    }
-                }
-                else//衝突データが足元よりも上だった場合
-                {
-                    anim.Play("Player_Down");
-                    isDown = true;
-                    GameManager.instance.hpNum -= 1;
-                    break;
-                }
-            }
-        }
-        */
 }
     

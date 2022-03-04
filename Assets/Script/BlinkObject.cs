@@ -28,7 +28,6 @@ public class BlinkObject : MonoBehaviour
 
         if (continueTime > 1.0f)//リスポーン表現の時間が1秒より大きくなった場合
         {
-            Debug.Log("点滅終了");
             blinkTime = 0f;
             continueTime = 0f;
             sr.enabled = true;
