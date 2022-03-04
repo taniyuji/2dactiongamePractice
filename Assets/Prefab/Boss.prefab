@@ -263,7 +263,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -641761675
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c31f3913e81744879908a0fb55c6ac3b, type: 3}
   m_Color: {r: 0.5660378, g: 0.5633678, b: 0.5633678, a: 1}
@@ -313,9 +313,12 @@ MonoBehaviour:
   nonVisible: 0
   myScore: 1000
   bossHp: 5
+  stopWidth: 25
+  enemies: []
   enc: {fileID: 650762974059182127}
   hitGround: 0
   isAttack: 0
+  isGenerating: 0
   playerStepOn2: 0
 --- !u!50 &5332623041972457708
 Rigidbody2D:
@@ -337,4 +340,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6

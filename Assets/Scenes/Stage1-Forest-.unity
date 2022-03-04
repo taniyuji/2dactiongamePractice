@@ -691,7 +691,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b64e950931054601bfece4bd365dc9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBlink: 0
 --- !u!4 &221634745
 Transform:
   m_ObjectHideFlags: 0
@@ -11481,7 +11480,7 @@ MonoBehaviour:
   - {fileID: 1465255413}
   - {fileID: 1957410633}
   continueButton: {fileID: 2084800976}
-  continueNum: 1
+  continueNum: 0
 --- !u!4 &1152320169
 Transform:
   m_ObjectHideFlags: 0

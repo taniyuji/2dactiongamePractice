@@ -95,7 +95,6 @@ public class Player : BlinkObject
 
     private void FixedUpdate()
     {
-        Debug.Log(inEnemy);
         //接地しているか、頭があたってないかを判定
         isGround = ground.IsGround();
         isHead = head.IsGround();
@@ -128,7 +127,14 @@ public class Player : BlinkObject
             }
             if (beforeDown)
             {
-                InVincibleMode(2.0f);
+                if (isBoss)
+                {
+                    InVincibleMode(5.0f);
+                }
+                else
+                {
+                    InVincibleMode(2.0f);
+                }
                 isSet = false;
                 if (isGround && yspeed <= 0)
                 {
@@ -143,6 +149,7 @@ public class Player : BlinkObject
                 if (!invincibleMode)
                 {
                     rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                    isBoss = false;
                     beforeDown = false;
                 }
             }
@@ -266,7 +273,12 @@ public class Player : BlinkObject
         }
         else if (time > invincibleTime)
         {
-            if (!inEnemy)
+            if (inEnemy)
+            {
+                Debug.Log("uwaaaa");
+                downBehavior();
+            }
+            else if (!inEnemy)
             {
                 sr.enabled = true;
                 boxRight.enabled = false;
@@ -275,6 +287,7 @@ public class Player : BlinkObject
                 time = 0.0f;
                 capcol.isTrigger = false;
             }
+
         }
         time += Time.deltaTime;
     }
@@ -545,34 +558,45 @@ public class Player : BlinkObject
 
     public void bossDownBehavior()
     {
-        if (downTime < 0.2f)
-        {
-            if (enemyOnRight)
+        capcol.isTrigger = true;
+        rb.isKinematic = true;
+        if(downTime < 0.2f) {
+            if (!inEnemy)
             {
-                xspeed = -(speed + 1f);
-                yspeed = 20f;
+                xspeed = enemyOnRight ? -30 : 30;
             }
             else
             {
-                xspeed = speed + 1f;
-                yspeed = 20f;
+                xspeed = enemyOnRight ? -70 : 70;
             }
+            yspeed = 5f;
+            
         }
-        else if (downTime >= 0.2f && downTime < 0.6f && !isGround)
+        else if (downTime >= 0.2f && downTime < 0.5f && !isGround)
         {
-            if (enemyOnRight)
+            if (!isGround)
             {
-                xspeed = -speed;
-                yspeed = -20f;
+                if (!inEnemy)
+                {
+                    xspeed = enemyOnRight ? -20 : 20;
+                }
+                else
+                {
+                    xspeed = enemyOnRight ? -50 : 50;
+                }
+                yspeed = -10f;
             }
             else
             {
-                xspeed = speed;
-                yspeed = -20f;
+                rb.constraints = RigidbodyConstraints2D.FreezePositionY
+                    | RigidbodyConstraints2D.FreezeRotation;
             }
+
         }
-        else if ((downTime >= 0.6f || isGround) && !invincibleMode)
+        else if ((downTime >= 0.5f || isGround))
         {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            rb.isKinematic = false;
             if (GameManager.instance.hpNum > 0m)
             {
                 anim.Play("Player_Stand");
@@ -583,7 +607,6 @@ public class Player : BlinkObject
                 isDead = true;
             }
             downTime = 0.0f;
-            isBoss = false;
         }
     }
 
@@ -630,8 +653,9 @@ public class Player : BlinkObject
 
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
+        isBoss = false;
         rb.isKinematic = false;
-        capcol.enabled = true;
+        capcol.isTrigger = false;
         GameManager.instance.hpNum = 0.5m;
         gameObject.SetActive(true);
         isDown = false;
