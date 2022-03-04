@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Player : MonoBehaviour
+public class Player : BlinkObject
 {
     //Unityのインスペクターに表示させる
     [Header("重力")] public float gravity;
@@ -83,8 +83,8 @@ public class Player : MonoBehaviour
     {
         if (isContinue)//コンティニュー表現中か
         {
-            BlinkObject.instance.blinkObject(sr);//プレイヤーを点滅
-            if (!BlinkObject.instance.isBlink)
+            GetBlink(sr);//プレイヤーを点滅
+            if (isBlinkFin())
             {
                 isContinue = false;
             }
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
         }
         if(isDown || invincibleMode)
         {
-            BlinkObject.instance.blinkObject(sr);
+           GetBlink(sr);
         }
         else
         {
@@ -589,6 +589,7 @@ public class Player : MonoBehaviour
             currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
             if (currentState.IsName("Player_Down"))//ダウンアニメーションの場合
             {
+                Debug.Log("はいった");
                 if(currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
                     return true;

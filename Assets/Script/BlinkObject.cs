@@ -4,35 +4,20 @@ using UnityEngine;
 
 public class BlinkObject : MonoBehaviour
 {
-    [HideInInspector] public bool isBlink = false;
-    [HideInInspector] public bool isBlinkFin = false;
-    public static BlinkObject instance = null;
+    private bool isBlinkfin;
     private float blinkTime;
     private float continueTime;
-    
 
-    private void Start()
+    public void GetBlink(SpriteRenderer sr)//点滅消滅
     {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-
-    public void blinkObject(SpriteRenderer sr)//点滅消滅
-    {
-        isBlink = true;
+        isBlinkfin = false;
         //0.2秒以降は、人通りすべてのif条件を通るように
         if (blinkTime > 0.2f)
         {
             sr.enabled = true;//スプライトーレンダラーを表示
             blinkTime = 0.0f;//ここでリセット
         }
-        else if (blinkTime > 0.1f)
+        else if (blinkTime > 0.1f && blinkTime <= 1.0f)
         {
             sr.enabled = false;//スプライトーレンダラーを非表示
         }
@@ -43,16 +28,21 @@ public class BlinkObject : MonoBehaviour
 
         if (continueTime > 1.0f)//リスポーン表現の時間が1秒より大きくなった場合
         {
+            Debug.Log("点滅終了");
             blinkTime = 0f;
             continueTime = 0f;
             sr.enabled = true;
-            isBlink = false;
-            isBlinkFin = true;
+            isBlinkfin = true;
         }
         else
         {
             blinkTime += Time.deltaTime;
             continueTime += Time.deltaTime;
         }
+    }
+
+    public bool isBlinkFin()
+    {
+        return isBlinkfin;
     }
 }

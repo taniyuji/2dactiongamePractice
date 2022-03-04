@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BossBehavior : MonoBehaviour
+public class BossBehavior : BlinkObject
 {
     public float BoundHeight;    //敵を踏んだときの跳ねる高さ
     public float enemySpeed;
@@ -19,25 +18,20 @@ public class BossBehavior : MonoBehaviour
     [HideInInspector] public bool isGenerating = false;
 
     [HideInInspector] public bool playerStepOn2 = false; //敵を踏んだかどうか判断、インスペクターでは非表示
-    private int count2;
     private Animator anim = null;
     private SpriteRenderer sr;
     private Rigidbody2D rb;
-    private bool isDead;
-    private bool isBlink = false;
     private bool isSet = false;
-    private float blinkTime = 0.0f;
-    private float continueTime = 0.0f;
     private GameObject player;
     private int xVector;
     private float beforeSpeed = 1;
     private bool moveRight = false;
+    private bool startBlink = false;
     private int attackNum;
     private bool AttackAnimFin = false;
     private float time = 0f;
     private GameObject RLimitObj;
     private GameObject LLimitObj;
-    private bool playerOnRight = true;
     private bool playerHit = false;
     private float backTime = 0.0f;
     private bool inBoundary = false;
@@ -61,11 +55,15 @@ public class BossBehavior : MonoBehaviour
     {
         if (isSet)//HP減少がセットされた場合
         {
-            if (!BlinkObject.instance.isBlinkFin)//点滅作業が終了していない場合
+            if (!startBlink)
             {
-                BlinkObject.instance.blinkObject(sr);
+                GetBlink(sr);
+                if (isBlinkFin())
+                {
+                    startBlink = true;
+                }
             }
-            else//点滅作業が終了した場合
+            if(isBlinkFin())//点滅作業が終了した場合
             {
                 if (bossHp > 0)
                 {
@@ -86,8 +84,8 @@ public class BossBehavior : MonoBehaviour
                         anim.SetBool("Generate", false);
                         CountGenerate++;
                         playerStepOn2 = false;
-                        BlinkObject.instance.isBlinkFin = false;
                         isSet = false;
+                        startBlink = false;
                     }
                 }
                 else//ボスのHPが0の場合
@@ -198,7 +196,7 @@ public class BossBehavior : MonoBehaviour
 
     private void setBossDead()//ボス死亡時
     {
-        if (!isBlink)//点滅中でない場合
+        if (isBlinkFin())//点滅中でない場合
         {
             GameManager.instance.isBossDead = true;
             gameObject.SetActive(false);

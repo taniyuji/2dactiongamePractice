@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System;
 
-public class EnemyBehavior : MonoBehaviour
+public class EnemyBehavior : BlinkObject
 {
     public float BoundHeight;    //敵を踏んだときの跳ねる高さ
     public float enemySpeed;
@@ -18,8 +18,8 @@ public class EnemyBehavior : MonoBehaviour
     public bool isFly;
     public bool ofBoss;
     public GameObject boss;
-    [HideInInspector]public bool playerStepOn = false; //敵を踏んだかどうか判断、インスペクターでは非表示
-    [HideInInspector]public bool isGenerated = false;
+    [HideInInspector] public bool playerStepOn = false; //敵を踏んだかどうか判断、インスペクターでは非表示
+    [HideInInspector] public bool isGenerated = false;
 
     private Animator anim = null;
     private SpriteRenderer sr;
@@ -38,6 +38,7 @@ public class EnemyBehavior : MonoBehaviour
     private Vector2 toVector;
     private bool isPlayerPos = false;
     private bool isSet = false;
+    private bool blinkStart = false;
 
     private void Start()
     {
@@ -50,13 +51,13 @@ public class EnemyBehavior : MonoBehaviour
         if (ofBoss)
         {
             sr.enabled = false;
-            foreach(var i in children)
+            foreach (var i in children)
             {
                 i.SetActive(false);
             }
         }
         //飛行とジャンプを両方入力してしまった場合の修正
-        if (isFly) 
+        if (isFly)
         {
             isJamp = false;
         }
@@ -74,7 +75,6 @@ public class EnemyBehavior : MonoBehaviour
         {
             if (!isGenerated)
             {
-                Debug.Log(boss);
                 var fixedBossPos = new Vector2(boss.transform.position.x, boss.transform.position.y - 21);
                 rb.MovePosition(fixedBossPos);
             }
@@ -111,8 +111,16 @@ public class EnemyBehavior : MonoBehaviour
                         isSet = true;
                     }
                     rb.isKinematic = true;
-                    BlinkObject.instance.blinkObject(sr);
-                    if (BlinkObject.instance.isBlink)
+                    if (!blinkStart)
+                    {
+                        GetBlink(sr);
+                        if (isBlinkFin())
+                        {
+                            blinkStart = true;
+                        }
+                    }
+
+                    if (!isBlinkFin())
                     {
                         foreach (var i in children)//スプライトがあるため、親オブジェクトだけ消したくない
                         {
@@ -132,25 +140,38 @@ public class EnemyBehavior : MonoBehaviour
                 }
                 else
                 {
+                    
                     isDead = true;
                     anim.SetBool("Defeated", true);
-                    rb.velocity = new Vector2(0, -gravity);
+                    if (isJamp)
+                    {
+                        rb.velocity = new Vector2(0, -gravity);
+                    }
+                    else
+                    {
+                        rb.velocity = new Vector2(0, 0);
+                    }
+                    
                     foreach (var i in children)//スプライトがあるため、親オブジェクトだけ消したくない
                     {
                         i.SetActive(false);
                     }
-                    Destroy(gameObject, 3f);
+                    Debug.Log(anim.GetCurrentAnimatorStateInfo(0).IsName("BigEnemyDefeated"));
+                    if (anim.GetCurrentAnimatorStateInfo(0).IsName("BigEnemyDefeated"))
+                    {
+                        Debug.Log(anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
+                        if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                        {
+                            //gameObject.SetActive(false);
+                        }
+                    }
                 }
-            }
-            else
-            {
-                transform.Rotate(new Vector3(0, 0, 5));
             }
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.tag == "player")
+        if (collision.collider.tag == "player")
         {
             DirectionRight = !DirectionRight;
         }
@@ -158,7 +179,7 @@ public class EnemyBehavior : MonoBehaviour
     public void generateItSelf()
     {
         sr.enabled = true;
-        foreach(var i in children)
+        foreach (var i in children)
         {
             i.SetActive(true);
         }
