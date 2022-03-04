@@ -17,6 +17,7 @@ public class Player : BlinkObject
     [Header("設置判定")] public GroudCheck ground;
     public BoxCollider2D boxRight;
     public BoxCollider2D boxLeft;
+    public JudgeIsEnemy judgeEnemySpace;
     [Header("頭をぶつけた判定")] public GroudCheck head;
     [HideInInspector] public bool EnemyCollision = false;
     [HideInInspector] public bool isDead = false;
@@ -560,7 +561,8 @@ public class Player : BlinkObject
     {
         capcol.isTrigger = true;
         rb.isKinematic = true;
-        if(downTime < 0.2f) {
+        if(downTime < 0.5f) {
+          
             if (!inEnemy)
             {
                 xspeed = enemyOnRight ? -30 : 30;
@@ -569,33 +571,11 @@ public class Player : BlinkObject
             {
                 xspeed = enemyOnRight ? -70 : 70;
             }
-            yspeed = 5f;
-            
+            yspeed = 5f;           
         }
-        else if (downTime >= 0.2f && downTime < 0.5f && !isGround)
+        else if (!JudgeEnemySpace())
         {
-            if (!isGround)
-            {
-                if (!inEnemy)
-                {
-                    xspeed = enemyOnRight ? -20 : 20;
-                }
-                else
-                {
-                    xspeed = enemyOnRight ? -50 : 50;
-                }
-                yspeed = -10f;
-            }
-            else
-            {
-                rb.constraints = RigidbodyConstraints2D.FreezePositionY
-                    | RigidbodyConstraints2D.FreezeRotation;
-            }
-
-        }
-        else if ((downTime >= 0.5f || isGround))
-        {
-            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+     
             rb.isKinematic = false;
             if (GameManager.instance.hpNum > 0m)
             {
@@ -608,6 +588,11 @@ public class Player : BlinkObject
             }
             downTime = 0.0f;
         }
+    }
+
+    private bool JudgeEnemySpace()
+    {
+        return judgeEnemySpace.IsEnemy();
     }
 
     public bool IsContinueWating()//コンティニュー待ちか。結果をstagectrlのupdateに送る。

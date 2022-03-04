@@ -13,6 +13,11 @@ public class BossBehavior : BlinkObject
     public int stopWidth = 25;
     public List<GameObject> enemies;
     public EnemyCollisionCheck enc;
+    public GameObject JudgeReturnRight;
+    public GameObject JudgeReturnLeft;
+    public GameObject ReturnPos;
+    public EdgeCollider2D BodyEdge;
+    public EdgeCollider2D HeadEdge;
     [HideInInspector] public bool hitGround = false;
     [HideInInspector] public bool isAttack = false;
     [HideInInspector] public bool isGenerating = false;
@@ -35,10 +40,13 @@ public class BossBehavior : BlinkObject
     private bool playerHit = false;
     private float backTime = 0.0f;
     private bool inBoundary = false;
+    private bool isReturn = false;
     private int xLocalScale;
     private int generateTime = 0;
     private int CountGenerate = 0;
     private float generatingTime = 0.0f;
+    private Vector2 returnPos;
+
     
     private void Start()
     {
@@ -108,7 +116,7 @@ public class BossBehavior : BlinkObject
                 GameManager.instance.bossIsvisble = true;
                 judgeMoveDir();
                 Move();
-                if (hitGround == false)
+                if (!isReturn)
                 {
                     bossAttack();
                 }
@@ -131,7 +139,23 @@ public class BossBehavior : BlinkObject
             }
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
-        rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
+        if (isReturn)
+        {
+            Debug.Log("戻ります");
+            returnPos = Vector2.MoveTowards(transform.position, ReturnPos.transform.position, enemySpeed * Time.deltaTime +1);
+            Debug.Log(returnPos);
+            rb.MovePosition(returnPos);
+            if (transform.position.x == ReturnPos.transform.position.x)
+            {
+                BodyEdge.isTrigger = false;
+                HeadEdge.isTrigger = false;
+                isReturn = false;
+            }
+        }
+        else
+        {
+            rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
+        }
     }
 
     private void judgeMoveDir()//動く方向を判断
@@ -150,13 +174,30 @@ public class BossBehavior : BlinkObject
             inBoundary = true;
         }
     }
+
+    private bool playerAbove()
+    {
+        return transform.position.y < player.transform.position.y;
+    }
+
+    private bool isReturnPos()
+    {
+        return transform.position.x > JudgeReturnRight.transform.position.x || transform.position.x < JudgeReturnLeft.transform.position.x;
+    }
+
       ///メソッドたち///
     private void Move() //敵キャラの動き
     {
-        if (playerHit && !isAttack)//プレイヤーと衝突し、攻撃中ではない場合
+        if(isReturnPos())
+        {
+            BodyEdge.isTrigger = true;
+            HeadEdge.isTrigger = true;
+            isReturn = true;
+        }
+        else if (playerHit && !isAttack)//プレイヤーと衝突し、攻撃中ではない場合
         {
             //踏まれていない場合と踏まれた場合で下がる距離を分ける
-            if ((!playerStepOn2 && backTime < 0.3f) || (playerStepOn2 && backTime < 0.6f))
+            if ((!playerStepOn2 && backTime < 0.4f) || (playerStepOn2 && backTime < 0.6f))
             {
                 enemySpeed += 2f;
                 xVector = moveRight ? -1 : 1;
@@ -171,23 +212,16 @@ public class BossBehavior : BlinkObject
         }
         else if(!isAttack && !playerHit)//プレイヤーと衝突しておらず、攻撃中でない場合
         {
-            xLocalScale = 1;
-            if (!moveRight)//プレイヤーが左側にいる場合
-            {
-                anim.SetBool("Run", true);
-                xVector = -1;
-                xLocalScale = -1;
-            }
-            else if(moveRight)//プレイヤーが右側にいる場合
-            {
-                anim.SetBool("Run", true);
-                xVector = 1;
-                xLocalScale = 1;
-            }
-            else if(inBoundary)//境界間の内にいる場合
+            if(inBoundary && playerAbove())//境界間の内にいる場合
             {
                 anim.SetBool("Run", false);
                 xVector = 0;
+                xLocalScale = moveRight ? 1 : -1;
+            }
+            else//プレイヤーが境界内にいない場合
+            {
+                anim.SetBool("Run", true);
+                xVector = moveRight ? 1 : -1;
                 xLocalScale = moveRight ? 1 : -1;
             }
             transform.localScale = new Vector3(xLocalScale * Math.Abs(transform.localScale.x), transform.localScale.y);

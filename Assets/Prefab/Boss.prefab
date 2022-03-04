@@ -316,6 +316,10 @@ MonoBehaviour:
   stopWidth: 25
   enemies: []
   enc: {fileID: 650762974059182127}
+  ReturnPosRight: {fileID: 0}
+  ReturnPosLeft: {fileID: 0}
+  BodyEdge: {fileID: 3390249241601091184}
+  HeadEdge: {fileID: 6670252709622124105}
   hitGround: 0
   isAttack: 0
   isGenerating: 0
