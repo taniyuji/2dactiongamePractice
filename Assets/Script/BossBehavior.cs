@@ -116,10 +116,12 @@ public class BossBehavior : BlinkObject
                 GameManager.instance.bossIsvisble = true;
                 judgeMoveDir();
                 Move();
+                /*
                 if (!isReturn)
                 {
                     bossAttack();
                 }
+                */
             }
             else
             {
@@ -141,16 +143,7 @@ public class BossBehavior : BlinkObject
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
         if (isReturn)
         {
-            Debug.Log("戻ります");
-            returnPos = Vector2.MoveTowards(transform.position, ReturnPos.transform.position, enemySpeed * Time.deltaTime +1);
-            Debug.Log(returnPos);
-            rb.MovePosition(returnPos);
-            if (transform.position.x == ReturnPos.transform.position.x)
-            {
-                BodyEdge.isTrigger = false;
-                HeadEdge.isTrigger = false;
-                isReturn = false;
-            }
+            TelepoteBehavior();        
         }
         else
         {
@@ -322,5 +315,30 @@ public class BossBehavior : BlinkObject
         {
             playerHit = true;
         }
+    }
+
+    private void TelepoteBehavior()
+    {
+        Debug.Log("戻ります");
+        nonVisible = true;
+        if (time < 1.5f)
+        {
+            anim.SetBool("telepote", true);
+        }
+        else
+        {
+            returnPos = Vector2.MoveTowards(transform.position, ReturnPos.transform.position, 5 * Time.deltaTime + 1);
+            Debug.Log(returnPos);
+            rb.MovePosition(returnPos);
+            if (transform.position.x == ReturnPos.transform.position.x)
+            {
+                anim.SetBool("telepote", false);
+                BodyEdge.isTrigger = false;
+                HeadEdge.isTrigger = false;
+                time = 0.0f;
+                isReturn = false;
+            }
+        }
+        time += Time.deltaTime;
     }
 }
