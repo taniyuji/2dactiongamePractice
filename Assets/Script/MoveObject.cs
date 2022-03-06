@@ -31,6 +31,10 @@ public class MoveObject : MonoBehaviour
         }
         pObj = GameObject.Find("Player");
         player = pObj.GetComponent<Player>();
+        if(nowPoint == movePoint.Length - 1)
+        {
+            returnPoint = true;
+        }
     }
 
     public Vector2 GetVelocity()//外部からこのオブジェクトのvelocityを入手
