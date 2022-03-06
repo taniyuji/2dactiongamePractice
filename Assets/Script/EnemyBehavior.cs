@@ -156,10 +156,8 @@ public class EnemyBehavior : BlinkObject
                     {
                         i.SetActive(false);
                     }
-                    Debug.Log(anim.GetCurrentAnimatorStateInfo(0).IsName("BigEnemyDefeated"));
                     if (anim.GetCurrentAnimatorStateInfo(0).IsName("BigEnemyDefeated"))
                     {
-                        Debug.Log(anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
                         if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
                         {
                             //gameObject.SetActive(false);
@@ -176,6 +174,8 @@ public class EnemyBehavior : BlinkObject
             DirectionRight = !DirectionRight;
         }
     }
+
+    //setActiveがオフのままだと生成されるまでボスについて行く挙動ができないため用意
     public void generateItSelf()
     {
         sr.enabled = true;

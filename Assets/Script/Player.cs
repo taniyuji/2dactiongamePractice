@@ -15,8 +15,6 @@ public class Player : BlinkObject
     [Header("ダッシュの速さ表現")] public AnimationCurve DashCurve;
     [Header("ジャンプの速さ表現")] public AnimationCurve JampCurve;
     [Header("設置判定")] public GroudCheck ground;
-    public BoxCollider2D boxRight;
-    public BoxCollider2D boxLeft;
     public JudgeIsEnemy judgeEnemySpace;
     [Header("頭をぶつけた判定")] public GroudCheck head;
     [HideInInspector] public bool EnemyCollision = false;
@@ -49,6 +47,7 @@ public class Player : BlinkObject
     private bool isContinue = false;
     private bool isBoss = false;
     private bool isSet = false;
+    private bool isInvincible = false;
     private SpriteRenderer sr = null;
     private float jumpPos = 0.0f;
     private float jumpTime = 0.0f;
@@ -69,8 +68,6 @@ public class Player : BlinkObject
     private bool invincibleMode;//無敵状態
     private bool beforeDown = false;
     private bool inEnemy = false;
-    private float onGroundPos;
-    private bool DontFall = false;
     ///////////////////////////////////メイン///////////////////////////////////
     void Start()
     {
@@ -128,28 +125,11 @@ public class Player : BlinkObject
             }
             if (beforeDown)
             {
-                if (isBoss)
-                {
-                    InVincibleMode(5.0f);
-                }
-                else
-                {
-                    InVincibleMode(2.0f);
-                }
+                InVincibleMode(2.0f);
                 isSet = false;
-                if (isGround && yspeed <= 0)
+                
+                if (!isInvincible)
                 {
-                    rb.constraints = RigidbodyConstraints2D.FreezePositionY
-                        | RigidbodyConstraints2D.FreezeRotation;
-                }
-                else
-                {
-                    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-                }
-
-                if (!invincibleMode)
-                {
-                    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                     isBoss = false;
                     beforeDown = false;
                 }
@@ -227,10 +207,6 @@ public class Player : BlinkObject
         }else if(collision.collider.tag == "MovingGround")
         {
             moveObj = collision.gameObject.GetComponent<MoveObject>();
-        }else if(invincibleMode && collision.collider.tag == "Ground")
-        {
-            boxRight.isTrigger = false;
-            boxLeft.isTrigger = false;
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -265,32 +241,20 @@ public class Player : BlinkObject
     //////////////////////////////////////メソッド///////////////////////////////
     private void InVincibleMode(float invincibleTime)
     {
-        if (time <= invincibleTime) { 
-            GetBlink(sr);
-            boxRight.enabled = true;
-            boxLeft.enabled = true;
-            invincibleMode = true;
-            capcol.isTrigger = true;
-        }
-        else if (time > invincibleTime)
+        if (time <= invincibleTime)
         {
-            if (inEnemy)
-            {
-                Debug.Log("uwaaaa");
-                downBehavior();
-            }
-            else if (!inEnemy)
-            {
-                sr.enabled = true;
-                boxRight.enabled = false;
-                boxLeft.enabled = false;
-                invincibleMode = false;
-                time = 0.0f;
-                capcol.isTrigger = false;
-            }
-
+            isInvincible = true;
+            gameObject.layer = 11;
+            GetBlink(sr);
+        }
+        else
+        {
+            isInvincible = false;
+            gameObject.layer = 13;
+            time = 0.0f;
         }
         time += Time.deltaTime;
+        
     }
     private float GetXspeed()//X軸の移動
     {
@@ -529,8 +493,6 @@ public class Player : BlinkObject
     {
         if (downTime < 0.5f)
         {
-            capcol.isTrigger = true;
-            rb.isKinematic = true;
             if (!isGround)
             {
                 xspeed = enemyOnRight ? -20: 20;
@@ -543,7 +505,6 @@ public class Player : BlinkObject
             }
         }else if(downTime >= 0.5f)
         {
-            rb.isKinematic = false;
             if (GameManager.instance.hpNum > 0m)
             {
                 anim.Play("Player_Stand");
@@ -559,8 +520,6 @@ public class Player : BlinkObject
 
     public void bossDownBehavior()
     {
-        capcol.isTrigger = true;
-        rb.isKinematic = true;
         if(downTime < 0.5f) {
           
             if (!inEnemy)
@@ -576,7 +535,6 @@ public class Player : BlinkObject
         else if (!JudgeEnemySpace())
         {
      
-            rb.isKinematic = false;
             if (GameManager.instance.hpNum > 0m)
             {
                 anim.Play("Player_Stand");
@@ -626,7 +584,6 @@ public class Player : BlinkObject
             currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
             if (currentState.IsName("Player_Down"))//ダウンアニメーションの場合
             {
-                Debug.Log("はいった");
                 if(currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
                     return true;
@@ -639,8 +596,6 @@ public class Player : BlinkObject
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
         isBoss = false;
-        rb.isKinematic = false;
-        capcol.isTrigger = false;
         GameManager.instance.hpNum = 0.5m;
         gameObject.SetActive(true);
         isDown = false;

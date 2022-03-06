@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
+using System.Collections;
 
 public class BossBehavior : BlinkObject
 {
@@ -16,8 +18,6 @@ public class BossBehavior : BlinkObject
     public GameObject JudgeReturnRight;
     public GameObject JudgeReturnLeft;
     public GameObject ReturnPos;
-    public EdgeCollider2D BodyEdge;
-    public EdgeCollider2D HeadEdge;
     [HideInInspector] public bool hitGround = false;
     [HideInInspector] public bool isAttack = false;
     [HideInInspector] public bool isGenerating = false;
@@ -31,12 +31,9 @@ public class BossBehavior : BlinkObject
     private int xVector;
     private float beforeSpeed = 1;
     private bool moveRight = false;
-    private bool startBlink = false;
     private int attackNum;
     private bool AttackAnimFin = false;
     private float time = 0f;
-    private GameObject RLimitObj;
-    private GameObject LLimitObj;
     private bool playerHit = false;
     private float backTime = 0.0f;
     private bool inBoundary = false;
@@ -44,56 +41,66 @@ public class BossBehavior : BlinkObject
     private int xLocalScale;
     private int generateTime = 0;
     private int CountGenerate = 0;
-    private float generatingTime = 0.0f;
     private Vector2 returnPos;
+    private Vector2 p;
+    private Vector2 This;
+    private Vector2 ReRight;
+    private Vector2 ReLeft;
+    private Vector2 ReturnVector;
+    private Func<bool> boolFunction;
+    private bool isBlink = false;
+    private bool isInvicble = false;
+    private bool animSet = false;
+    private bool moveToReturn = false;
 
-    
     private void Start()
     {
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
-        RLimitObj = GameObject.Find("RightMoveLimit");
-        LLimitObj = GameObject.Find("LeftMoveLimit");
         beforeSpeed = enemySpeed;
         player = GameObject.Find("Player");
+        ReRight = JudgeReturnRight.transform.position;
+        ReLeft = JudgeReturnLeft.transform.position;
+        ReturnVector = ReturnPos.transform.position;
     }
 
     private void Update()
     {
         if (isSet)//HP減少がセットされた場合
         {
-            if (!startBlink)
+            if (isBlink)
             {
                 GetBlink(sr);
                 if (isBlinkFin())
                 {
-                    startBlink = true;
+                    isBlink = false;
                 }
             }
-            if(isBlinkFin())//点滅作業が終了した場合
+            else//点滅作業が終了した場合
             {
                 if (bossHp > 0)
                 {
-                    //エネミー生成攻撃一回目の一体目、または二回目の一体目のエネミー生成の場合
+                    //updateのたびにtrueにしてしまうと永遠に生成してしまうため、一回だけフラグを立てる
                     if ((CountGenerate == 0 && generateTime == 0) || (CountGenerate == 1 && generateTime == 5))
                     {
-                        isGenerating = true;//生成中のフラグを建てる
+                        isGenerating = true;
                     }
 
                     if ((bossHp == 8 || bossHp == 4) && isGenerating)//HPが8または4かつ生成作業中の場合
                     {
-                        enemySpeed = 0;
+                        rb.constraints = RigidbodyConstraints2D.FreezeAll;
                         GenerateEnemy();
+
                     }
                     else//HPが上記の該当外または、生成作業が終了した場合
                     {
-                        enemySpeed = beforeSpeed;
                         anim.SetBool("Generate", false);
                         CountGenerate++;
                         playerStepOn2 = false;
                         isSet = false;
-                        startBlink = false;
+                        rb.constraints = RigidbodyConstraints2D.FreezePositionY
+                                        | RigidbodyConstraints2D.FreezeRotation;
                     }
                 }
                 else//ボスのHPが0の場合
@@ -108,59 +115,79 @@ public class BossBehavior : BlinkObject
 
     void FixedUpdate()
     {
-        if (!playerStepOn2)//プレイヤーが踏んでいない場合
+        p = player.transform.position;
+        This = transform.position;
+        
+        //カメラに写っているかどうか（シーンビューに映る際も適応される）
+        if (sr.isVisible || nonVisible)
         {
-            //カメラに写っているかどうか（シーンビューに映る際も適応される）
-            if (sr.isVisible || nonVisible)
+            GameManager.instance.bossIsvisble = true;
+            judgeMoveDir();
+
+            if (JudgeIsReturnPos() && playerHit && !isAttack)//移動範囲外におり、プレイヤーに衝突した場合
             {
-                GameManager.instance.bossIsvisble = true;
-                judgeMoveDir();
-                Move();
-                /*
-                if (!isReturn)
-                {
-                    bossAttack();
-                }
-                */
+                isReturn = true;
+            }
+            else if (isGenerating)
+            {
+
+            }
+            else if (!isAttack && !JudgeIsReturnPos() && playerHit)
+            {
+                PlayerHitBehavior();
             }
             else
             {
-                rb.Sleep();
+                if (!isAttack)
+                {
+                    Move();
+                }
+                bossAttack();
             }
-        }
-        else//踏まれた場合
-        {
-            if (!isAttack && !isGenerating && !isSet)//攻撃中でない、生成中でない、体力減少をセットしていない場合
+       
+            if (isReturn)
             {
-                bossHp -= 1;
-                isSet = true;
+                
+                TelepoteBehavior();
+                if (moveToReturn)
+                { 
+                   rb.MovePosition(ReturnVector);
+                }
             }
-            if (!isGenerating)//生成攻撃中は動かさない
+            else
             {
-                Move();
+                rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
             }
-        }
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
-        if (isReturn)
-        {
-            TelepoteBehavior();        
         }
         else
         {
-            rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
+            rb.Sleep();
+        }  
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (isGenerating || isReturn)
+        {
+            return;
+        }
+
+        if (collision.collider.tag == "player")
+        {
+            playerHit = true;
         }
     }
 
+    ///メソッド達///
     private void judgeMoveDir()//動く方向を判断
     {
         var leftBossStopWidth = transform.position.x - stopWidth;//左側の境界値
         var rightBossStopWidth = transform.position.x + stopWidth;//右側の境界値
-        float pPos = player.transform.position.x;
 
-        if(pPos < leftBossStopWidth || pPos > rightBossStopWidth)//プレイヤーが境界より外側にいた場合
+        if(p.x < leftBossStopWidth || p.x > rightBossStopWidth)//プレイヤーが境界より外側にいた場合
         {
             inBoundary = false;
-            moveRight = pPos > rightBossStopWidth;
+            moveRight = p.x > rightBossStopWidth;
         }
         else//両境界の内側にいた場合
         {
@@ -168,44 +195,13 @@ public class BossBehavior : BlinkObject
         }
     }
 
-    private bool playerAbove()
-    {
-        return transform.position.y < player.transform.position.y;
-    }
-
-    private bool isReturnPos()
-    {
-        return transform.position.x > JudgeReturnRight.transform.position.x || transform.position.x < JudgeReturnLeft.transform.position.x;
-    }
-
-      ///メソッドたち///
     private void Move() //敵キャラの動き
     {
-        if(isReturnPos())
+        
+        if (!isAttack && !isGenerating)//プレイヤーと衝突しておらず、攻撃中でない場合
         {
-            BodyEdge.isTrigger = true;
-            HeadEdge.isTrigger = true;
-            isReturn = true;
-        }
-        else if (playerHit && !isAttack)//プレイヤーと衝突し、攻撃中ではない場合
-        {
-            //踏まれていない場合と踏まれた場合で下がる距離を分ける
-            if ((!playerStepOn2 && backTime < 0.4f) || (playerStepOn2 && backTime < 0.6f))
-            {
-                enemySpeed += 2f;
-                xVector = moveRight ? -1 : 1;
-            }
-            else
-            {
-                backTime = 0.0f;
-                playerHit = false;
-                enemySpeed = beforeSpeed;
-            }
-            backTime += Time.deltaTime;
-        }
-        else if(!isAttack && !playerHit)//プレイヤーと衝突しておらず、攻撃中でない場合
-        {
-            if(inBoundary && playerAbove())//境界間の内にいる場合
+            boolFunction = () => This.y < p.y;
+            if (inBoundary && boolFunction())//境界間の内におり、頭上にいる場合
             {
                 anim.SetBool("Run", false);
                 xVector = 0;
@@ -217,8 +213,38 @@ public class BossBehavior : BlinkObject
                 xVector = moveRight ? 1 : -1;
                 xLocalScale = moveRight ? 1 : -1;
             }
-            transform.localScale = new Vector3(xLocalScale * Math.Abs(transform.localScale.x), transform.localScale.y);
         }
+        transform.localScale = new Vector3(xLocalScale * Math.Abs(transform.localScale.x), transform.localScale.y);
+    }
+
+    private bool JudgeIsReturnPos()
+    {
+        return This.x > ReRight.x || This.x < ReLeft.x;
+    }
+
+    private void PlayerHitBehavior()
+    {
+        float Judgetime = playerStepOn2 ? 0.4f : 0.6f; //プレイヤーに踏まれたか、踏まれていないか
+
+        if (playerStepOn2 && !isSet)//攻撃中でない、生成中でない、体力減少をセットしていない場合
+        {
+            bossHp -= 1;
+            isSet = true;
+            isBlink = true;
+        }
+
+        if (backTime < Judgetime)
+        {
+            enemySpeed += 2f;
+            xVector = moveRight ? -1 : 1;
+        }
+        else
+        {
+            backTime = 0.0f;
+            playerHit = false;
+            enemySpeed = beforeSpeed;
+        }
+        backTime += Time.deltaTime;
     }
 
     private void setBossDead()//ボス死亡時
@@ -233,42 +259,39 @@ public class BossBehavior : BlinkObject
 
     private void bossAttack()//ボスの攻撃処理
     {
-        if (gameObject.tag != "Enemy")
+        if (attackNum != 1)
         {
-            if (attackNum != 1)
-            {
-                attackNum = UnityEngine.Random.Range(1, 351);
-            }
-            else
-            {
-                bossAttackBehavior();
-            }
+            attackNum = UnityEngine.Random.Range(1, 351);
+        }
+        else
+        {
+            bossAttackBehavior();
+            
         }
     }
 
     private void bossAttackBehavior()//ボスの攻撃動作
     {
-        if (time < 1f)
+        if (time < 0.8f)
         {
             anim.SetBool("Run", false);
             AttackAnimFin = false;
             xVector = moveRight ? 1 : -1;
             xLocalScale = moveRight ? 1 : -1;
         }
-        else if (time >= 1f && AttackAnimFin == false)
+        else if (time >= 0.8f && AttackAnimFin == false)
         {
             isAttack = true;
             anim.SetBool("Attack", true);
             AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
-            if (currentState.IsName("Boss_Attack"))//ダウンアニメーションの場合
+            if (currentState.IsName("Boss_Attack") && isAttack)//ダウンアニメーションの場合
             {
                 if (currentState.normalizedTime >= 0.32 && currentState.normalizedTime < 1)
                 {
                         enemySpeed += 1f;
                 }
-                else if (currentState.normalizedTime >= 1　|| playerHit)//1で100%再生。再生し終わってるかを判断
+                else if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
-                    playerHit = false;
                     attackNum = 0;
                     time = 0f;
                     isAttack = false;
@@ -276,6 +299,10 @@ public class BossBehavior : BlinkObject
                     anim.SetBool("Attack", false);
                     enemySpeed = beforeSpeed;
                     rb.velocity = new Vector2(0, -gravity);
+                    if (JudgeIsReturnPos())
+                    {
+                        isReturn = true;
+                    }
                 }
             }
 
@@ -286,59 +313,69 @@ public class BossBehavior : BlinkObject
     private void GenerateEnemy()//エネミー生成攻撃の挙動
     {
         anim.SetBool("Generate", true);
-        //一回の攻撃につき、五体のエネミーを生成。
-        if ((CountGenerate == 0 && generateTime < 5) || (CountGenerate == 1 && generateTime < 10))
+        //１回目の攻撃か否かで何番目までのエネミーを生成するか判断
+        int generateAmount = CountGenerate == 0 ? 5 : 10;
+
+        if (generateTime < generateAmount)
         {
             var script = enemies[generateTime].GetComponent<EnemyBehavior>();
-            if (generatingTime > 1f && !script.isGenerated)//ゲーム内時間１秒につき、一体生成
+            if(time > 1f && !script.isGenerated)//ゲーム内時間１秒につき、一体生成
             {
                 script.generateItSelf();//各エネミーのスクリプトでenableをtrueにする。
             }
             else if(script.isGenerated)//エネミースクリプト側で生成動作が終了した場合
             {
                 generateTime++;
-                generatingTime = 0.0f;
+                time = 0.0f;
             }
         }
         else if (generateTime == 5 || generateTime == 10)//攻撃毎に、5体生成した場合
         {
-            generatingTime = 0.0f;
+            time = 0.0f;
             isGenerating = false;
         }
-        generatingTime += Time.deltaTime;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-
-        if(collision.collider.tag == "player")
-        {
-            playerHit = true;
-        }
+        time += Time.deltaTime;
     }
 
     private void TelepoteBehavior()
     {
-        Debug.Log("戻ります");
         nonVisible = true;
-        if (time < 1.5f)
+        gameObject.layer = 14;
+        isInvicble = true;
+
+
+        if (!moveToReturn)
         {
             anim.SetBool("telepote", true);
         }
         else
         {
-            returnPos = Vector2.MoveTowards(transform.position, ReturnPos.transform.position, 5 * Time.deltaTime + 1);
-            Debug.Log(returnPos);
-            rb.MovePosition(returnPos);
-            if (transform.position.x == ReturnPos.transform.position.x)
-            {
-                anim.SetBool("telepote", false);
-                BodyEdge.isTrigger = false;
-                HeadEdge.isTrigger = false;
-                time = 0.0f;
-                isReturn = false;
-            }
+            anim.SetBool("telepote", false);
+            anim.SetBool("GetBack", true);
         }
-        time += Time.deltaTime;
+
+        AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);
+
+        if (currentState.IsName("Boss_Telepote") && currentState.normalizedTime >= 1 && !moveToReturn)
+        {
+            moveToReturn = true;
+        }
+        else if(currentState.IsName("Boss_GetBack") && currentState.normalizedTime >= 1)
+        {
+            Debug.Log("帰還");
+            moveToReturn = false;
+            anim.SetBool("GetBack", false);
+            anim.Play("Boss_stand");
+            gameObject.layer = 6;
+            isInvicble = false;
+            playerHit = false;
+            isReturn = false;
+        }
+    }
+
+    private IEnumerator DelayCoroutine(float sec, Action action)
+    {
+        yield return new WaitForSeconds(sec);
+        action?.Invoke();
     }
 }

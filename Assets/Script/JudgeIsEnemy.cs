@@ -15,7 +15,6 @@ public class JudgeIsEnemy : MonoBehaviour
     {
         if(collision.tag == "Enemy" || collision.tag == "Boss")
         {
-            Debug.Log("引き飛ぶ");
             isEnemy = true;
         }
     }
@@ -30,7 +29,6 @@ public class JudgeIsEnemy : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("引き跳びおわり");
         if (collision.tag == "Enemy" || collision.tag == "Boss")
         {
             isEnemy = false;

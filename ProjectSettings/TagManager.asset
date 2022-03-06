@@ -23,10 +23,10 @@ TagManager:
   - Item
   - FlyingEnemy
   - OnlyEnemyGround
-  - 
-  - 
-  - 
-  - 
+  - InvincibleMode
+  - Ground
+  - Player
+  - EnemyInvincibleMode
   - 
   - 
   - 
