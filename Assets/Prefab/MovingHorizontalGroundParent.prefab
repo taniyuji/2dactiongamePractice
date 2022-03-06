@@ -163,7 +163,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1074083037
-  m_SortingLayer: -3
+  m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: -5676246910159773997, guid: 0965e01d1ccb14b3d9889107d0bbdfea, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -213,7 +213,7 @@ PlatformEffector2D:
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
-    m_Bits: 183
+    m_Bits: 2231
   m_RotationalOffset: 0
   m_UseOneWay: 1
   m_UseOneWayGrouping: 0
@@ -262,6 +262,9 @@ MonoBehaviour:
   - {fileID: 8819567438441930030}
   nowPoint: 0
   onPlay: 0
+  speed: 20
+  stopMove: 0
+  Move: 1
 --- !u!1 &8819567438090406788
 GameObject:
   m_ObjectHideFlags: 0

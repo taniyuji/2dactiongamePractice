@@ -28,6 +28,7 @@ public class BossBehavior : BlinkObject
     private Rigidbody2D rb;
     private bool isSet = false;
     private GameObject player;
+    private GameObject[] children;
     private int xVector;
     private float beforeSpeed = 1;
     private bool moveRight = false;
@@ -63,6 +64,7 @@ public class BossBehavior : BlinkObject
         ReRight = JudgeReturnRight.transform.position;
         ReLeft = JudgeReturnLeft.transform.position;
         ReturnVector = ReturnPos.transform.position;
+        getAllChildren();
     }
 
     private void Update()
@@ -77,7 +79,7 @@ public class BossBehavior : BlinkObject
                     isBlink = false;
                 }
             }
-            else//点滅作業が終了した場合
+            else if(!playerHit)//点滅作業と回避行動が終了した場合
             {
                 if (bossHp > 0)
                 {
@@ -124,25 +126,29 @@ public class BossBehavior : BlinkObject
             GameManager.instance.bossIsvisble = true;
             judgeMoveDir();
 
-            if (JudgeIsReturnPos() && playerHit && !isAttack)//移動範囲外におり、プレイヤーに衝突した場合
-            {
-                isReturn = true;
-            }
-            else if (isGenerating)
+            if (isGenerating)
             {
 
             }
-            else if (!isAttack && !JudgeIsReturnPos() && playerHit)
+            else if (playerHit && !isAttack)//移動範囲外におり、プレイヤーに衝突した場合
             {
-                PlayerHitBehavior();
-            }
-            else
-            {
-                if (!isAttack)
+                if (JudgeIsReturnPos())
                 {
-                    Move();
+                    isReturn = true;
                 }
-                bossAttack();
+                else
+                {
+                    PlayerHitBehavior();
+                }
+            }
+            else if(!playerHit)
+            {
+                BossAttackJudge();
+            }
+            //PlayerHitBehaviorが終了したのち、すぐに動かしたいため上記のif分とは別に記述
+            if (!playerHit && !isAttack && !isGenerating && !isReturn)
+            {
+                Move();
             }
        
             if (isReturn)
@@ -167,12 +173,11 @@ public class BossBehavior : BlinkObject
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isGenerating || isReturn)
+        if (isGenerating || isReturn || playerStepOn2)
         {
             return;
         }
-
-        if (collision.collider.tag == "player")
+        else if (collision.collider.tag == "player")
         {
             playerHit = true;
         }
@@ -226,6 +231,7 @@ public class BossBehavior : BlinkObject
     {
         float Judgetime = playerStepOn2 ? 0.4f : 0.6f; //プレイヤーに踏まれたか、踏まれていないか
 
+
         if (playerStepOn2 && !isSet)//攻撃中でない、生成中でない、体力減少をセットしていない場合
         {
             bossHp -= 1;
@@ -235,14 +241,26 @@ public class BossBehavior : BlinkObject
 
         if (backTime < Judgetime)
         {
-            enemySpeed += 2f;
+            enterInvincibleMode();
+            anim.SetBool("telepote", true);
+            enemySpeed += 0.1f;
             xVector = moveRight ? -1 : 1;
         }
         else
         {
-            backTime = 0.0f;
-            playerHit = false;
-            enemySpeed = beforeSpeed;
+            anim.SetBool("telepote", false);
+            anim.SetBool("GetBack", true);
+            AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);
+            if (currentState.IsName("Boss_GetBack") && currentState.normalizedTime >= 1)
+            {
+                Debug.Log("回避終了");
+                exitInvincibleMode();
+                anim.SetBool("GetBack", false);
+                anim.Play("Boss_stand");
+                backTime = 0.0f;
+                playerHit = false;
+                enemySpeed = beforeSpeed;
+            }
         }
         backTime += Time.deltaTime;
     }
@@ -257,11 +275,11 @@ public class BossBehavior : BlinkObject
         }
     }
 
-    private void bossAttack()//ボスの攻撃処理
+    private void BossAttackJudge()//ボスの攻撃処理
     {
         if (attackNum != 1)
         {
-            attackNum = UnityEngine.Random.Range(1, 351);
+            attackNum = UnityEngine.Random.Range(1, 451);
         }
         else
         {
@@ -292,6 +310,7 @@ public class BossBehavior : BlinkObject
                 }
                 else if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
+                    playerHit = false;
                     attackNum = 0;
                     time = 0f;
                     isAttack = false;
@@ -340,7 +359,7 @@ public class BossBehavior : BlinkObject
     private void TelepoteBehavior()
     {
         nonVisible = true;
-        gameObject.layer = 14;
+        enterInvincibleMode();
         isInvicble = true;
 
 
@@ -362,15 +381,42 @@ public class BossBehavior : BlinkObject
         }
         else if(currentState.IsName("Boss_GetBack") && currentState.normalizedTime >= 1)
         {
-            Debug.Log("帰還");
+           // Debug.Log("帰還");
             moveToReturn = false;
             anim.SetBool("GetBack", false);
             anim.Play("Boss_stand");
-            gameObject.layer = 6;
+            exitInvincibleMode();
             isInvicble = false;
             playerHit = false;
             isReturn = false;
         }
+    }
+
+    private void getAllChildren()
+    {
+        children = new GameObject[gameObject.transform.childCount];
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            children[i] = gameObject.transform.GetChild(i).gameObject;
+        }
+    }
+
+    private void enterInvincibleMode()
+    {
+        foreach (var i in children)
+        {
+            i.layer = 14;
+        }
+        gameObject.layer = 14;
+    }
+
+    private void exitInvincibleMode()
+    {
+        foreach (var i in children)
+        {
+            i.layer = 6;
+        }
+        gameObject.layer = 6;
     }
 
     private IEnumerator DelayCoroutine(float sec, Action action)

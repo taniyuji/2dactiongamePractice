@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: 30
-  speed: 35
+  speed: 30
   jumpSpeed: 20
   jumpHeightLimit: 24
   jumpLimitTime: 0.5
@@ -176,8 +176,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   ground: {fileID: 405939117442520296}
-  boxRight: {fileID: 0}
-  boxLeft: {fileID: 0}
   judgeEnemySpace: {fileID: 7034024389281152084}
   head: {fileID: 405939116045467331}
   EnemyCollision: 0

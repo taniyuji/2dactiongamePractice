@@ -107,35 +107,32 @@ public class EnemyBehavior : BlinkObject
                 {
                     if (!isSet)
                     {
+                        blinkStart = false;
                         enemyHp -= 1;
                         isSet = true;
+                        foreach (var i in children)
+                        {
+                            i.layer = 14;
+                        }
+                        {
+
+                        }
                     }
-                    rb.isKinematic = true;
+                    gameObject.layer = 14;
                     if (!blinkStart)
                     {
                         GetBlink(sr);
                         if (isBlinkFin())
                         {
                             blinkStart = true;
+                            foreach (var i in children)
+                            {
+                                i.layer = 6;
+                            }
+                            gameObject.layer = 6;
+                            isSet = false;
+                            playerStepOn = false;
                         }
-                    }
-
-                    if (!isBlinkFin())
-                    {
-                        foreach (var i in children)//スプライトがあるため、親オブジェクトだけ消したくない
-                        {
-                            i.SetActive(false);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var i in children)
-                        {
-                            i.SetActive(true);
-                        }
-                        rb.isKinematic = false;
-                        playerStepOn = false;
-                        isSet = false;
                     }
                 }
                 else
@@ -201,14 +198,7 @@ public class EnemyBehavior : BlinkObject
         }
     }
 
-    private void getAllChildren()
-    {
-        children = new GameObject[gameObject.transform.childCount];
-        for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
-            children[i] = gameObject.transform.GetChild(i).gameObject;
-        }
-    }
+    
 
     private void getYVector()
     {
@@ -293,6 +283,15 @@ public class EnemyBehavior : BlinkObject
             }
         }
         judgeTime += Time.deltaTime;
+    }
+
+    private void getAllChildren()
+    {
+        children = new GameObject[gameObject.transform.childCount];
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            children[i] = gameObject.transform.GetChild(i).gameObject;
+        }
     }
 
     private bool ComparePos(Vector2 v)
