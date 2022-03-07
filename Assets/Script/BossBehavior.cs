@@ -23,8 +23,9 @@ public class BossBehavior : BlinkObject
     [HideInInspector] public bool hitGround = false;
     [HideInInspector] public bool isAttack = false;
     [HideInInspector] public bool isGenerating = false;
-
     [HideInInspector] public bool playerStepOn2 = false; //敵を踏んだかどうか判断、インスペクターでは非表示
+    [HideInInspector] public bool playerHit = false;
+
     private Animator anim = null;
     private SpriteRenderer sr;
     private Rigidbody2D rb;
@@ -36,7 +37,6 @@ public class BossBehavior : BlinkObject
     private int attackNum;
     private bool AttackAnimFin = false;
     private float time = 0f;
-    private bool playerHit = false;
     private float backTime = 0.0f;
     private bool inBoundary = false;
     private bool isReturn = false;
@@ -50,10 +50,10 @@ public class BossBehavior : BlinkObject
     private Vector2 ReLeft;
     private Vector2 ReturnVector;
     private Func<bool> boolFunction;
-    private bool isBlink = false;
-    private bool isInvicble = false;
-    private bool animSet = false;
+    private bool canBlink = false;
     private bool moveToReturn = false;
+    private bool getDamageFin = true;
+    private bool isDead = false;
 
     private void Start()
     {
@@ -67,123 +67,74 @@ public class BossBehavior : BlinkObject
         ReturnVector = ReturnPos.transform.position;
     }
 
-    private void Update()
-    {
-        if (isSet)//HP減少がセットされた場合
-        {
-            if (isBlink)
-            {
-                GetBlink(sr);
-                if (isBlinkFin())
-                {
-                    isBlink = false;
-                }
-            }
-            else if(!playerHit)//点滅作業と回避行動が終了した場合
-            {
-                if (bossHp > 0)
-                {
-                    //updateのたびにtrueにしてしまうと永遠に生成してしまうため、一回だけフラグを立てる
-                    if ((CountGenerate == 0 && generateTime == 0) || (CountGenerate == 1 && generateTime == 5))
-                    {
-                        isGenerating = true;
-                    }
-
-                    if ((bossHp == 8 || bossHp == 4) && isGenerating)//HPが8または4かつ生成作業中の場合
-                    {
-                        rb.constraints = RigidbodyConstraints2D.FreezeAll;
-                        GenerateEnemy();
-
-                    }
-                    else//HPが上記の該当外または、生成作業が終了した場合
-                    {
-                        anim.SetBool("Generate", false);
-                        CountGenerate++;
-                        playerStepOn2 = false;
-                        isSet = false;
-                        rb.constraints = RigidbodyConstraints2D.FreezePositionY
-                                        | RigidbodyConstraints2D.FreezeRotation;
-                    }
-                }
-                else//ボスのHPが0の場合
-                {
-                    setBossDead();
-                }
-            }
-        }
-       
-        
-    }
-
     void FixedUpdate()
     {
         p = player.transform.position;
         This = transform.position;
         
-        //カメラに写っているかどうか（シーンビューに映る際も適応される）
+        //カメラに写っているか場合
         if (sr.isVisible || nonVisible)
         {
             GameManager.instance.bossIsvisble = true;
             judgeMoveDir();
+            if (!isReturn)
+            {
+                if (!playerStepOn2)
+                {
+                    nonVisible = true;
+                    Debug.Log("踏まれてないよ");
+                    if (!doNotAttack)
+                    {
+                        BossAttackJudge();//攻撃動作が終了した場合isAttackをfalseにする
+                    }
+                    if (!isAttack)
+                    {
+                        Move();/*JudgeisReturnPos()がtrueでplayerとあたった場合、
+                             isReturnをtrueにする。*/
+                    }
+                }
+                else//踏まれた場合
+                {
+                    Debug.Log("踏まれたよ");
+                    GetDamageBehavior();//回避動作が終了したらgetDamageFinフラグをtrueにする。
+                    if (getDamageFin)
+                    {
+                        Debug.Log("EnterTogetDamageFin");
+                        JudgeCanGenerate();//Hpが生成作業対象の場合は、isGeneratingをtrueにする
+                        if (isGenerating)//生成作業中の場合
+                        {
+                            GenerateEnemy();//生成作業が終了したらisGeneratingをfalseにする
+                        }
 
-            if (isGenerating)
-            {
-
-            }
-            else if (playerHit && !isAttack)//移動範囲外におり、プレイヤーに衝突した場合
-            {
-                if (JudgeIsReturnPos())
-                {
-                    isReturn = true;
+                        if(!isGenerating)//生成作業終了後、すぐに起動させたいため上記のif文とは別々に記述
+                        {
+                            playerStepOn2 = false;//ここで!playerStepOn分岐を終了
+                            isSet = false;//GetDamageBehaviorで使用する。仕様上ここでfalseにする
+                            backTime = 0.0f; //仕様上ここでfalseにする
+                        }
+                    }else if(isDead && !canBlink)/*GetDamageBehaviorでisDeadフラグがtrueになり
+                        　　　　　　　　　　　　　　　blinkObjectも終了した場合*/
+                    {
+                        setBossDead();
+                    }
                 }
-                else
-                {
-                    PlayerHitBehavior();
-                }
-            }
-            else if(!playerHit)
-            {
-                if (!doNotAttack)
-                {
-                    BossAttackJudge();
-                }
-            }
-            //PlayerHitBehaviorが終了したのち、すぐに動かしたいため上記のif分とは別に記述
-            if (!playerHit && !isAttack && !isGenerating && !isReturn)
-            {
-                Move();
-            }
-       
-            if (isReturn)
-            {
-                
-                TelepoteBehavior();
-                if (moveToReturn)
-                { 
-                   rb.MovePosition(ReturnVector);
-                }
-            }
-            else
-            {
                 rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
             }
+            else//isReturnの場合
+            {
+                Debug.Log("EnterToIsreturn");
+                TelepoteBehavior();//ここでplayerHitをfalseにする
+                                   
+                if (moveToReturn)//TelepoteBehaviorにてmoveToReturnがtrueにされた場合
+                {
+                    rb.MovePosition(ReturnVector);//移動したあと、TelepoteBehaviorにてisReturnがfalseになる
+                }
+            }
         }
-        else
+        else//画面に入ってない場合
         {
             rb.Sleep();
         }  
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (isGenerating || isReturn || playerStepOn2)
-        {
-            return;
-        }
-        else if (collision.collider.tag == "player")
-        {
-            playerHit = true;
-        }
     }
 
     ///メソッド達///
@@ -205,8 +156,24 @@ public class BossBehavior : BlinkObject
 
     private void Move() //敵キャラの動き
     {
-        
-        if (!isAttack && !isGenerating)//プレイヤーと衝突しておらず、攻撃中でない場合
+        if (playerHit)//プレイヤーと衝突した場合
+        {
+            if (JudgeIsReturnPos())
+            {
+                isReturn = true;
+            }
+            else
+            {
+                xVector = moveRight ? -1 : 1;
+                if (time > 0.2f)
+                {
+                    playerHit = false;
+                    time = 0.0f;
+                }
+                time += Time.deltaTime;
+            }
+        }
+        else//プレイヤーと衝突していない場合
         {
             boolFunction = () => This.y < p.y;
             if (inBoundary && boolFunction())//境界間の内におり、頭上にいる場合
@@ -230,52 +197,68 @@ public class BossBehavior : BlinkObject
         return This.x > ReRight.x || This.x < ReLeft.x;
     }
 
-    private void PlayerHitBehavior()
+    private void GetDamageBehavior()
     {
-        float Judgetime = playerStepOn2 ? 0.4f : 0.6f; //プレイヤーに踏まれたか、踏まれていないか
-
-
-        if (playerStepOn2 && !isSet)//攻撃中でない、生成中でない、体力減少をセットしていない場合
+        Debug.Log(backTime);
+        //一度起動させたら、次にfixedUpdateでisSetがfalseになるまで起動させない。
+        if (!isSet)
         {
+            Debug.Log("GetDamageBehavior set");
             bossHp -= 1;
             isSet = true;
-            isBlink = true;
+            canBlink = true;
+            getDamageFin = false;
         }
-
-        if (backTime < Judgetime)
+           
+        //一度終了したら、次に上記のif文でcanBlinkがtrueになるまで起動させない。
+        if (canBlink)
         {
-            SetInvincible();
-            anim.SetBool("telepote", true);
-            enemySpeed += 0.1f;
-            xVector = moveRight ? -1 : 1;
-        }
-        else
-        {
-            anim.SetBool("telepote", false);
-            anim.SetBool("GetBack", true);
-            AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);
-            if (currentState.IsName("Boss_GetBack") && currentState.normalizedTime >= 1)
+            GetBlink(sr);
+            if (isBlinkFin())
             {
-                Debug.Log("回避終了");
-                UnSetInvincible();
-                anim.SetBool("GetBack", false);
-                anim.Play("Boss_stand");
-                backTime = 0.0f;
-                playerHit = false;
-                enemySpeed = beforeSpeed;
+                canBlink = false;
             }
         }
-        backTime += Time.deltaTime;
+        if(bossHp <= 0)
+        {
+            isDead = true;
+        }
+        if (!isDead)
+        {
+            if (backTime < 1f)
+            {
+                anim.SetBool("telepote", true);
+                SetInvincible();
+                enemySpeed += 0.5f;
+                xVector = moveRight ? -1 : 1;
+            }
+            else if (backTime >= 1f && backTime < 2f)
+            {
+                Debug.Log("GetDamageBehavior's animation changed");
+                enemySpeed = beforeSpeed;
+                xVector = 0;
+                anim.SetBool("telepote", false);
+                anim.SetBool("GetBack", true);
+            }
+            else if (backTime >= 2f && backTime < 3f)
+            {
+                Debug.Log("GetDamageBehaviorFin");
+                anim.SetBool("GetBack", false);
+                anim.Play("Boss_stand");
+                UnSetInvincible();
+                getDamageFin = true;
+            }
+            backTime += Time.deltaTime;
+        }
     }
+
+    
 
     private void setBossDead()//ボス死亡時
     {
-        if (isBlinkFin())//点滅中でない場合
-        {
-            GameManager.instance.isBossDead = true;
-            gameObject.SetActive(false);
-            playerStepOn2 = false;
-        }
+        GameManager.instance.isBossDead = true;
+        gameObject.SetActive(false);
+        playerStepOn2 = false;
     }
 
     private void BossAttackJudge()//ボスの攻撃処理
@@ -313,18 +296,12 @@ public class BossBehavior : BlinkObject
                 }
                 else if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
-                    playerHit = false;
                     attackNum = 0;
                     time = 0f;
                     isAttack = false;
                     AttackAnimFin = true;
                     anim.SetBool("Attack", false);
                     enemySpeed = beforeSpeed;
-                    rb.velocity = new Vector2(0, -gravity);
-                    if (JudgeIsReturnPos())
-                    {
-                        isReturn = true;
-                    }
                 }
             }
 
@@ -332,10 +309,22 @@ public class BossBehavior : BlinkObject
         time += Time.deltaTime;
     }
 
+    private void JudgeCanGenerate()
+    {
+        if (bossHp == 8 || bossHp == 4)
+        {
+            if ((CountGenerate == 0 && generateTime == 0) || (CountGenerate == 1 && generateTime == 5))
+            {
+                isGenerating = true;
+            }
+        }
+    }
+
     private void GenerateEnemy()//エネミー生成攻撃の挙動
     {
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
         anim.SetBool("Generate", true);
-        //１回目の攻撃か否かで何番目までのエネミーを生成するか判断
+        //１回目の生成攻撃か否かで何番目までのエネミーを生成するか判断
         int generateAmount = CountGenerate == 0 ? 5 : 10;
 
         if (generateTime < generateAmount)
@@ -353,6 +342,11 @@ public class BossBehavior : BlinkObject
         }
         else if (generateTime == 5 || generateTime == 10)//攻撃毎に、5体生成した場合
         {
+            Debug.Log("生成終了");
+            anim.SetBool("Generate", false);
+            CountGenerate++;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionY
+                            | RigidbodyConstraints2D.FreezeRotation;
             time = 0.0f;
             isGenerating = false;
         }
@@ -363,7 +357,7 @@ public class BossBehavior : BlinkObject
     {
         nonVisible = true;
         SetInvincible();
-        isInvicble = true;
+        playerHit = false;
 
 
         if (!moveToReturn)
@@ -389,8 +383,6 @@ public class BossBehavior : BlinkObject
             anim.SetBool("GetBack", false);
             anim.Play("Boss_stand");
             UnSetInvincible();
-            isInvicble = false;
-            playerHit = false;
             isReturn = false;
         }
     }

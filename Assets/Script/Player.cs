@@ -173,6 +173,7 @@ public class Player : BlinkObject
                             GetDamagedSE.Play();
                         }
                         b.playerStepOn2 = false;
+                        b.playerHit = true;
                         isDown = true;
                         GameManager.instance.hpNum -= 0.1m;
                     }
