@@ -398,13 +398,15 @@ public class BossBehavior : BlinkObject
     private void SetInvincible()
     {
         gameObject.layer = 14;
-        children.Select(o => o.layer = 14);
+        children.Select(o => o.layer = 14)
+                .ToList();
     }
 
     private void UnSetInvincible()
     {
         gameObject.layer = 6;
-        children.Select(o => o.layer = 6);
+        children.Select(o => o.layer = 6)
+                .ToList();
     }
 
     private IEnumerator DelayCoroutine(float sec, Action action)
