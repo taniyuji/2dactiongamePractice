@@ -283,6 +283,11 @@ MonoBehaviour:
   isFly: 0
   ofBoss: 0
   boss: {fileID: 0}
+  children:
+  - {fileID: 8963675222174618133}
+  - {fileID: 406549383545838877}
+  - {fileID: 2003909189268267085}
+  - {fileID: 3974697379809362311}
   playerStepOn: 0
   isGenerated: 0
 --- !u!1 &3974697379809362311

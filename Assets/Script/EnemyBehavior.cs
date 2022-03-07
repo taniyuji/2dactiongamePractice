@@ -18,13 +18,13 @@ public class EnemyBehavior : BlinkObject
     public bool isFly;
     public bool ofBoss;
     public GameObject boss;
+    public List<GameObject> children;
     [HideInInspector] public bool playerStepOn = false; //敵を踏んだかどうか判断、インスペクターでは非表示
     [HideInInspector] public bool isGenerated = false;
 
     private Animator anim = null;
     private SpriteRenderer sr;
     private Rigidbody2D rb;
-    private GameObject[] children;
     private GameObject Rlim;
     private GameObject LLim;
     private bool isDead;
@@ -45,7 +45,6 @@ public class EnemyBehavior : BlinkObject
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
-        getAllChildren();
         Rlim = GameObject.Find("RightMoveLimit");
         LLim = GameObject.Find("LeftMoveLimit");
         if (ofBoss)
@@ -110,12 +109,9 @@ public class EnemyBehavior : BlinkObject
                         blinkStart = false;
                         enemyHp -= 1;
                         isSet = true;
-                        foreach (var i in children)
+                        if(children.Count > 0)
                         {
-                            i.layer = 14;
-                        }
-                        {
-
+                            children.ForEach(o => o.layer = 14);
                         }
                     }
                     gameObject.layer = 14;
@@ -125,9 +121,9 @@ public class EnemyBehavior : BlinkObject
                         if (isBlinkFin())
                         {
                             blinkStart = true;
-                            foreach (var i in children)
+                            if (children.Count > 0)
                             {
-                                i.layer = 6;
+                                children.ForEach(o => o.layer = 6);
                             }
                             gameObject.layer = 6;
                             isSet = false;
@@ -283,15 +279,6 @@ public class EnemyBehavior : BlinkObject
             }
         }
         judgeTime += Time.deltaTime;
-    }
-
-    private void getAllChildren()
-    {
-        children = new GameObject[gameObject.transform.childCount];
-        for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
-            children[i] = gameObject.transform.GetChild(i).gameObject;
-        }
     }
 
     private bool ComparePos(Vector2 v)

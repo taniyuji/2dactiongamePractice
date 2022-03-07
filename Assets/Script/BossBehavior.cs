@@ -14,10 +14,12 @@ public class BossBehavior : BlinkObject
     public int bossHp;
     public int stopWidth = 25;
     public List<GameObject> enemies;
+    public List<GameObject> children;
     public EnemyCollisionCheck enc;
     public GameObject JudgeReturnRight;
     public GameObject JudgeReturnLeft;
     public GameObject ReturnPos;
+    public bool doNotAttack = false;
     [HideInInspector] public bool hitGround = false;
     [HideInInspector] public bool isAttack = false;
     [HideInInspector] public bool isGenerating = false;
@@ -28,7 +30,6 @@ public class BossBehavior : BlinkObject
     private Rigidbody2D rb;
     private bool isSet = false;
     private GameObject player;
-    private GameObject[] children;
     private int xVector;
     private float beforeSpeed = 1;
     private bool moveRight = false;
@@ -64,7 +65,6 @@ public class BossBehavior : BlinkObject
         ReRight = JudgeReturnRight.transform.position;
         ReLeft = JudgeReturnLeft.transform.position;
         ReturnVector = ReturnPos.transform.position;
-        getAllChildren();
     }
 
     private void Update()
@@ -143,7 +143,10 @@ public class BossBehavior : BlinkObject
             }
             else if(!playerHit)
             {
-                BossAttackJudge();
+                if (!doNotAttack)
+                {
+                    BossAttackJudge();
+                }
             }
             //PlayerHitBehaviorが終了したのち、すぐに動かしたいため上記のif分とは別に記述
             if (!playerHit && !isAttack && !isGenerating && !isReturn)
@@ -241,7 +244,8 @@ public class BossBehavior : BlinkObject
 
         if (backTime < Judgetime)
         {
-            enterInvincibleMode();
+            gameObject.layer = 14;
+            children.ForEach(o => o.layer = 14);
             anim.SetBool("telepote", true);
             enemySpeed += 0.1f;
             xVector = moveRight ? -1 : 1;
@@ -254,7 +258,8 @@ public class BossBehavior : BlinkObject
             if (currentState.IsName("Boss_GetBack") && currentState.normalizedTime >= 1)
             {
                 Debug.Log("回避終了");
-                exitInvincibleMode();
+                gameObject.layer = 6;
+                children.ForEach(o => o.layer = 6);
                 anim.SetBool("GetBack", false);
                 anim.Play("Boss_stand");
                 backTime = 0.0f;
@@ -359,7 +364,8 @@ public class BossBehavior : BlinkObject
     private void TelepoteBehavior()
     {
         nonVisible = true;
-        enterInvincibleMode();
+        gameObject.layer = 14;
+        children.ForEach(o => o.layer = 14);
         isInvicble = true;
 
 
@@ -385,38 +391,12 @@ public class BossBehavior : BlinkObject
             moveToReturn = false;
             anim.SetBool("GetBack", false);
             anim.Play("Boss_stand");
-            exitInvincibleMode();
+            gameObject.layer = 6;
+            children.ForEach(o => o.layer = 6);
             isInvicble = false;
             playerHit = false;
             isReturn = false;
         }
-    }
-
-    private void getAllChildren()
-    {
-        children = new GameObject[gameObject.transform.childCount];
-        for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
-            children[i] = gameObject.transform.GetChild(i).gameObject;
-        }
-    }
-
-    private void enterInvincibleMode()
-    {
-        foreach (var i in children)
-        {
-            i.layer = 14;
-        }
-        gameObject.layer = 14;
-    }
-
-    private void exitInvincibleMode()
-    {
-        foreach (var i in children)
-        {
-            i.layer = 6;
-        }
-        gameObject.layer = 6;
     }
 
     private IEnumerator DelayCoroutine(float sec, Action action)

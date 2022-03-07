@@ -315,6 +315,10 @@ MonoBehaviour:
   bossHp: 6
   stopWidth: 25
   enemies: []
+  children:
+  - {fileID: 3481670287036235370}
+  - {fileID: 4920015465526936437}
+  - {fileID: 6569035957585880437}
   enc: {fileID: 650762974059182127}
   JudgeReturnRight: {fileID: 0}
   JudgeReturnLeft: {fileID: 0}
