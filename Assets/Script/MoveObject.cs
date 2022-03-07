@@ -26,7 +26,7 @@ public class MoveObject : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if(movePoint != null && movePoint.Length > 0 && rb != null)//オブジェクトを初期位置に設定
         {
-            rb.position = movePoint[0].transform.position;
+            rb.position = movePoint[nowPoint].transform.position;
             oldPos = rb.position;
         }
         pObj = GameObject.Find("Player");
