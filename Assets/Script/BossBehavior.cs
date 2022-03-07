@@ -244,8 +244,7 @@ public class BossBehavior : BlinkObject
 
         if (backTime < Judgetime)
         {
-            gameObject.layer = 14;
-            children.ForEach(o => o.layer = 14);
+            SetInvincible();
             anim.SetBool("telepote", true);
             enemySpeed += 0.1f;
             xVector = moveRight ? -1 : 1;
@@ -258,8 +257,7 @@ public class BossBehavior : BlinkObject
             if (currentState.IsName("Boss_GetBack") && currentState.normalizedTime >= 1)
             {
                 Debug.Log("回避終了");
-                gameObject.layer = 6;
-                children.ForEach(o => o.layer = 6);
+                UnSetInvincible();
                 anim.SetBool("GetBack", false);
                 anim.Play("Boss_stand");
                 backTime = 0.0f;
@@ -364,8 +362,7 @@ public class BossBehavior : BlinkObject
     private void TelepoteBehavior()
     {
         nonVisible = true;
-        gameObject.layer = 14;
-        children.ForEach(o => o.layer = 14);
+        SetInvincible();
         isInvicble = true;
 
 
@@ -391,12 +388,23 @@ public class BossBehavior : BlinkObject
             moveToReturn = false;
             anim.SetBool("GetBack", false);
             anim.Play("Boss_stand");
-            gameObject.layer = 6;
-            children.ForEach(o => o.layer = 6);
+            UnSetInvincible();
             isInvicble = false;
             playerHit = false;
             isReturn = false;
         }
+    }
+
+    private void SetInvincible()
+    {
+        gameObject.layer = 14;
+        children.Select(o => o.layer = 14);
+    }
+
+    private void UnSetInvincible()
+    {
+        gameObject.layer = 6;
+        children.Select(o => o.layer = 6);
     }
 
     private IEnumerator DelayCoroutine(float sec, Action action)

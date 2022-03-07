@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 
 public class EnemyBehavior : BlinkObject
 {
@@ -50,10 +51,7 @@ public class EnemyBehavior : BlinkObject
         if (ofBoss)
         {
             sr.enabled = false;
-            foreach (var i in children)
-            {
-                i.SetActive(false);
-            }
+            children.ForEach(o => o.SetActive(false));
         }
         //飛行とジャンプを両方入力してしまった場合の修正
         if (isFly)
@@ -109,23 +107,15 @@ public class EnemyBehavior : BlinkObject
                         blinkStart = false;
                         enemyHp -= 1;
                         isSet = true;
-                        if(children.Count > 0)
-                        {
-                            children.ForEach(o => o.layer = 14);
-                        }
+                        SetInvincible();
                     }
-                    gameObject.layer = 14;
                     if (!blinkStart)
                     {
                         GetBlink(sr);
                         if (isBlinkFin())
                         {
                             blinkStart = true;
-                            if (children.Count > 0)
-                            {
-                                children.ForEach(o => o.layer = 6);
-                            }
-                            gameObject.layer = 6;
+                            UnSetInvincible();
                             isSet = false;
                             playerStepOn = false;
                         }
@@ -172,10 +162,7 @@ public class EnemyBehavior : BlinkObject
     public void generateItSelf()
     {
         sr.enabled = true;
-        foreach (var i in children)
-        {
-            i.SetActive(true);
-        }
+        children.ForEach(o => o.SetActive(true));
         isGenerated = true;
     }
 
@@ -285,4 +272,17 @@ public class EnemyBehavior : BlinkObject
     {
         return (int)transform.position.x == (int)v.x && (int)transform.position.y == (int)transform.position.y;
     }
+
+    private void SetInvincible()
+    {
+        gameObject.layer = 14;
+        children.Select(o => o.layer = 14);
+    }
+
+    private void UnSetInvincible()
+    {
+        gameObject.layer = 6;
+        children.Select(o => o.layer = 6);
+    }
+
 }
