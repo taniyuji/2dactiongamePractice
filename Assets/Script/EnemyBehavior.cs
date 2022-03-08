@@ -22,13 +22,13 @@ public class EnemyBehavior : BlinkObject
     public List<GameObject> children;
     [HideInInspector] public bool playerStepOn = false; //敵を踏んだかどうか判断、インスペクターでは非表示
     [HideInInspector] public bool isGenerated = false;
+    [HideInInspector] public bool isDead;
 
     private Animator anim = null;
     private SpriteRenderer sr;
     private Rigidbody2D rb;
     private GameObject Rlim;
     private GameObject LLim;
-    private bool isDead;
     private bool posSet = false;
     private Vector2 beforePos;
     private float xVector;
@@ -102,14 +102,14 @@ public class EnemyBehavior : BlinkObject
                 }
                 if (enemyHp > 0)
                 {
+                    SetInvincible();
                     if (!isSet)
                     {
+                        enemyHp--;
                         blinkStart = false;
-                        enemyHp -= 1;
                         isSet = true;
-                        SetInvincible();
                     }
-                    if (!blinkStart)
+                    if (!blinkStart && enemyHp > 0)
                     {
                         GetBlink(sr);
                         if (isBlinkFin())
@@ -121,30 +121,28 @@ public class EnemyBehavior : BlinkObject
                         }
                     }
                 }
+                 if(enemyHp <= 0)
+                {              
+                    isDead = true;
+                }
+            }
+            else
+            {
+                anim.SetBool("Defeated", true);
+                if (isJamp)
+                {
+                    rb.velocity = new Vector2(0, -gravity);
+                }
                 else
                 {
-                    
-                    isDead = true;
-                    anim.SetBool("Defeated", true);
-                    if (isJamp)
+                    rb.velocity = new Vector2(0, 0);
+                }
+                
+                if (anim.GetCurrentAnimatorStateInfo(0).IsName("BigEnemyDefeated"))
+                {
+                    if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
                     {
-                        rb.velocity = new Vector2(0, -gravity);
-                    }
-                    else
-                    {
-                        rb.velocity = new Vector2(0, 0);
-                    }
-                    
-                    foreach (var i in children)//スプライトがあるため、親オブジェクトだけ消したくない
-                    {
-                        i.SetActive(false);
-                    }
-                    if (anim.GetCurrentAnimatorStateInfo(0).IsName("BigEnemyDefeated"))
-                    {
-                        if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-                        {
-                            //gameObject.SetActive(false);
-                        }
+                        gameObject.SetActive(false);
                     }
                 }
             }

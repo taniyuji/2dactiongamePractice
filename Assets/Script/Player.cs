@@ -177,7 +177,7 @@ public class Player : BlinkObject
                         isDown = true;
                         GameManager.instance.hpNum -= 0.1m;
                     }
-                    else
+                    else if(!o.isDead)
                     {
                         if (EnemyOrBossStepSE != null)
                         {

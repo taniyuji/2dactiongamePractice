@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 405939116045467340}
   - component: {fileID: 405939116045467330}
   - component: {fileID: 405939116045467331}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: HeadCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 405939116434810719}
   - component: {fileID: 405939116434810707}
   - component: {fileID: 405939116434810706}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Player
   m_TagString: player
   m_Icon: {fileID: 0}
@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 405939117442520298}
   - component: {fileID: 405939117442520297}
   - component: {fileID: 405939117442520296}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 1086494803835498892}
   - component: {fileID: 1612665856809029737}
   - component: {fileID: 7034024389281152084}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: downCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

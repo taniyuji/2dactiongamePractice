@@ -151,6 +151,11 @@ MonoBehaviour:
   isFly: 0
   ofBoss: 0
   boss: {fileID: 0}
+  children:
+  - {fileID: 7301626849824427114}
+  - {fileID: 6486607109962446449}
+  - {fileID: 7205277031276099600}
+  - {fileID: 934127239561704357}
   playerStepOn: 0
   isGenerated: 0
 --- !u!212 &1147646375463163055
@@ -191,7 +196,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -641761675
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b0ce5d7577d15466ba1422b3240f7ca4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

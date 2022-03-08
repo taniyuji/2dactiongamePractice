@@ -72,14 +72,22 @@ MonoBehaviour:
   BoundHeight: 7
   enemySpeed: 15
   gravity: 20
-  DirectionChangeCount: 400
+  enemyHp: 1
   nonVisible: 0
   DirectionRight: 1
   isJamp: 0
   myScore: 10
   g: {fileID: 7097574723148991221}
   isFly: 1
+  ofBoss: 0
+  boss: {fileID: 0}
+  children:
+  - {fileID: 6383653711324228896}
+  - {fileID: 7487032735248056419}
+  - {fileID: 4694900742797262023}
+  - {fileID: 4631239987487068727}
   playerStepOn: 0
+  isGenerated: 0
 --- !u!212 &1855782679090707804
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -118,7 +126,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -641761675
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d47e598238cf7460780b308e4f714161, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -43,14 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d14b83bafb244429baceebbb3937c252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fade: {fileID: 0}
+  fade: {fileID: 1273567067422481643, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
   score: 0
   stageNum: 1
-  hpNum: 3
-  Cam: {fileID: 0}
-  cam: {fileID: 0}
-  slight: {fileID: 0}
-  BossBGM: {fileID: 0}
-  ForestBGM: {fileID: 0}
+  BossBGM: {fileID: 8169943957579628909, guid: fe5b88ab1436341bda2168ce66515ff5, type: 3}
+  Cam: {fileID: 7567734981287570020, guid: ddd5634b95c954a58ae23edd74c1e6b5, type: 3}
+  cam: {fileID: 3813241603505013628, guid: 82fbaf9618b614652822b90400926a41, type: 3}
+  BackGroundChangePos: {fileID: 2322594987214678870, guid: 24548a4612d5843d19fc9c37847bbe16, type: 3}
+  player: {fileID: 405939116434810712, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
   bossIsvisble: 0
   isBossDead: 0
+  goBossBattle: 0
+  isFallDead: 0

@@ -22,9 +22,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool isBossDead = false;
     [HideInInspector] public bool goBossBattle = false;
     [HideInInspector] public bool isFallDead = false;
+    [HideInInspector] public bool goNextScene = false;
 
     private bool Play = false;
-    private bool goNextScene = false;
     private float BackColorR;
     private float BackColorG;
     private float BackColorB;
