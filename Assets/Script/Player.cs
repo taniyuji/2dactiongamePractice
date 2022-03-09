@@ -156,6 +156,7 @@ public class Player : BlinkObject
 
         if (collision.collider.tag == "Enemy_Head")
         {
+            Debug.Log("踏んだ");
             if (o != null || b != null)
             {
                

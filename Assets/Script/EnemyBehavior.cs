@@ -102,12 +102,19 @@ public class EnemyBehavior : BlinkObject
                 }
                 if (enemyHp > 0)
                 {
-                    SetInvincible();
                     if (!isSet)
                     {
                         enemyHp--;
                         blinkStart = false;
                         isSet = true;
+                    }
+                    if (isJamp)
+                    {
+                        rb.isKinematic = true;
+                    }
+                    else
+                    {
+                        SetInvincible();
                     }
                     if (!blinkStart && enemyHp > 0)
                     {
@@ -129,20 +136,21 @@ public class EnemyBehavior : BlinkObject
             else
             {
                 anim.SetBool("Defeated", true);
+                AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);
                 if (isJamp)
                 {
                     rb.velocity = new Vector2(0, -gravity);
+                    transform.Rotate(new Vector3(0, 0, 5));
+                    Destroy(gameObject, 3f);
                 }
                 else
                 {
                     rb.velocity = new Vector2(0, 0);
-                }
-                
-                if (anim.GetCurrentAnimatorStateInfo(0).IsName("BigEnemyDefeated"))
-                {
-                    if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-                    {
-                        gameObject.SetActive(false);
+                    if (checkDefeatedAnim(currentState)){
+                        if (currentState.normalizedTime >= 1)
+                        {
+                            gameObject.SetActive(false);
+                        }
                     }
                 }
             }
@@ -265,6 +273,12 @@ public class EnemyBehavior : BlinkObject
         }
         judgeTime += Time.deltaTime;
     }
+    private bool checkDefeatedAnim(AnimatorStateInfo currentState)
+    {
+        return currentState.IsName("BigEnemyDefeated")
+            || currentState.IsName("UltraBigEnemyDefeated")
+            || currentState.IsName("FlyingEnemyDefeated");
+    }
 
     private bool ComparePos(Vector2 v)
     {
@@ -283,6 +297,8 @@ public class EnemyBehavior : BlinkObject
         gameObject.layer = 6;
         children.Select(o => o.layer = 6)
                 .ToList();
+        children[1].layer = 15;
+        
     }
 
 }

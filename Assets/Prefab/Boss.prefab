@@ -80,7 +80,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8114657272603373181}
   - component: {fileID: 6670252709622124105}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Head
   m_TagString: Enemy_Head
   m_Icon: {fileID: 0}
@@ -323,10 +323,12 @@ MonoBehaviour:
   JudgeReturnRight: {fileID: 0}
   JudgeReturnLeft: {fileID: 0}
   ReturnPos: {fileID: 0}
+  doNotAttack: 0
   hitGround: 0
   isAttack: 0
   isGenerating: 0
   playerStepOn2: 0
+  playerHit: 0
 --- !u!50 &5332623041972457708
 Rigidbody2D:
   serializedVersion: 4
