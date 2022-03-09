@@ -4911,6 +4911,10 @@ PrefabInstance:
       propertyPath: enemies.Array.data[4]
       value: 
       objectReference: {fileID: 1628056452}
+    - target: {fileID: 1022158829641947749, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.44
+      objectReference: {fileID: 0}
     - target: {fileID: 3390249241601091184, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: m_Points.Array.data[5].x
       value: 12.486957
@@ -4953,7 +4957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4920015465526936437, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5332623041972457708, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: m_BodyType

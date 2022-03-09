@@ -82,7 +82,7 @@ public class BossBehavior : BlinkObject
                 if (!playerStepOn2)
                 {
                     nonVisible = true;
-                    Debug.Log("踏まれてないよ");
+                    //Debug.Log("踏まれてないよ");
                     if (!doNotAttack)
                     {
                         BossAttackJudge();//攻撃動作が終了した場合isAttackをfalseにする
@@ -95,11 +95,11 @@ public class BossBehavior : BlinkObject
                 }
                 else//踏まれた場合
                 {
-                    Debug.Log("踏まれたよ");
+                    //Debug.Log("踏まれたよ");
                     GetDamageBehavior();//回避動作が終了したらgetDamageFinフラグをtrueにする。
                     if (getDamageFin)
                     {
-                        Debug.Log("EnterTogetDamageFin");
+                        //Debug.Log("EnterTogetDamageFin");
                         JudgeCanGenerate();//Hpが生成作業対象の場合は、isGeneratingをtrueにする
                         if (isGenerating)//生成作業中の場合
                         {
@@ -122,7 +122,7 @@ public class BossBehavior : BlinkObject
             }
             else//isReturnの場合
             {
-                Debug.Log("EnterToIsreturn");
+                //Debug.Log("EnterToIsreturn");
                 TelepoteBehavior();//ここでplayerHitをfalseにする
                                    
                 if (moveToReturn)//TelepoteBehaviorにてmoveToReturnがtrueにされた場合
@@ -199,11 +199,11 @@ public class BossBehavior : BlinkObject
 
     private void GetDamageBehavior()
     {
-        Debug.Log(backTime);
+        //Debug.Log(backTime);
         //一度起動させたら、次にfixedUpdateでisSetがfalseになるまで起動させない。
         if (!isSet)
         {
-            Debug.Log("GetDamageBehavior set");
+            //Debug.Log("GetDamageBehavior set");
             bossHp -= 1;
             isSet = true;
             canBlink = true;
@@ -234,7 +234,7 @@ public class BossBehavior : BlinkObject
             }
             else if (backTime >= 1f && backTime < 2f)
             {
-                Debug.Log("GetDamageBehavior's animation changed");
+                //Debug.Log("GetDamageBehavior's animation changed");
                 enemySpeed = beforeSpeed;
                 xVector = 0;
                 anim.SetBool("telepote", false);
@@ -242,7 +242,7 @@ public class BossBehavior : BlinkObject
             }
             else if (backTime >= 2f && backTime < 3f)
             {
-                Debug.Log("GetDamageBehaviorFin");
+                //Debug.Log("GetDamageBehaviorFin");
                 anim.SetBool("GetBack", false);
                 anim.Play("Boss_stand");
                 UnSetInvincible();
@@ -399,6 +399,7 @@ public class BossBehavior : BlinkObject
         gameObject.layer = 6;
         children.Select(o => o.layer = 6)
                 .ToList();
+        children[1].layer = 15;
     }
 
     private IEnumerator DelayCoroutine(float sec, Action action)

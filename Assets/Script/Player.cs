@@ -67,7 +67,6 @@ public class Player : BlinkObject
     private bool wasJamp = false;
     private bool invincibleMode;//無敵状態
     private bool beforeDown = false;
-    private bool inEnemy = false;
     ///////////////////////////////////メイン///////////////////////////////////
     void Start()
     {
@@ -169,16 +168,19 @@ public class Player : BlinkObject
                 {
                     if (b.isAttack || b.isGenerating)//ボスが攻撃中の場合
                     {
-                        if (GetDamagedSE != null)
+                        if (gameObject.layer == 13)
                         {
-                            GetDamagedSE.Play();
+                            if (GetDamagedSE != null)
+                            {
+                                GetDamagedSE.Play();
+                            }
+                            b.playerStepOn2 = false;
+                            b.playerHit = true;
+                            isDown = true;
+                            GameManager.instance.hpNum -= 0.1m;
                         }
-                        b.playerStepOn2 = false;
-                        b.playerHit = true;
-                        isDown = true;
-                        GameManager.instance.hpNum -= 0.1m;
                     }
-                    else if(!o.isDead)
+                    else
                     {
                         if (EnemyOrBossStepSE != null)
                         {
@@ -211,28 +213,10 @@ public class Player : BlinkObject
             moveObj = collision.gameObject.GetComponent<MoveObject>();
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.tag == "Enemy" || collision.tag == "Boss")
-        {
-            inEnemy = true;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.tag == "Enemy_Body" || collision.tag == "Boss")
-        {
-            inEnemy = true;
-        }
-    }
+  
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Enemy_Body" || collision.tag == "Boss")
-        {
-            inEnemy = false;
-        }
         if (collision.tag == "MovingGround")
         {
             moveObj = null;
@@ -523,16 +507,8 @@ public class Player : BlinkObject
     public void bossDownBehavior()
     {
         if(downTime < 0.5f) {
-          
-            if (!inEnemy)
-            {
-                xspeed = enemyOnRight ? -30 : 30;
-            }
-            else
-            {
-                xspeed = enemyOnRight ? -70 : 70;
-            }
-            yspeed = 5f;           
+            xspeed = enemyOnRight ? 0 : 0;
+            yspeed = 0;           
         }
         else if (!JudgeEnemySpace())
         {
