@@ -11181,7 +11181,7 @@ MonoBehaviour:
   - {fileID: 1465255413}
   - {fileID: 1957410633}
   continueButton: {fileID: 2084800976}
-  continueNum: 2
+  continueNum: 0
 --- !u!4 &1152320169
 Transform:
   m_ObjectHideFlags: 0
