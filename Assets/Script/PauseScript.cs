@@ -37,5 +37,6 @@ public class PauseScript : MonoBehaviour
     public void BackToTiTle()
     {
         SceneManager.LoadScene("TitleScene");
+        
     }
 }

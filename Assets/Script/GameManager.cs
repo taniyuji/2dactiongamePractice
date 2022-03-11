@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public Camera cam;
     public GameObject BackGroundChangePos;
     public GameObject player;
+    public AudioSource buttonSE;
     [HideInInspector] public bool bossIsvisble;
     [HideInInspector] public bool isBossDead = false;
     [HideInInspector] public bool goBossBattle = false;
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        Time.timeScale = 1f;
          //インスタンスが存在しない場合
         if(instance == null)
         {
@@ -50,6 +52,10 @@ public class GameManager : MonoBehaviour
 
     public void startFadeOut()
     {
+        if (buttonSE != null)
+        {
+            buttonSE.Play();
+        }
         fade.StartFadeOut();
     }
 

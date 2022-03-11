@@ -51,7 +51,9 @@ MonoBehaviour:
   cam: {fileID: 3813241603505013628, guid: 82fbaf9618b614652822b90400926a41, type: 3}
   BackGroundChangePos: {fileID: 2322594987214678870, guid: 24548a4612d5843d19fc9c37847bbe16, type: 3}
   player: {fileID: 405939116434810712, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
+  buttonSE: {fileID: 1081584583134506691, guid: d7c6523c967914b24b641ef9e6765881, type: 3}
   bossIsvisble: 0
   isBossDead: 0
   goBossBattle: 0
   isFallDead: 0
+  goNextScene: 0
