@@ -22,6 +22,7 @@ public class Player : BlinkObject
     public GameObject RLimitObj;
     public GameObject LLimitObj;
     public GameObject deadPos = null;
+    public GameObject playerFoots;
     public bool testMode = false;
     public AudioSource JampSE;
     public AudioSource JampDownSE;
@@ -80,7 +81,7 @@ public class Player : BlinkObject
 
     private void Update()
     {
-        if(Mathf.Approximately(Time.timeScale, 0f))//pause中は起動させない
+        if (Mathf.Approximately(Time.timeScale, 0f))//pause中は起動させない
         {
             return;
         }
@@ -486,7 +487,7 @@ public class Player : BlinkObject
         {
             if (!isGround)
             {
-                xspeed = enemyOnRight ? -20: 20;
+                xspeed = enemyOnRight ? 0: 0;
                 yspeed = -1f;
             }
             else

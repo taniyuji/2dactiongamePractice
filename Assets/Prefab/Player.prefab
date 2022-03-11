@@ -183,6 +183,7 @@ MonoBehaviour:
   RLimitObj: {fileID: 0}
   LLimitObj: {fileID: 0}
   deadPos: {fileID: 0}
+  playerFoots: {fileID: 405939117442520299}
   testMode: 0
   JampSE: {fileID: 0}
   JampDownSE: {fileID: 0}
@@ -308,7 +309,7 @@ GameObject:
   - component: {fileID: 405939117442520298}
   - component: {fileID: 405939117442520297}
   - component: {fileID: 405939117442520296}
-  m_Layer: 13
+  m_Layer: 17
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

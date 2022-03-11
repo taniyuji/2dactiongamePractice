@@ -11,7 +11,7 @@ public class CheckPlayerPenetration : MonoBehaviour
     {
         if(collision.gameObject.layer == 11)
         {
-            //Debug.Log("プレイヤー入ってきたよ");
+            Debug.Log("プレイヤー入ってきたよ");
             //上から踏みつけに行った場合も反応してしまうため、タイミングをずらす
             DelayCorutine(0.02f, () =>
             {
@@ -22,15 +22,18 @@ public class CheckPlayerPenetration : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "player")
-        head.enabled = false;
+        if (collision.gameObject.tag == "player")
+        {
+            Debug.Log("プレイヤーいるよ");
+            head.enabled = false;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "player")
+        if (collision.gameObject.layer == 17)
         {
-            //Debug.Log("プレイヤーでたよ");
+            Debug.Log("プレイヤーでたよ");
             head.enabled = true;
         }
     }

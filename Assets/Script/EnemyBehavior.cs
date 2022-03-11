@@ -40,6 +40,7 @@ public class EnemyBehavior : BlinkObject
     private bool isPlayerPos = false;
     private bool isSet = false;
     private bool blinkStart = false;
+    private float arrivedTime;
 
     private void Start()
     {
@@ -248,7 +249,7 @@ public class EnemyBehavior : BlinkObject
         }
         if (judgeTime < 0.5f)
         {
-            p = player.transform.position;
+            p = new Vector2(player.transform.position.x, player.transform.position.y + 1.5f);
             toVector = transform.position;
         }
         else if (judgeTime >= 0.5f && !isPlayerPos)
@@ -259,16 +260,18 @@ public class EnemyBehavior : BlinkObject
                 if (ComparePos(p))
                 {
                     isPlayerPos = true;
+                    arrivedTime = judgeTime;
                 }
             }
         }
-        else if (isPlayerPos)
+        else if (isPlayerPos && judgeTime >= arrivedTime + 1f)
         {
             toVector = Vector2.MoveTowards(transform.position, beforePos, enemySpeed * Time.deltaTime);
             if (ComparePos(beforePos))
             {
                 judgeTime = 0.0f;
                 isPlayerPos = false;
+                arrivedTime = 0.0f;
             }
         }
         judgeTime += Time.deltaTime;
