@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if(Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
+        {
+            return;
+        }
+
         if (player != null)
         {
             if (player.transform.position.y < BackGroundChangePos.transform.position.y)

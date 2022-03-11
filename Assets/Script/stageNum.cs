@@ -24,7 +24,12 @@ public class stageNum : MonoBehaviour
 
     void Update()
     {
-        if(oldStageNum != GameManager.instance.stageNum)
+        if (Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
+        {
+            return;
+        }
+
+        if (oldStageNum != GameManager.instance.stageNum)
         {
             stageText.text = "stage" + GameManager.instance.stageNum;
             oldStageNum = GameManager.instance.stageNum;

@@ -25,6 +25,11 @@ public class hp : MonoBehaviour
 
     void Update()
     {
+        if (Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
+        {
+            return;
+        }
+
         if (oldHpNum != GameManager.instance.hpNum)
         {
             hpGage.fillAmount = (float)GameManager.instance.hpNum;

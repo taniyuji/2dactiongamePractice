@@ -80,6 +80,11 @@ public class Player : BlinkObject
 
     private void Update()
     {
+        if(Mathf.Approximately(Time.timeScale, 0f))//pause中は起動させない
+        {
+            return;
+        }
+
         if (isContinue)//コンティニュー表現中か
         {
             GetBlink(sr);//プレイヤーを点滅

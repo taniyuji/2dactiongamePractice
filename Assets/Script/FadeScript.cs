@@ -70,7 +70,11 @@ public class FadeScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(frameCount > 2)//シーンロード中は思いため、2フレーム待ってから実行
+        if (Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
+        {
+            return;
+        }
+        if (frameCount > 2)//シーンロード中は思いため、2フレーム待ってから実行
         {
             if (fadeIn)//フェードインが開始している場合
             {

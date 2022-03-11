@@ -24,7 +24,12 @@ public class Score : MonoBehaviour
 
     private void Update()
     {
-      if(oldScore != GameManager.instance.score)
+        if (Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
+        {
+            return;
+        }
+
+        if (oldScore != GameManager.instance.score)
         {
             scoreText.text = "Score" + GameManager.instance.score;
             oldScore = GameManager.instance.score;
