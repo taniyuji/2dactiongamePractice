@@ -11,15 +11,22 @@ public class PauseScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isPausing)
+        if (!GameManager.instance.goBackTitle)
         {
-            pauseUI.SetActive(true);
+            if (isPausing)
+            {
+                pauseUI.SetActive(true);
 
-            Time.timeScale = 0.01f;
+                Time.timeScale = 0.01f;
+            }
+            else
+            {
+                pauseUI.SetActive(false);
+                Time.timeScale = 1f;
+            }
         }
         else
         {
-            pauseUI.SetActive(false);
             Time.timeScale = 1f;
         }
     }
@@ -34,9 +41,9 @@ public class PauseScript : MonoBehaviour
         isPausing = false;
     }
 
-    public void BackToTiTle()
+    public void BackToTiTle()//GameManagaerスクリプト側でフェードとシーンを移動
     {
-        SceneManager.LoadScene("TitleScene");
-        
+        isPausing = false;
+        GameManager.instance.goBackTitle = true;
     }
 }

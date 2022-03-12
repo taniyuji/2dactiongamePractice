@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool goBossBattle = false;
     [HideInInspector] public bool isFallDead = false;
     [HideInInspector] public bool goNextScene = false;
+    [HideInInspector] public bool goBackTitle = false;
 
     private bool Play = false;
     private float BackColorR;
@@ -101,6 +102,17 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("Stage1-Forest-");
             goNextScene = true;
+        }
+
+        if (goBackTitle)
+        {
+            fade.StartFadeOut();
+            if (fade.IsFadeOutComplete())
+            {
+                SceneManager.LoadScene("TitleScene");
+                goNextScene = false;
+                goBackTitle = false;
+            }
         }
 
         if(bossIsvisble && !isBossDead)

@@ -38,6 +38,7 @@ public class FadeScript : MonoBehaviour
     {
         if (fadeIn || fadeOut)
         {
+            Debug.Log("fadeOut中断");
             return;
         }
         fadeOut = true;
@@ -56,6 +57,11 @@ public class FadeScript : MonoBehaviour
     void Start()
     {
         img = GetComponent<Image>();
+
+        if (!GameManager.instance.goNextScene)
+        {
+            firstFadeInComp = true;
+        }
 
         if (firstFadeInComp)//フェードインがいらない場合
         {
@@ -105,6 +111,7 @@ public class FadeScript : MonoBehaviour
     {
         if(timer < 1f)//１秒でフェードさせる
         {
+            Debug.Log(timer);
             img.color = new Color(1, 1, 1, timer);
             img.fillAmount = timer;
         }
