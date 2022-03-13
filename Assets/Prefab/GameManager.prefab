@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4606676397612418283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4606676397612418281}
+  - component: {fileID: 4606676397612418280}
+  - component: {fileID: 3378626312667626628}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4606676397612418281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4606676397612418283}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.572865, y: -2.232411, z: -0.15989685}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4606676397612418280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4606676397612418283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d14b83bafb244429baceebbb3937c252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fade: {fileID: 1273567067422481643, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
+  score: 0
+  stageNum: 1
+  BossBGM: {fileID: 8169943957579628909, guid: fe5b88ab1436341bda2168ce66515ff5, type: 3}
+  Cam: {fileID: 7567734981287570020, guid: ddd5634b95c954a58ae23edd74c1e6b5, type: 3}
+  cam: {fileID: 3813241603505013628, guid: 82fbaf9618b614652822b90400926a41, type: 3}
+  BackGroundChangePos: {fileID: 2322594987214678870, guid: 24548a4612d5843d19fc9c37847bbe16, type: 3}
+  player: {fileID: 405939116434810712, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
+  buttonSE: {fileID: 1081584583134506691, guid: d7c6523c967914b24b641ef9e6765881, type: 3}
+  bossIsvisble: 0
+  isBossDead: 0
+  goBossBattle: 0
+  isFallDead: 0
+  goNextScene: 0
+--- !u!114 &3378626312667626628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4606676397612418283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ddbb05f7bfda4020a4c56d6f437bb49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseUI: {fileID: 2686355639291571819, guid: 33b725030a18042e29c0556ecef82e64, type: 3}
+  fade: {fileID: 1273567067422481643, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
