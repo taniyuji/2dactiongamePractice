@@ -11,6 +11,9 @@ TagManager:
   - Enemy_Head
   - Enemy_Body
   - MovingGround
+  - PauseButton
+  - BackToTitleButton
+  - BackToGameButton
   layers:
   - Default
   - TransparentFX

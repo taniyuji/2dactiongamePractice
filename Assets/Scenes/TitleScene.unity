@@ -1166,8 +1166,12 @@ PrefabInstance:
       value: Fade
       objectReference: {fileID: 0}
     - target: {fileID: 1273567067422481642, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1273567067422481642, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
       propertyPath: m_FillAmount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}

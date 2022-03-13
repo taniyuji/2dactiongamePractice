@@ -40,7 +40,6 @@ public class GameManager : MonoBehaviour
         if(instance == null)
         {
             instance = this;
-           // DontDestroyOnLoad(this.gameObject);
         }
         else//存在した場合
         {
@@ -100,8 +99,8 @@ public class GameManager : MonoBehaviour
         //次のシーンに言っておらず、フェードアウトが終了していた場合
         if (!goNextScene && fade.IsFadeOutComplete())
         {
-            SceneManager.LoadScene("Stage1-Forest-");
             goNextScene = true;
+            SceneManager.LoadScene("Stage1-Forest-");
         }
 
         if (goBackTitle)

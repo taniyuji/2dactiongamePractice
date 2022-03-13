@@ -25,7 +25,6 @@ public class FadeScript : MonoBehaviour
         compFadeIn = false;
         timer = 0.0f;
         img.color = new Color(1, 1, 1, 1);//１は白を表す
-        img.fillAmount = 1;
         img.raycastTarget = true;//フェード中にボタンを押されないように
     }
 
@@ -41,11 +40,11 @@ public class FadeScript : MonoBehaviour
             Debug.Log("fadeOut中断");
             return;
         }
+        img.enabled = true;
         fadeOut = true;
         compFadeOut = false;
         timer = 0.0f;
         img.color = new Color(1, 1, 1, 0);
-        img.fillAmount = 0;
         img.raycastTarget = true;
     }
 
@@ -57,20 +56,7 @@ public class FadeScript : MonoBehaviour
     void Start()
     {
         img = GetComponent<Image>();
-
-        if (!GameManager.instance.goNextScene)
-        {
-            firstFadeInComp = true;
-        }
-
-        if (firstFadeInComp)//フェードインがいらない場合
-        {
-            FadeInComplete();
-        }
-        else
-        {
-            StartFadeIn();
-        }
+        StartFadeIn();
     }
 
     // Update is called once per frame
@@ -97,12 +83,13 @@ public class FadeScript : MonoBehaviour
     {
         if (timer < 1f)
         {
-            img.color = new Color(1, 1, 1, 1 - timer);
-            img.fillAmount = 1 - timer;
+            Debug.Log("Fadein");
+            img.color = new Color(1, 1, 1, 1 -timer);
         }
         else
         {
             FadeInComplete();
+            img.enabled = false;
         }
         timer += Time.deltaTime;
     }
@@ -113,7 +100,6 @@ public class FadeScript : MonoBehaviour
         {
             Debug.Log(timer);
             img.color = new Color(1, 1, 1, timer);
-            img.fillAmount = timer;
         }
         else
         {
@@ -125,7 +111,6 @@ public class FadeScript : MonoBehaviour
     private void FadeInComplete()//フェードインが終了
     {
         img.color = new Color(1, 1, 1, 0);
-        img.fillAmount = 0;
         img.raycastTarget = false;
         timer = 0.0f;
         fadeIn = false;
@@ -134,8 +119,7 @@ public class FadeScript : MonoBehaviour
 
     private void FadeOutComplete()//フェードアウトが終了
     {
-        img.color = new Color(1, 1, 1, 0);
-        img.fillAmount = 1;
+        img.color = new Color(1, 1, 1, 1);
         img.raycastTarget = false;
         timer = 0.0f;
         fadeIn = false;
