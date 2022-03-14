@@ -26,12 +26,13 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool goNextScene = false;
     [HideInInspector] public bool goBackTitle = false;
 
+    private bool isSet = false;
+    private GameObject goBossPos;
     private bool Play = false;
     private float BackColorR;
     private float BackColorG;
     private float BackColorB;
-
-
+    private AsyncOperation asyncOperation;
 
     private void Awake()
     {
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
         BackColorR = cam.backgroundColor.r;
         BackColorG = cam.backgroundColor.g;
         BackColorB = cam.backgroundColor.b;
+        goBossPos = GameObject.Find("goBossBattlePoint");
     }
 
     public void startFadeOut()
@@ -56,11 +58,20 @@ public class GameManager : MonoBehaviour
         {
             buttonSE.Play();
         }
-        fade.StartFadeOut();
+        startLoadStage1Scene();
     }
 
     void Update()
     {
+        if (!isSet && goBossPos != null)
+        {
+            if( player.transform.position.x < goBossPos.transform.position.x)
+            {
+                Debug.Log("ボス戦へ");
+                goBossBattle = true;
+                isSet = true;
+            }
+        }
         if(Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
         {
             return;
@@ -93,25 +104,14 @@ public class GameManager : MonoBehaviour
 
         if (goBossBattle)
         {
+            startLoadBoss1Scene();
             goBossBattle = false;
-            SceneManager.LoadScene("Boss1");
-        }
-        //次のシーンに言っておらず、フェードアウトが終了していた場合
-        if (!goNextScene && fade.IsFadeOutComplete())
-        {
-            goNextScene = true;
-            SceneManager.LoadScene("Stage1-Forest-");
         }
 
         if (goBackTitle)
         {
-            fade.StartFadeOut();
-            if (fade.IsFadeOutComplete())
-            {
-                SceneManager.LoadScene("TitleScene");
-                goNextScene = false;
-                goBackTitle = false;
-            }
+            startLoadTitleScene();
+            goBackTitle = false;
         }
 
         if(bossIsvisble && !isBossDead)
@@ -135,5 +135,47 @@ public class GameManager : MonoBehaviour
                 Cam.m_Lens.OrthographicSize -= 0.2f;
             }
         }
+    }
+
+    private void startLoadStage1Scene()
+    {
+        StartCoroutine("LoadStage1Scene");
+    }
+
+    IEnumerator LoadStage1Scene()
+    {
+        asyncOperation = SceneManager.LoadSceneAsync("Stage1-Forest-");
+        asyncOperation.allowSceneActivation = false;
+        fade.StartFadeOut();
+        yield return new WaitForSeconds(1f);
+        asyncOperation.allowSceneActivation = true;
+    }
+
+    private void startLoadTitleScene()
+    {
+        StartCoroutine("LoadTitleScene");
+    }
+
+    IEnumerator LoadTitleScene()
+    {
+        asyncOperation = SceneManager.LoadSceneAsync("TitleScene");
+        asyncOperation.allowSceneActivation = false;
+        fade.StartFadeOut();
+        yield return new WaitForSeconds(2f);
+        asyncOperation.allowSceneActivation = true;
+    }
+
+    private void startLoadBoss1Scene()
+    {
+        StartCoroutine("LoadBoss1Scene");
+    }
+
+    IEnumerator LoadBoss1Scene()
+    {
+        asyncOperation = SceneManager.LoadSceneAsync("Boss1");
+        asyncOperation.allowSceneActivation = false;
+        fade.StartFadeOut();
+        yield return new WaitForSeconds(2f);
+        asyncOperation.allowSceneActivation = true;
     }
 }

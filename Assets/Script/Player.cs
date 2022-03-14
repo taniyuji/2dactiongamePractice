@@ -62,7 +62,6 @@ public class Player : BlinkObject
     private Vector2 addVelocity;
     private float xspeed;
     private float yspeed;
-    private GameObject goBossPos;
     private AnimatorStateInfo currentState;
     private bool enemyOnRight = false;
     private bool wasJamp = false;
@@ -76,7 +75,6 @@ public class Player : BlinkObject
         rb = GetComponent<Rigidbody2D>();
         capcol = GetComponent<CapsuleCollider2D>();
         sr = GetComponent<SpriteRenderer>();
-        goBossPos = GameObject.Find("goBossBattlePoint");
     }
 
     private void Update()
@@ -103,16 +101,7 @@ public class Player : BlinkObject
         isHead = head.IsGround();
         //アニメーションをセット
         SetAnim();
-
-        if(transform.position.x <= goBossPos.transform.position.x)
-        {
-            GameManager.instance.goBossBattle = true;
-        }
-
-        else
-        {
-            sr.enabled = true;
-        }
+        sr.enabled = true;
         //プレイヤーがダウンしていない場合
         if (!isDown)
         {

@@ -43,6 +43,10 @@ public class PauseScript : MonoBehaviour
 
     public void BackToTiTle()//GameManagaerスクリプト側でフェードとシーンを移動
     {
+        if (GameManager.instance.goBackTitle)
+        {
+            return;
+        }
         isPausing = false;
         GameManager.instance.goBackTitle = true;
     }

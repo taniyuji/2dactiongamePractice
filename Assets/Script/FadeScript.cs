@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class FadeScript : MonoBehaviour
 {
+    [HideInInspector] public bool goLoadScene = false;
     public bool firstFadeInComp;//最初からフェードインを終了させておくか
     private Image img = null;
     private int frameCount = 0;
@@ -13,6 +14,7 @@ public class FadeScript : MonoBehaviour
     private bool compFadeIn = false;
     private bool fadeOut = false;
     private bool compFadeOut = false;
+    private bool FadingFin = false;
 
     public void StartFadeIn()//フェードインを始める
     {
@@ -24,8 +26,8 @@ public class FadeScript : MonoBehaviour
         fadeIn = true;
         compFadeIn = false;
         timer = 0.0f;
-        img.color = new Color(1, 1, 1, 1);//１は白を表す
         img.raycastTarget = true;//フェード中にボタンを押されないように
+        StartFadeInUpdate();
     }
 
     public bool IsFadeInComplete()//フェードインが終了しているか
@@ -40,12 +42,13 @@ public class FadeScript : MonoBehaviour
             Debug.Log("fadeOut中断");
             return;
         }
+        Debug.Log("StartFadeOut");
         img.enabled = true;
         fadeOut = true;
         compFadeOut = false;
         timer = 0.0f;
-        img.color = new Color(1, 1, 1, 0);
         img.raycastTarget = true;
+        StartFadeOutUpdate();
     }
 
     public bool IsFadeOutComplete()//フェードアウトが終了しているか
@@ -57,9 +60,10 @@ public class FadeScript : MonoBehaviour
     {
         img = GetComponent<Image>();
         StartFadeIn();
+        goLoadScene = false;
     }
 
-    // Update is called once per frame
+    /*
     void Update()
     {
         if (Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
@@ -70,46 +74,62 @@ public class FadeScript : MonoBehaviour
         {
             if (fadeIn)//フェードインが開始している場合
             {
-                FadeInUpdate();
+                StartCoroutine(FadeInUpdate());
             }else if (fadeOut)//フェードアウトが開始している場合
             {
-                FadeOutUpdate();
+                StartCoroutine(FadeOutUpdate());
             }
         }
         ++frameCount;    
     }
+    */
 
-    private void FadeInUpdate()//フェードイン機能
+    private void StartFadeInUpdate()
     {
-        if (timer < 1f)
-        {
-            Debug.Log("Fadein");
-            img.color = new Color(1, 1, 1, 1 -timer);
-        }
-        else
-        {
-            FadeInComplete();
-            img.enabled = false;
-        }
-        timer += Time.deltaTime;
+        StartCoroutine(FadeInUpdate());
     }
 
-    private void FadeOutUpdate()//フェードアウト機能
+    private void StartFadeOutUpdate()
     {
-        if(timer < 1f)//１秒でフェードさせる
+        StartCoroutine(FadeOutUpdate());
+    }
+
+    IEnumerator FadeInUpdate()
+    {
+        for(decimal i = 0m; i <= 1m; i += 0.01m)
         {
-            Debug.Log(timer);
-            img.color = new Color(1, 1, 1, timer);
-        }
-        else
+            decimal g = i;
+            img.color = new Color(1, 1, 1, 1 - (float)g);
+            Debug.Log("FadeInが" + img.color + "進んでます");
+            if(i == 1m)
+            {
+                Debug.Log("終わり");
+                FadeInComplete();
+            }
+            yield return null;
+        }  
+    }
+
+    IEnumerator FadeOutUpdate()
+    {
+        for (decimal i = 0m; i <= 1m; i += 0.01m)
         {
-            FadeOutComplete();
+            decimal g = i;
+            img.color = new Color(1, 1, 1, (float)g);
+            Debug.Log("FadeOutが" + img.color + "進んでます");
+            if (i == 1m)
+            {
+                Debug.Log("終わり");
+                FadeOutComplete();
+            }
+            yield return null;
         }
-        timer += Time.deltaTime;
+
     }
 
     private void FadeInComplete()//フェードインが終了
     {
+        
         img.color = new Color(1, 1, 1, 0);
         img.raycastTarget = false;
         timer = 0.0f;
@@ -119,6 +139,7 @@ public class FadeScript : MonoBehaviour
 
     private void FadeOutComplete()//フェードアウトが終了
     {
+        
         img.color = new Color(1, 1, 1, 1);
         img.raycastTarget = false;
         timer = 0.0f;
