@@ -8,6 +8,7 @@ public class PauseScript : MonoBehaviour
     public GameObject pauseUI;
 
     private bool isPausing = false;
+    private bool keyPushed = false;
     // Update is called once per frame
     void Update()
     {
@@ -15,12 +16,25 @@ public class PauseScript : MonoBehaviour
         {
             if (isPausing)
             {
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    isPausing = false;
+                    keyPushed = true;
+                }else if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    BackToTiTle();
+                    keyPushed = true;
+                }
                 pauseUI.SetActive(true);
 
                 Time.timeScale = 0.01f;
             }
             else
             {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    isPausing = true;
+                }
                 pauseUI.SetActive(false);
                 Time.timeScale = 1f;
             }

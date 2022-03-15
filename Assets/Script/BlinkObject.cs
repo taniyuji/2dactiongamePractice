@@ -1,13 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BlinkObject : MonoBehaviour
 {
-    private bool isBlinkfin;
-    private float blinkTime;
-    private float continueTime;
+    public bool isUI = false;
 
+    private bool isBlinkfin;
+    private float blinkTime = 0.0f;
+    private float continueTime;
+    private Text txt;
+    private Color color;
+    private bool PlusTime = true;
+    private void Start()
+    {
+        if (isUI)
+        {
+            txt = gameObject.GetComponent<Text>();
+            color = txt.color;
+        }
+    }
+    private void Update()
+    {
+        if (isUI)
+        {
+            BlinkUI();
+        }
+    }
+
+    public void BlinkUI()
+    {
+        float subTime = PlusTime ? blinkTime : 1 - blinkTime;
+        if (blinkTime < 1f)
+        {          
+            txt.color = new Color(color.r, color.g, color.b, subTime);
+        }
+        else if(blinkTime >= 1f && blinkTime < 1.5f)
+        {
+            txt.color = new Color(color.r, color.g, color.b, subTime);
+        }
+        else
+        {
+            PlusTime = !PlusTime;
+            blinkTime = 0.0f;
+        }
+        blinkTime += Time.deltaTime;
+    }
     public void GetBlink(SpriteRenderer sr)//点滅消滅
     {
         isBlinkfin = false;

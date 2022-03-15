@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     private float BackColorG;
     private float BackColorB;
     private AsyncOperation asyncOperation;
+    private bool keyPushed = false;
 
     private void Awake()
     {
@@ -63,6 +64,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (SceneManager.GetActiveScene().name == "TitleScene" && Input.anyKey && !keyPushed)
+        {
+            startFadeOut();
+            keyPushed = true;
+        }
         if (!isSet && goBossPos != null)
         {
             if( player.transform.position.x < goBossPos.transform.position.x)
