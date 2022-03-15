@@ -11,14 +11,24 @@ public class BlinkObject : MonoBehaviour
     private float blinkTime = 0.0f;
     private float continueTime;
     private Text txt;
+    private Image img;
     private Color color;
     private bool PlusTime = true;
+
     private void Start()
     {
         if (isUI)
         {
             txt = gameObject.GetComponent<Text>();
-            color = txt.color;
+            img = gameObject.GetComponent<Image>();
+            if (txt != null)
+            {
+                color = txt.color;
+            }
+            else
+            {
+                color = img.color;
+            }
         }
     }
     private void Update()
@@ -31,21 +41,24 @@ public class BlinkObject : MonoBehaviour
 
     public void BlinkUI()
     {
-        float subTime = PlusTime ? blinkTime : 1 - blinkTime;
-        if (blinkTime < 1f)
-        {          
-            txt.color = new Color(color.r, color.g, color.b, subTime);
-        }
-        else if(blinkTime >= 1f && blinkTime < 1.5f)
+        if (blinkTime < 1.5f)
         {
-            txt.color = new Color(color.r, color.g, color.b, subTime);
+            float subTime = PlusTime ? blinkTime : 1 - blinkTime;
+            if (txt != null)
+            {
+                txt.color = new Color(color.r, color.g, color.b, subTime);
+            }
+            else
+            {
+                img.color = new Color(color.r, color.g, color.b, subTime);
+            }
         }
         else
         {
             PlusTime = !PlusTime;
             blinkTime = 0.0f;
         }
-        blinkTime += Time.deltaTime;
+        blinkTime += Time.unscaledDeltaTime;
     }
     public void GetBlink(SpriteRenderer sr)//点滅消滅
     {
