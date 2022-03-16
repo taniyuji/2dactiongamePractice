@@ -53,20 +53,12 @@ public class GameManager : MonoBehaviour
         goBossPos = GameObject.Find("goBossBattlePoint");
     }
 
-    public void startFadeOut()
-    {
-        if (buttonSE != null)
-        {
-            buttonSE.Play();
-        }
-        startLoadStage1Scene();
-    }
-
     void Update()
     {
         if (SceneManager.GetActiveScene().name == "TitleScene" && Input.anyKey && !keyPushed)
         {
-            startFadeOut();
+            Debug.Log("起動開始");
+            startLoadStage1Scene();
             keyPushed = true;
         }
         if (!isSet && goBossPos != null)

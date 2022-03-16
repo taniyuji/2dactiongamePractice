@@ -41,7 +41,7 @@ public class BlinkObject : MonoBehaviour
 
     public void BlinkUI()
     {
-        if (blinkTime < 1.5f)
+        if (blinkTime < 1f)
         {
             float subTime = PlusTime ? blinkTime : 1 - blinkTime;
             if (txt != null)

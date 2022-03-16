@@ -57,7 +57,7 @@ public class PauseScript : MonoBehaviour
             if (isPausing)
             {
                 pauseUI.SetActive(true);
-                Time.timeScale = 0.01f;
+                Time.timeScale = 0f;
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     if(SelectSE != null)

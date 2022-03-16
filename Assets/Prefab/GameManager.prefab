@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4606676397612418281}
   - component: {fileID: 4606676397612418280}
-  - component: {fileID: 3378626312667626628}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -58,17 +57,4 @@ MonoBehaviour:
   goBossBattle: 0
   isFallDead: 0
   goNextScene: 0
---- !u!114 &3378626312667626628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4606676397612418283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ddbb05f7bfda4020a4c56d6f437bb49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pauseUI: {fileID: 2686355639291571819, guid: 33b725030a18042e29c0556ecef82e64, type: 3}
-  fade: {fileID: 1273567067422481643, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
+  goBackTitle: 0
