@@ -8,9 +8,10 @@ public class PauseScript : MonoBehaviour
 {
     public GameObject pauseUI;
     public List<GameObject> UIs;
+    public AudioSource SelectSE;
+
     private Image img;
     private BlinkObject blinkObject;
-
     private bool isPausing = false;
     private bool keyPushed = false;
     private int objNum;
@@ -59,6 +60,10 @@ public class PauseScript : MonoBehaviour
                 Time.timeScale = 0.01f;
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
+                    if(SelectSE != null)
+                    {
+                        SelectSE.Play();
+                    }
                     if (objNum == 0)
                     {
                         isPausing = false;

@@ -15120,6 +15120,7 @@ MonoBehaviour:
   UIs:
   - {fileID: 1807530458}
   - {fileID: 491018833}
+  SelectSE: {fileID: 1960076999}
 --- !u!1 &1860480487 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2322594987214678870, guid: 24548a4612d5843d19fc9c37847bbe16, type: 3}
