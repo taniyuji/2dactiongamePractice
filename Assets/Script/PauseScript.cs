@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class PauseScript : MonoBehaviour
 {
     public GameObject pauseUI;
+    public GameObject cursol;
     public List<GameObject> UIs;
+    public List<GameObject> CursolPos;
     public AudioSource SelectSE;
 
     private Image img;
@@ -26,6 +28,7 @@ public class PauseScript : MonoBehaviour
         }
         blinkObject = UIs[0].GetComponent<BlinkObject>();
         blinkObject.enabled = true;
+        cursol.transform.position = CursolPos[0].transform.position;
         objNum = 0;
     }
     // Update is called once per frame
@@ -51,7 +54,7 @@ public class PauseScript : MonoBehaviour
             blinkObject = UIs[objNum].GetComponent<BlinkObject>();
             blinkObject.enabled = true;
         }
-
+        cursol.transform.position = CursolPos[objNum].transform.position;
         if (!GameManager.instance.goBackTitle)
         {
             if (isPausing)
