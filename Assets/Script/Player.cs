@@ -100,8 +100,7 @@ public class Player : BlinkObject
         isGround = ground.IsGround();
         isHead = head.IsGround();
         //アニメーションをセット
-        SetAnim();
-        sr.enabled = true;
+        SetAnim();      
         //プレイヤーがダウンしていない場合
         if (!isDown)
         {
@@ -119,14 +118,19 @@ public class Player : BlinkObject
             }
             if (beforeDown)
             {
-                InVincibleMode(2.0f);
-                isSet = false;
-                
-                if (!isInvincible)
+                if(time < 2f)
                 {
-                    isBoss = false;
+                    GetBlink(sr);
+                }
+                if(time >= 2f)
+                {
+                    sr.enabled = true;
+                    UnSetInvincibleMode();
+                    isSet = false;
+                    time = 0.0f;
                     beforeDown = false;
                 }
+                time += Time.deltaTime;
             }
         }
         else if (isDown && !testMode)
@@ -220,23 +224,21 @@ public class Player : BlinkObject
 
 
     //////////////////////////////////////メソッド///////////////////////////////
-    private void InVincibleMode(float invincibleTime)
+    //
+    private void SetInvincibleMode()
     {
-        if (time <= invincibleTime)
-        {
-            isInvincible = true;
-            gameObject.layer = 11;
-            GetBlink(sr);
-        }
-        else
-        {
-            isInvincible = false;
-            gameObject.layer = 13;
-            time = 0.0f;
-        }
-        time += Time.deltaTime;
-        
+        isInvincible = true;
+        gameObject.layer = 11;
+        Debug.Log("Player is Invincible");
     }
+
+    private void UnSetInvincibleMode()
+    {
+        isInvincible = false;
+        gameObject.layer = 13;
+        Debug.Log("Un Set PlayerInvinciblemode");
+    }
+
     private float GetXspeed()//X軸の移動
     {
         //定義
@@ -447,43 +449,34 @@ public class Player : BlinkObject
                 GetDamagedSE.Play();
             }
             GameManager.instance.hpNum -= 0.1m;
+            SetInvincibleMode();
             isSet = true;
         }
         RunningSE.Pause();
-        anim.Play("Player_Down");
         if (isDead)
         {
             beforeDown = false;
-            gameObject.SetActive(false);
+            anim.Play("Player_dead");
+            if (IsDeadAnimEnd())
+            {
+                Debug.Log("deadAnimationFin");
+                UnSetInvincibleMode();
+                gameObject.SetActive(false);
+            }
         }
         else
         {
-            if (isBoss)
-            { 
-                bossDownBehavior();
-            }
-            else
-            {
-                enemyDownBehavior();
-            }
-            downTime += Time.deltaTime;
+            PlayDownAnimation();           
         }
     }
 
-    public void enemyDownBehavior()
+    public void PlayDownAnimation()
     {
+        anim.Play("Player_Down");
         if (downTime < 0.5f)
         {
-            if (!isGround)
-            {
-                xspeed = enemyOnRight ? 0: 0;
-                yspeed = -1f;
-            }
-            else
-            {
-                xspeed = 0;
-                yspeed = 0;
-            }
+            xspeed = enemyOnRight ? -10: 10;
+            yspeed = 1f;
         }else if(downTime >= 0.5f)
         {
             if (GameManager.instance.hpNum > 0m)
@@ -497,28 +490,7 @@ public class Player : BlinkObject
             }
             downTime = 0.0f;
         }
-    }
-
-    public void bossDownBehavior()
-    {
-        if(downTime < 0.5f) {
-            xspeed = enemyOnRight ? 0 : 0;
-            yspeed = 0;           
-        }
-        else if (!JudgeEnemySpace())
-        {
-     
-            if (GameManager.instance.hpNum > 0m)
-            {
-                anim.Play("Player_Stand");
-                isDown = false;
-            }
-            else
-            {
-                isDead = true;
-            }
-            downTime = 0.0f;
-        }
+        downTime += Time.deltaTime;
     }
 
     private bool JudgeEnemySpace()
@@ -558,6 +530,30 @@ public class Player : BlinkObject
             if (currentState.IsName("Player_Down"))//ダウンアニメーションの場合
             {
                 if(currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private bool IsDeadAnimEnd()
+    {
+        if (!isDead)
+        {
+            return false;
+        }
+        else if (anim == null)
+        {
+            return false;
+        }
+        else//ダウン状態で、アニメーションコンポーネントがある場合
+        {
+            currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
+            if (currentState.IsName("Player_dead"))//ダウンアニメーションの場合
+            {
+                if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
                     return true;
                 }
