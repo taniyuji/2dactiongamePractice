@@ -13,6 +13,8 @@ public class PauseScript : MonoBehaviour
     public AudioSource SelectSE;
 
     private Image img;
+
+
     private BlinkObject blinkObject;
     private bool isPausing = false;
     private bool keyPushed = false;

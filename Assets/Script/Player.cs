@@ -154,7 +154,7 @@ public class Player : BlinkObject
 
         if (collision.collider.tag == "Enemy_Head")
         {
-            Debug.Log("踏んだ");
+            //Debug.Log("踏んだ");
             if (o != null || b != null)
             {
                
@@ -229,14 +229,14 @@ public class Player : BlinkObject
     {
         isInvincible = true;
         gameObject.layer = 11;
-        Debug.Log("Player is Invincible");
+        //Debug.Log("Player is Invincible");
     }
 
     private void UnSetInvincibleMode()
     {
         isInvincible = false;
         gameObject.layer = 13;
-        Debug.Log("Un Set PlayerInvinciblemode");
+        //Debug.Log("Un Set PlayerInvinciblemode");
     }
 
     private float GetXspeed()//X軸の移動
@@ -502,7 +502,7 @@ public class Player : BlinkObject
     {
         if (GameManager.instance.hpNum <= 0 && !GameManager.instance.isFallDead)
         {
-            return IsDownAnimEnd();
+            return IsDeadAnimEnd();
         }else if (GameManager.instance.isFallDead)
         {
             gameObject.SetActive(false);
@@ -538,7 +538,7 @@ public class Player : BlinkObject
         return false;
     }
 
-    private bool IsDeadAnimEnd()
+    public bool IsDeadAnimEnd()
     {
         if (!isDead)
         {

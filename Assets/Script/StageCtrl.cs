@@ -7,7 +7,7 @@ public class StageCtrl : MonoBehaviour
     public GameObject playerObj;
     public GameObject[] continuePoint;
     public GameObject[] fallDeadPoint;
-    public GameObject continueButton;
+    public GameObject ContinueCtr;
     public int continueNum; //リスポーンする地点
 
     private Player p;
@@ -69,26 +69,13 @@ public class StageCtrl : MonoBehaviour
 
             }
 
-            if (p != null && p.IsContinueWating())
+            //プレイヤースクリプトの方でコンティニュー待ちかつ消滅アニメーションが終了した場合
+            if (p != null && p.IsContinueWating()　&& p.IsDeadAnimEnd())
             {
-                continueButton.SetActive(true);
+            Debug.Log("ContinueCtrSetActive");
+                ContinueCtr.SetActive(true);
             }
         
-    }
-
-    public void onClickContinue()
-    {
-            if (continuePoint.Length > continueNum)
-            {
-                playerObj.transform.position = continuePoint[continueNum].transform.position;
-                p.ContinuePlayer();
-                continueButton.SetActive(false);
-                GameManager.instance.isFallDead = false;
-            }
-            else
-            {
-                Debug.Log("コンティニューポイントの設定が足りていない");
-            }
     }
 
     public void isFallDead()

@@ -242,39 +242,42 @@ public class EnemyBehavior : BlinkObject
     private void getFlyingBehavior()
     {
         player = GameObject.Find("Player");
-        if (!posSet)
+        if (p != null)
         {
-            beforePos = transform.position;
-            posSet = true;
-        }
-        if (judgeTime < 0.5f)
-        {
-            p = new Vector2(player.transform.position.x, player.transform.position.y + 1.5f);
-            toVector = transform.position;
-        }
-        else if (judgeTime >= 0.5f && !isPlayerPos)
-        {
-            if (p != null)
+            if (!posSet)
             {
-                toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
-                if (ComparePos(p))
+                beforePos = transform.position;
+                posSet = true;
+            }
+            if (judgeTime < 0.5f)
+            {
+                p = new Vector2(player.transform.position.x, player.transform.position.y + 1.5f);
+                toVector = transform.position;
+            }
+            else if (judgeTime >= 0.5f && !isPlayerPos)
+            {
+                if (p != null)
                 {
-                    isPlayerPos = true;
-                    arrivedTime = judgeTime;
+                    toVector = Vector2.MoveTowards(transform.position, p, enemySpeed * Time.deltaTime);
+                    if (ComparePos(p))
+                    {
+                        isPlayerPos = true;
+                        arrivedTime = judgeTime;
+                    }
                 }
             }
-        }
-        else if (isPlayerPos && judgeTime >= arrivedTime + 1f)
-        {
-            toVector = Vector2.MoveTowards(transform.position, beforePos, enemySpeed * Time.deltaTime);
-            if (ComparePos(beforePos))
+            else if (isPlayerPos && judgeTime >= arrivedTime + 1f)
             {
-                judgeTime = 0.0f;
-                isPlayerPos = false;
-                arrivedTime = 0.0f;
+                toVector = Vector2.MoveTowards(transform.position, beforePos, enemySpeed * Time.deltaTime);
+                if (ComparePos(beforePos))
+                {
+                    judgeTime = 0.0f;
+                    isPlayerPos = false;
+                    arrivedTime = 0.0f;
+                }
             }
+            judgeTime += Time.deltaTime;
         }
-        judgeTime += Time.deltaTime;
     }
     private bool checkDefeatedAnim(AnimatorStateInfo currentState)
     {

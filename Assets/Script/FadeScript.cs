@@ -100,10 +100,10 @@ public class FadeScript : MonoBehaviour
         {
             decimal g = i;
             img.color = new Color(1, 1, 1, 1 - (float)g);
-            Debug.Log("FadeInが" + img.color + "進んでます");
+            //Debug.Log("FadeInが" + img.color + "進んでます");
             if(i == 1m)
             {
-                Debug.Log("終わり");
+                //Debug.Log("終わり");
                 FadeInComplete();
             }
             yield return null;
@@ -116,7 +116,7 @@ public class FadeScript : MonoBehaviour
         {
             decimal g = i;
             img.color = new Color(1, 1, 1, (float)g);
-            Debug.Log("FadeOutが" + img.color + "進んでます");
+            //Debug.Log("FadeOutが" + img.color + "進んでます");
             if (i == 1m)
             {
                 Debug.Log("終わり");

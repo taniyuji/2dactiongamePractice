@@ -58,6 +58,7 @@ MonoBehaviour:
   - {fileID: 1706220027159732448}
   - {fileID: 7521671266668578200}
   SelectSE: {fileID: 0}
+  p: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
 --- !u!1 &482830491349364164
 GameObject:
   m_ObjectHideFlags: 0
