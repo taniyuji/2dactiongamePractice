@@ -18,13 +18,10 @@ public class ContinueScript : MonoBehaviour
     private Text txt;
     private Color beforeColor;
     private BlinkObject blinkObject;
-    private bool isPausing = false;
-    private bool keyPushed = false;
     private int objNum;
 
     private void Start()
     {
-        pauseCtr.SetActive(false);
         foreach (var i in UIs)
         {
             blinkObject = UIs[objNum].GetComponent<BlinkObject>();
@@ -39,9 +36,10 @@ public class ContinueScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        pauseCtr.SetActive(false);
         if (!(objNum == UIs.Count - 1) && Input.GetKeyDown(KeyCode.RightArrow))
         {
-            Debug.Log("moveCursolToRight");
+            // Debug.Log("moveCursolToRight");
             txt = UIs[objNum].GetComponent<Text>();
             beforeColor = txt.color;
             txt.color = new Color(beforeColor.r, beforeColor.g, beforeColor.b, 1);
@@ -53,7 +51,7 @@ public class ContinueScript : MonoBehaviour
         }
         else if (!(objNum == 0) && Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            Debug.Log("moveCursolToLeft");
+            // Debug.Log("moveCursolToLeft");
             txt = UIs[objNum].GetComponent<Text>();
             beforeColor = txt.color;
             txt.color = new Color(beforeColor.r, beforeColor.g, beforeColor.b, 1);
@@ -64,34 +62,34 @@ public class ContinueScript : MonoBehaviour
             blinkObject.enabled = true;
         }
         cursol.transform.position = CursolPos[objNum].transform.position;
-        Debug.Log("CursolPos == " + cursol.transform.position);
+        //Debug.Log("CursolPos == " + cursol.transform.position);
+        //Debug.Log("objNum = " + objNum);
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(SelectSE != null)
+            if (SelectSE != null)
             {
                 SelectSE.Play();
             }
-            if(objNum == 0)
+            if (objNum == 0)
             {
                 if (stct.continuePoint.Length > stct.continueNum)
                 {
                     stct.playerObj.transform.position = stct.continuePoint[stct.continueNum].transform.position;
                     p.ContinuePlayer();
                     GameManager.instance.isFallDead = false;
-                    pauseCtr.SetActive(true);                   
+                    pauseCtr.SetActive(true);
                 }
                 else
                 {
                     Debug.Log("コンティニューポイントの設定が足りていない");
                 }
-            }else if(objNum == 1)
+            }
+            else if (objNum == 1)
             {
                 GameManager.instance.goBackTitle = true;
             }
             gameObject.SetActive(false);
         }
     }
-
-
 }
 

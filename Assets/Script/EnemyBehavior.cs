@@ -242,7 +242,7 @@ public class EnemyBehavior : BlinkObject
     private void getFlyingBehavior()
     {
         player = GameObject.Find("Player");
-        if (p != null)
+        if (player != null)
         {
             if (!posSet)
             {

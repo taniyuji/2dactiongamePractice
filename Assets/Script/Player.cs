@@ -62,6 +62,7 @@ public class Player : BlinkObject
     private Vector2 addVelocity;
     private float xspeed;
     private float yspeed;
+    private int xVector = 1;
     private AnimatorStateInfo currentState;
     private bool enemyOnRight = false;
     private bool wasJamp = false;
@@ -138,6 +139,7 @@ public class Player : BlinkObject
             downBehavior();
         }
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
+        transform.localScale = new Vector3(Math.Abs(transform.localScale.x) * xVector, transform.localScale.y, 1);
         rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;
 
     }
@@ -262,10 +264,10 @@ public class Player : BlinkObject
                     RunningSE.Pause();
                 }
             }
-                transform.localScale = new Vector3(-1 * Math.Abs(transform.localScale.x), transform.localScale.y, 1);
             isRun = true;
             dashTime += Time.deltaTime;
             xspeed = speed;
+            xVector = -1;
         }//左矢印キーが押された場合
         else if (horizontalkey < 0)
         {
@@ -283,10 +285,10 @@ public class Player : BlinkObject
                     RunningSE.Pause();
                 }
             }
-            transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, 1);
             isRun = true;
             dashTime += Time.deltaTime;
             xspeed = -speed;
+            xVector = 1;
         }//入力がない場合
         else
         {
@@ -370,13 +372,13 @@ public class Player : BlinkObject
                 if (horizontalkey > 0)
                 {
                     xspeed = speed;
-                    transform.localScale = new Vector3(-1 * Math.Abs(transform.localScale.x), transform.localScale.y, 1);
+                    xVector = -1;
                     isRolling = true;
                 }
                 else if (horizontalkey < 0)
                 {
                     xspeed = -speed;
-                    transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y, 1);
+                    xVector = 1;
                     isRolling = true;
                 }//下矢印キーが押されているのみの場合
                 else
@@ -455,14 +457,12 @@ public class Player : BlinkObject
         RunningSE.Pause();
         if (isDead)
         {
+            xspeed = 5f;
+            yspeed = 1f;
+            rb.isKinematic = true;
+            capcol.enabled = false;
             beforeDown = false;
-            anim.Play("Player_dead");
-            if (IsDeadAnimEnd())
-            {
-                Debug.Log("deadAnimationFin");
-                UnSetInvincibleMode();
-                gameObject.SetActive(false);
-            }
+            anim.Play("Player_dead");//アニメーションが終わったかをIsDeadAnimEndで確認
         }
         else
         {
@@ -475,7 +475,8 @@ public class Player : BlinkObject
         anim.Play("Player_Down");
         if (downTime < 0.5f)
         {
-            xspeed = enemyOnRight ? -10: 10;
+            xspeed = enemyOnRight ? -15: 15;
+            xVector = enemyOnRight ? -1 : 1;
             yspeed = 1f;
         }else if(downTime >= 0.5f)
         {
@@ -496,22 +497,6 @@ public class Player : BlinkObject
     private bool JudgeEnemySpace()
     {
         return judgeEnemySpace.IsEnemy();
-    }
-
-    public bool IsContinueWating()//コンティニュー待ちか。結果をstagectrlのupdateに送る。
-    {
-        if (GameManager.instance.hpNum <= 0 && !GameManager.instance.isFallDead)
-        {
-            return IsDeadAnimEnd();
-        }else if (GameManager.instance.isFallDead)
-        {
-            gameObject.SetActive(false);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     private bool IsDownAnimEnd()//ダウンアニメーションの最中か
@@ -538,7 +523,7 @@ public class Player : BlinkObject
         return false;
     }
 
-    public bool IsDeadAnimEnd()
+    public bool IsDeadAnimEnd()//trueの場合、stageCtrスクリプトに通知
     {
         if (!isDead)
         {
@@ -548,13 +533,14 @@ public class Player : BlinkObject
         {
             return false;
         }
-        else//ダウン状態で、アニメーションコンポーネントがある場合
+        else//死亡状態で、アニメーションコンポーネントがある場合
         {
             currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
             if (currentState.IsName("Player_dead"))//ダウンアニメーションの場合
             {
                 if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
+                    rb.constraints = RigidbodyConstraints2D.FreezeAll;
                     return true;
                 }
             }
@@ -564,9 +550,12 @@ public class Player : BlinkObject
 
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        UnSetInvincibleMode();
+        rb.isKinematic = false;
+        capcol.enabled = true;
         isBoss = false;
         GameManager.instance.hpNum = 0.5m;
-        gameObject.SetActive(true);
         isDown = false;
         anim.Play("Player_Stand");
         isJump = false;
