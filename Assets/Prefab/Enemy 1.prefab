@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 834535117848641299}
   - component: {fileID: 834535117848641311}
   - component: {fileID: 834535117848641309}
+  - component: {fileID: 6558269930497875487}
   m_Layer: 6
   m_Name: Enemy 1
   m_TagString: Enemy
@@ -70,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cafd0cf8e5a540c0a0c453b628aa999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isUI: 0
   BoundHeight: 7
   enemySpeed: 10
   gravity: 20
@@ -162,6 +164,102 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!82 &6558269930497875487
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 834535117848641308}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 760da540710d4473fb69c05d70d0e0aa, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.2
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3317454101705782497
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +286,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3317454101705782497}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.65, z: 0}
+  m_LocalPosition: {x: 0, y: -1.71, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 834535117848641297}
@@ -224,9 +322,7 @@ EdgeCollider2D:
   m_EdgeRadius: 0
   m_Points:
   - {x: -2.0696945, y: 0}
-  - {x: -1.9626694, y: 0.017839432}
-  - {x: 1.7843018, y: 0.08918762}
-  - {x: 0.5, y: 0}
+  - {x: 1.7843018, y: 0.026798248}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -419,40 +515,11 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 1.0081787, y: 0.12542772}
-  - {x: 1.1075668, y: 0.19636667}
-  - {x: 1.0696487, y: -0.91788876}
-  - {x: 1.0699768, y: -1.1320518}
-  - {x: 1.0957108, y: -1.7078773}
-  - {x: 1.4607239, y: -1.4524715}
-  - {x: 1.4811401, y: -1.7047318}
-  - {x: 1.462326, y: -1.7115539}
-  - {x: 1.4613647, y: -2.1179895}
-  - {x: 1.3897018, y: -6.025745}
-  - {x: -0.14767456, y: -7.6052117}
-  - {x: -0.9555969, y: -7.5552483}
-  - {x: -0.8308182, y: -7.5490355}
+  - {x: 1.0308838, y: 0.54458666}
+  - {x: 1.425415, y: 0.47580224}
+  - {x: 1.447525, y: -7.1392927}
   - {x: -1.0818253, y: -7.3439603}
-  - {x: -1.1383514, y: -6.0592527}
-  - {x: -1.1249695, y: -5.9283442}
-  - {x: -1.0966568, y: -5.161026}
-  - {x: -1.1236801, y: -4.554771}
-  - {x: -1.2362442, y: -4.1963296}
-  - {x: -1.3261719, y: -4.528376}
-  - {x: -1.1618347, y: -3.8950987}
-  - {x: -1.1429291, y: -3.925302}
-  - {x: -1.0353928, y: -3.8669167}
-  - {x: -1.1269531, y: -3.6455586}
-  - {x: -1.0911331, y: -3.42602}
-  - {x: -1.2574081, y: -3.2021732}
-  - {x: -1.2332382, y: -3.2028422}
-  - {x: -1.240982, y: -3.2028542}
-  - {x: -1.1441879, y: -2.8708258}
-  - {x: -1.1707611, y: -2.3283026}
-  - {x: -1.2294922, y: -1.8735788}
-  - {x: -1.074234, y: -1.5801438}
-  - {x: -1.0391617, y: -1.6494477}
-  - {x: -0.8661804, y: 0.2508465}
+  - {x: -1.13311, y: 0.29545796}
   - {x: 1.0095215, y: 0.5016855}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}

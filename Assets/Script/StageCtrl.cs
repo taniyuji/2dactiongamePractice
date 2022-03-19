@@ -72,7 +72,7 @@ public class StageCtrl : MonoBehaviour
             //プレイヤースクリプトの方で消滅アニメーションが終了した場合
             if (p.IsDeadAnimEnd())
             {
-                Debug.Log("ContinueCtrSetActive");
+                //Debug.Log("ContinueCtrSetActive");
                 ContinueCtr.SetActive(true);
             }
         

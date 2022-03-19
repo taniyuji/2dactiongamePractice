@@ -18,8 +18,8 @@ public class EnemyBehavior : BlinkObject
     public GroudCheck g;
     public bool isFly;
     public bool ofBoss;
-    public GameObject boss;
     public List<GameObject> children;
+    
     [HideInInspector] public bool playerStepOn = false; //敵を踏んだかどうか判断、インスペクターでは非表示
     [HideInInspector] public bool isGenerated = false;
     [HideInInspector] public bool isDead;
@@ -41,9 +41,11 @@ public class EnemyBehavior : BlinkObject
     private bool isSet = false;
     private bool blinkStart = false;
     private float arrivedTime;
-
+    private AudioSource beStepSE;
+    private GameObject boss;
     private void Start()
     {
+        beStepSE = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
@@ -71,13 +73,24 @@ public class EnemyBehavior : BlinkObject
     {
         if (ofBoss)
         {
-            if (!isGenerated)
+            boss = GameObject.FindWithTag("Boss");
+            if (boss != null)
             {
+                Debug.Log("getBossObject");
+            }
+            else
+            {
+                Debug.Log("couldntGetBossObj");
+            }
+            if (boss != null && !isGenerated)
+            {
+                rb.isKinematic = true;
                 var fixedBossPos = new Vector2(boss.transform.position.x, boss.transform.position.y - 21);
                 rb.MovePosition(fixedBossPos);
             }
             else
             {
+                rb.isKinematic = false;
                 ofBoss = false;
             }
         }
@@ -105,6 +118,8 @@ public class EnemyBehavior : BlinkObject
                 {
                     if (!isSet)
                     {
+                       // Debug.Log("踏まれた");
+                        beStepSE.Play();
                         enemyHp--;
                         blinkStart = false;
                         isSet = true;

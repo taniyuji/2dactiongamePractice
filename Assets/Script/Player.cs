@@ -19,6 +19,7 @@ public class Player : BlinkObject
     [Header("頭をぶつけた判定")] public GroudCheck head;
     [HideInInspector] public bool EnemyCollision = false;
     [HideInInspector] public bool isDead = false;
+    [HideInInspector] public bool isDown = false;
     public GameObject RLimitObj;
     public GameObject LLimitObj;
     public GameObject deadPos = null;
@@ -26,10 +27,8 @@ public class Player : BlinkObject
     public bool testMode = false;
     public AudioSource JampSE;
     public AudioSource JampDownSE;
-    public AudioSource EnemyOrBossStepSE;
     public AudioSource GetDamagedSE;
     public AudioSource RunningSE;
-    public AudioSource EnemyStepSE2;
 
     //プライベート変数
     private Animator anim = null;
@@ -43,12 +42,10 @@ public class Player : BlinkObject
     private bool isRun = false;
     private bool isCrouch = false;
     private bool isRolling = false;
-    private bool isDown = false;
     private bool isOtherJump = false;
     private bool isContinue = false;
     private bool isBoss = false;
     private bool isSet = false;
-    private bool isInvincible = false;
     private SpriteRenderer sr = null;
     private float jumpPos = 0.0f;
     private float jumpTime = 0.0f;
@@ -84,15 +81,6 @@ public class Player : BlinkObject
         {
             return;
         }
-
-        if (isContinue)//コンティニュー表現中か
-        {
-            GetBlink(sr);//プレイヤーを点滅
-            if (isBlinkFin())
-            {
-                isContinue = false;
-            }
-        }
     }
 
     private void FixedUpdate()
@@ -117,7 +105,7 @@ public class Player : BlinkObject
                     addVelocity = moveObj.GetVelocity();
                 }
             }
-            if (beforeDown)
+            if (beforeDown　|| isContinue)
             {
                 if(time < 2f)
                 {
@@ -130,6 +118,7 @@ public class Player : BlinkObject
                     isSet = false;
                     time = 0.0f;
                     beforeDown = false;
+                    isContinue = false;
                 }
                 time += Time.deltaTime;
             }
@@ -150,13 +139,15 @@ public class Player : BlinkObject
     {
         o = collision.transform.root.gameObject.GetComponent<EnemyBehavior>();
         b = collision.transform.root.gameObject.GetComponent<BossBehavior>();
-
+        if(o == null)
+        {
+           // Debug.Log("failedgettingEnemyScript");
+        }
         isBoss = b != null;
         enemyOnRight = collision.collider.transform.position.x > transform.position.x;
 
         if (collision.collider.tag == "Enemy_Head")
         {
-            //Debug.Log("踏んだ");
             if (o != null || b != null)
             {
                
@@ -183,26 +174,15 @@ public class Player : BlinkObject
                     }
                     else
                     {
-                        if (EnemyOrBossStepSE != null)
-                        {
-                            EnemyOrBossStepSE.Play();
-                        }
                         otherJumpHeight = b.BoundHeight;//ボススクリプトから跳ねる高さを取得
                         b.playerStepOn2 = true;//踏んだことをボスに通知
                     }
                 }
                 else//ザコ敵の場合
                 {
-                    if (o.enemyHp > 1)//エネミーに踏んづけたことを通知する前に処理するためあえて1としている
-                    {
-                        EnemyStepSE2.Play();
-                    }
-                    else
-                    {
-                        EnemyOrBossStepSE.Play();
-                    }
                     otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
                     o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
+                    Debug.Log("踏んだ");
                 }
             }
         }else if(collision.collider.tag == "Enemy_Body" && !invincibleMode)
@@ -229,14 +209,12 @@ public class Player : BlinkObject
     //
     private void SetInvincibleMode()
     {
-        isInvincible = true;
         gameObject.layer = 11;
         //Debug.Log("Player is Invincible");
     }
 
     private void UnSetInvincibleMode()
     {
-        isInvincible = false;
         gameObject.layer = 13;
         //Debug.Log("Un Set PlayerInvinciblemode");
     }
@@ -462,7 +440,7 @@ public class Player : BlinkObject
             rb.isKinematic = true;
             capcol.enabled = false;
             beforeDown = false;
-            anim.Play("Player_dead");//アニメーションが終わったかをIsDeadAnimEndで確認
+            anim.Play("Player_dead");
         }
         else
         {
@@ -492,11 +470,6 @@ public class Player : BlinkObject
             downTime = 0.0f;
         }
         downTime += Time.deltaTime;
-    }
-
-    private bool JudgeEnemySpace()
-    {
-        return judgeEnemySpace.IsEnemy();
     }
 
     private bool IsDownAnimEnd()//ダウンアニメーションの最中か
@@ -551,7 +524,6 @@ public class Player : BlinkObject
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        UnSetInvincibleMode();
         rb.isKinematic = false;
         capcol.enabled = true;
         isBoss = false;

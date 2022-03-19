@@ -31,6 +31,7 @@ public class BossBehavior : BlinkObject
     private Rigidbody2D rb;
     private bool isSet = false;
     private GameObject player;
+    private Player pSc;
     private int xVector;
     private float beforeSpeed = 1;
     private bool moveRight = false;
@@ -54,9 +55,11 @@ public class BossBehavior : BlinkObject
     private bool moveToReturn = false;
     private bool getDamageFin = true;
     private bool isDead = false;
+    private AudioSource beSteppedSE;
 
     private void Start()
     {
+        beSteppedSE = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
@@ -79,6 +82,16 @@ public class BossBehavior : BlinkObject
             judgeMoveDir();
             if (!isReturn)
             {
+                pSc = player.GetComponent<Player>();
+                if (pSc.isDown)
+                {
+                    SetInvincible();
+                }
+                else
+                {
+                    UnSetInvincible();
+                }
+
                 if (!playerStepOn2)
                 {
                     nonVisible = true;
@@ -205,9 +218,10 @@ public class BossBehavior : BlinkObject
         {
             //Debug.Log("GetDamageBehavior set");
             bossHp -= 1;
-            isSet = true;
+            beSteppedSE.Play();
             canBlink = true;
             getDamageFin = false;
+            isSet = true;
         }
            
         //一度終了したら、次に上記のif文でcanBlinkがtrueになるまで起動させない。
@@ -265,7 +279,7 @@ public class BossBehavior : BlinkObject
     {
         if (attackNum != 1)
         {
-            attackNum = UnityEngine.Random.Range(1, 451);
+            attackNum = UnityEngine.Random.Range(1, 351);
         }
         else
         {
@@ -276,15 +290,15 @@ public class BossBehavior : BlinkObject
 
     private void bossAttackBehavior()//ボスの攻撃動作
     {
-        if (time < 0.8f)
+        if (!isSet)
         {
-            anim.SetBool("Run", false);
-            AttackAnimFin = false;
             xVector = moveRight ? 1 : -1;
             xLocalScale = moveRight ? 1 : -1;
+            AttackAnimFin = false;
+            isSet = true;
         }
-        else if (time >= 0.8f && AttackAnimFin == false)
-        {
+        if (AttackAnimFin == false)
+        {     
             isAttack = true;
             anim.SetBool("Attack", true);
             AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
@@ -297,11 +311,11 @@ public class BossBehavior : BlinkObject
                 else if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
                     attackNum = 0;
-                    time = 0f;
                     isAttack = false;
-                    AttackAnimFin = true;
+                    isSet = false;
                     anim.SetBool("Attack", false);
                     enemySpeed = beforeSpeed;
+                    AttackAnimFin = true;                  
                 }
             }
 
