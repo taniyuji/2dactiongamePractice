@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class PauseScript : MonoBehaviour
 {
@@ -13,48 +14,38 @@ public class PauseScript : MonoBehaviour
     public AudioSource SelectSE;
 
     private Image img;
-
-
+    private Color BeforeColor;
     private BlinkObject blinkObject;
     private bool isPausing = false;
-    private bool keyPushed = false;
     private int objNum;
+    private List<GameObject> skippedUIs;
+    private bool DownAllowPushed;
 
     private void Start()
     {
-        foreach (var i in UIs)
+        skippedUIs = UIs.Skip(1)
+                        .ToList();
+        skippedUIs.ForEach(skippedUIs =>
         {
-            blinkObject = UIs[objNum].GetComponent<BlinkObject>();
+            blinkObject = skippedUIs.GetComponent<BlinkObject>();
             blinkObject.enabled = false;
-            objNum++;
-        }
-        blinkObject = UIs[0].GetComponent<BlinkObject>();
-        blinkObject.enabled = true;
+        });
+        img = UIs[0].GetComponent<Image>();
+        BeforeColor = img.color;
         cursol.transform.position = CursolPos[0].transform.position;
-        objNum = 0;
     }
     // Update is called once per frame
     void Update()
     {
         if (!(objNum == UIs.Count - 1) && Input.GetKeyDown(KeyCode.DownArrow))
         {
-            img = UIs[objNum].GetComponent<Image>();
-            img.color = new Color(1, 1, 1, 1);
-            blinkObject = UIs[objNum].GetComponent<BlinkObject>();
-            blinkObject.enabled = false;
-            objNum++;
-            blinkObject = UIs[objNum].GetComponent<BlinkObject>();
-            blinkObject.enabled = true;
+            DownAllowPushed = true;
+            changeUI();
         }
         else if (!(objNum == 0) && Input.GetKeyDown(KeyCode.UpArrow))
         {
-            img = UIs[objNum].GetComponent<Image>();
-            img.color = new Color(1, 1, 1, 1);
-            blinkObject = UIs[objNum].GetComponent<BlinkObject>();
-            blinkObject.enabled = false;
-            objNum--;
-            blinkObject = UIs[objNum].GetComponent<BlinkObject>();
-            blinkObject.enabled = true;
+            DownAllowPushed = false;
+            changeUI();
         }
         cursol.transform.position = CursolPos[objNum].transform.position;
         if (!GameManager.instance.goBackTitle)
@@ -72,12 +63,10 @@ public class PauseScript : MonoBehaviour
                     if (objNum == 0)
                     {
                         isPausing = false;
-                        keyPushed = true;
                     }
                     else if (objNum == 1)
                     {
                         BackToTiTle();
-                        keyPushed = true;
                     }
                 }
             }
@@ -115,5 +104,16 @@ public class PauseScript : MonoBehaviour
         }
         isPausing = false;
         GameManager.instance.goBackTitle = true;
+    }
+
+    private void changeUI()
+    {
+        img = UIs[objNum].GetComponent<Image>();
+        img.color = BeforeColor;
+        blinkObject = UIs[objNum].GetComponent<BlinkObject>();
+        blinkObject.enabled = false;
+        objNum = DownAllowPushed ? ++objNum : --objNum;
+        blinkObject = UIs[objNum].GetComponent<BlinkObject>();
+        blinkObject.enabled = true;
     }
 }

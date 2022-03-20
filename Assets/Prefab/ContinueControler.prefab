@@ -54,13 +54,14 @@ MonoBehaviour:
   UIs:
   - {fileID: 4117227459121854833}
   - {fileID: 4117227458220007992}
+  skippedUIs: []
   CursolPos:
   - {fileID: 4117227459631809525}
   - {fileID: 4117227459002453162}
   SelectSE: {fileID: 0}
   stct: {fileID: 0}
-  p: {fileID: 0}
-  pauseCtr: {fileID: 0}
+  p: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
+  pauseCtr: {fileID: 482830491163810769, guid: a81f3fd1bf3b347cbbb7e4d9f6b01722, type: 3}
 --- !u!1 &4117227458220007992
 GameObject:
   m_ObjectHideFlags: 0

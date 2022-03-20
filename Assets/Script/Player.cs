@@ -24,6 +24,7 @@ public class Player : BlinkObject
     public GameObject LLimitObj;
     public GameObject deadPos = null;
     public GameObject playerFoots;
+    public List<GameObject> children;
     public bool testMode = false;
     public AudioSource JampSE;
     public AudioSource JampDownSE;
@@ -49,7 +50,6 @@ public class Player : BlinkObject
     private SpriteRenderer sr = null;
     private float jumpPos = 0.0f;
     private float jumpTime = 0.0f;
-    private float downTime = 0.0f;
     private float dashTime = 0.0f;
     private float time = 0.0f;
     private float beforeKey = 0.0f;
@@ -65,6 +65,8 @@ public class Player : BlinkObject
     private bool wasJamp = false;
     private bool invincibleMode;//無敵状態
     private bool beforeDown = false;
+
+
     ///////////////////////////////////メイン///////////////////////////////////
     void Start()
     {
@@ -105,28 +107,23 @@ public class Player : BlinkObject
                     addVelocity = moveObj.GetVelocity();
                 }
             }
-            if (beforeDown　|| isContinue)
-            {
-                if(time < 2f)
-                {
-                    GetBlink(sr);
-                }
-                if(time >= 2f)
-                {
-                    sr.enabled = true;
-                    UnSetInvincibleMode();
-                    isSet = false;
-                    time = 0.0f;
-                    beforeDown = false;
-                    isContinue = false;
-                }
-                time += Time.deltaTime;
-            }
         }
         else if (isDown && !testMode)
         {//プレイヤーがダウンしている場合
             downBehavior();
         }
+
+        if (beforeDown || isContinue)//ダウン明け、またはコンティニュー明けか
+        {
+            startInvincible();
+            if (!invincibleMode)//startINvincibleでinvincibleModeがfalseになった場合
+            {
+                sr.enabled = true;//万が一、spriteRendererがfalseになっていた場合に備えて
+                beforeDown = false;
+                isContinue = false;
+            }
+        }
+
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
         transform.localScale = new Vector3(Math.Abs(transform.localScale.x) * xVector, transform.localScale.y, 1);
         rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;
@@ -137,60 +134,69 @@ public class Player : BlinkObject
     //敵との接触判定
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isDown)//ダウン中はいかなる当たり判定も起こさない。
+        {
+            return;
+        }
         o = collision.transform.root.gameObject.GetComponent<EnemyBehavior>();
         b = collision.transform.root.gameObject.GetComponent<BossBehavior>();
         if(o == null)
         {
            // Debug.Log("failedgettingEnemyScript");
         }
-        isBoss = b != null;
+        isBoss = b != null;//衝突した敵がボスかどうか
         enemyOnRight = collision.collider.transform.position.x > transform.position.x;
 
-        if (collision.collider.tag == "Enemy_Head")
+        if (collision.collider.tag == "Enemy_Head")//敵の頭を踏んだ場合
         {
-            if (o != null || b != null)
+            if (isBoss)//ボスの場合
             {
-               
+                if (b.isAttack || b.isGenerating)//ボスが攻撃中、または生成中に頭を踏んだ場合
+                {
+                    if (!invincibleMode)//無敵状態じゃない場合はダメージ判定
+                    {
+                        if (GetDamagedSE != null)
+                        {
+                            GetDamagedSE.Play();
+                        }
+                        b.playerHit = true;//ボス攻撃後に指定ポイントまで戻る
+                        isDown = true;
+                        GameManager.instance.hpNum -= 0.1m;
+                    }
+                    else//無敵状態の場合は通り抜ける
+                    {
+                        //無敵状態でも、敵の頭の衝突判定はあり。そのためボスの頭に引っかからないようボススクリプトに通知
+                        b.HitInvP = true;
+                    }
+                }
+                else//ボスが攻撃中または生成中でなく、頭を踏んだ場合
+                {
+                    jumpPos = transform.position.y;//ジャンプした位置を記録する
+                    isOtherJump = true;
+                    isJump = false;
+                    jumpTime = 0.0f;
+                    otherJumpHeight = b.BoundHeight;//ボススクリプトから跳ねる高さを取得
+                    b.playerStepOn2 = true;//踏んだことをボスに通知
+                }
+            }
+            else//雑魚敵の頭を踏んだ場合
+            {
                 jumpPos = transform.position.y;//ジャンプした位置を記録する
                 isOtherJump = true;
                 isJump = false;
                 jumpTime = 0.0f;
-
-                if(isBoss)//ボスの場合
-                {
-                    if (b.isAttack || b.isGenerating)//ボスが攻撃中の場合
-                    {
-                        if (gameObject.layer == 13)
-                        {
-                            if (GetDamagedSE != null)
-                            {
-                                GetDamagedSE.Play();
-                            }
-                            b.playerStepOn2 = false;
-                            b.playerHit = true;
-                            isDown = true;
-                            GameManager.instance.hpNum -= 0.1m;
-                        }
-                    }
-                    else
-                    {
-                        otherJumpHeight = b.BoundHeight;//ボススクリプトから跳ねる高さを取得
-                        b.playerStepOn2 = true;//踏んだことをボスに通知
-                    }
-                }
-                else//ザコ敵の場合
-                {
-                    otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
-                    o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
-                    Debug.Log("踏んだ");
-                }
+                otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
+                o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
+                Debug.Log("踏んだ");
             }
-        }else if(collision.collider.tag == "Enemy_Body" && !invincibleMode)
+        //無敵状態でなく、敵の体と衝突した場合。無敵状態の場合は、通り抜ける。
+        }else if(collision.collider.tag == "Enemy_Body"　&& !invincibleMode)
         {
-                beforeDown = true;
-                isDown = true;       
+            isDown = true;
+        //動く床に乗った場合
         }else if(collision.collider.tag == "MovingGround")
         {
+            //addVelocity取得のために、動く床のスクリプトを取得
             moveObj = collision.gameObject.GetComponent<MoveObject>();
         }
     }
@@ -207,13 +213,30 @@ public class Player : BlinkObject
 
     //////////////////////////////////////メソッド///////////////////////////////
     //
-    private void SetInvincibleMode()
+    private void startInvincible()
+    {
+        if (time < 2f)
+        {
+            SetInvincibleMode();
+            GetBlink(sr);
+            invincibleMode = true;
+        }
+        if (time >= 2f)
+        {
+            UnSetInvincibleMode();
+            isSet = false;
+            time = 0.0f;
+            invincibleMode = false;
+        }
+        time += Time.deltaTime;
+    }
+    private void SetInvincibleMode()//レイヤータグをInvincivleModeに設定
     {
         gameObject.layer = 11;
         //Debug.Log("Player is Invincible");
     }
 
-    private void UnSetInvincibleMode()
+    private void UnSetInvincibleMode()//レイヤータグをPlayerに設定
     {
         gameObject.layer = 13;
         //Debug.Log("Un Set PlayerInvinciblemode");
@@ -429,47 +452,44 @@ public class Player : BlinkObject
                 GetDamagedSE.Play();
             }
             GameManager.instance.hpNum -= 0.1m;
-            SetInvincibleMode();
+    
             isSet = true;
         }
         RunningSE.Pause();
-        if (isDead)
+
+        if (GameManager.instance.hpNum <= 0m)
         {
-            xspeed = 5f;
-            yspeed = 1f;
-            rb.isKinematic = true;
-            capcol.enabled = false;
-            beforeDown = false;
+            isDead = true;
             anim.Play("Player_dead");
         }
         else
         {
-            PlayDownAnimation();           
+            beforeDown = true;//startInvincibleメソッドに通知
+            anim.Play("Player_Down");
         }
-    }
-
-    public void PlayDownAnimation()
-    {
-        anim.Play("Player_Down");
-        if (downTime < 0.5f)
+        //死亡中かつ、死亡アニメーションが終了していない、またはダウン中かつダウンアニメーションが終了していない場合
+        if ((isDead && !IsDeadAnimEnd()) || (beforeDown && !IsDownAnimEnd()))
         {
-            xspeed = enemyOnRight ? -15: 15;
+            xspeed = enemyOnRight ? -15 : 15;
             xVector = enemyOnRight ? -1 : 1;
             yspeed = 1f;
-        }else if(downTime >= 0.5f)
+        }
+        else
         {
-            if (GameManager.instance.hpNum > 0m)
+            if(IsDeadAnimEnd())
+            Debug.Log("IsDeadAnim Finished");
+            xspeed = 0;
+            yspeed = 0;
+            isDown = false;
+            if (!isDead)
             {
                 anim.Play("Player_Stand");
-                isDown = false;
             }
             else
             {
-                isDead = true;
+                children.ForEach(i => i.SetActive(false));
             }
-            downTime = 0.0f;
         }
-        downTime += Time.deltaTime;
     }
 
     private bool IsDownAnimEnd()//ダウンアニメーションの最中か
@@ -496,10 +516,11 @@ public class Player : BlinkObject
         return false;
     }
 
-    public bool IsDeadAnimEnd()//trueの場合、stageCtrスクリプトに通知
+    public bool IsDeadAnimEnd()// stageCtrのupdateで使用。trueの場合、stageCtrスクリプトに通知
     {
         if (!isDead)
         {
+            //Debug.Log("isDeadAnimeEnd Returned False");
             return false;
         }
         else if (anim == null)
@@ -513,7 +534,7 @@ public class Player : BlinkObject
             {
                 if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
-                    rb.constraints = RigidbodyConstraints2D.FreezeAll;
+                    //Debug.Log("isDeadAnimeEnd Returned True");
                     return true;
                 }
             }
@@ -523,18 +544,21 @@ public class Player : BlinkObject
 
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        rb.isKinematic = false;
-        capcol.enabled = true;
+        children.ForEach(i => i.SetActive(true));
         isBoss = false;
         GameManager.instance.hpNum = 0.5m;
-        isDown = false;
         anim.Play("Player_Stand");
         isJump = false;
         isOtherJump = false;
         isRun = false;
         isContinue = true;
         isDead = false;
+    }
+
+    private IEnumerator DelayCorutine(float sec, Action action)
+    {
+        yield return new WaitForSeconds(sec);
+        action?.Invoke();
     }
 }
     

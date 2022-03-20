@@ -10650,7 +10650,6 @@ MonoBehaviour:
   g: {fileID: 660100799}
   isFly: 0
   ofBoss: 0
-  boss: {fileID: 0}
   children:
   - {fileID: 1095242354}
   - {fileID: 415023925}
@@ -10829,7 +10828,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1047352072}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 211.11438, y: 162, z: 47.176384}
+  m_LocalPosition: {x: 211.11438, y: 118.9, z: 47.176384}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 901916654}

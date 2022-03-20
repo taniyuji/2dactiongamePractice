@@ -48,8 +48,6 @@ public class Item : MonoBehaviour
         {
             if (playerCheck.isOn)
             {
-                sr.enabled = false;
-                box.enabled = false;
                 if (GetItemSound != null)
                 {
                     GetItemSound.Play();
@@ -59,6 +57,7 @@ public class Item : MonoBehaviour
                     GameManager.instance.hpNum += healScore;
                     added = true;
                 }
+                gameObject.SetActive(false);
             }
         }
 

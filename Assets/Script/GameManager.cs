@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "TitleScene" && Input.anyKey && !keyPushed)
         {
             Debug.Log("起動開始");
+            buttonSE.Play();
             startLoadStage1Scene();
             keyPushed = true;
         }

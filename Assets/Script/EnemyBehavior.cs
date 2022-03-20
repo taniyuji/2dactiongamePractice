@@ -43,6 +43,7 @@ public class EnemyBehavior : BlinkObject
     private float arrivedTime;
     private AudioSource beStepSE;
     private GameObject boss;
+
     private void Start()
     {
         beStepSE = GetComponent<AudioSource>();
@@ -74,6 +75,7 @@ public class EnemyBehavior : BlinkObject
         if (ofBoss)
         {
             boss = GameObject.FindWithTag("Boss");
+            /*
             if (boss != null)
             {
                 Debug.Log("getBossObject");
@@ -82,6 +84,7 @@ public class EnemyBehavior : BlinkObject
             {
                 Debug.Log("couldntGetBossObj");
             }
+            */
             if (boss != null && !isGenerated)
             {
                 rb.isKinematic = true;
@@ -94,78 +97,82 @@ public class EnemyBehavior : BlinkObject
                 ofBoss = false;
             }
         }
-        if (!playerStepOn)
+        else//生成された場合またはボスのエネミーじゃない場合
         {
-            //カメラに写っているかどうか（シーンビューに映る際も適応される）
-            if (sr.isVisible || nonVisible)
+            if (!playerStepOn)//踏まれていない場合
             {
-                Move();
-            }
-            else
-            {
-                rb.Sleep();
-            }
-        }
-        else//踏まれた場合
-        {
-            if (!isDead)
-            {
-                if (GameManager.instance != null)
+                //カメラに写っているかどうか（シーンビューに映る際も適応される）
+                if (sr.isVisible || nonVisible)
                 {
-                    GameManager.instance.score += myScore;
-                }
-                if (enemyHp > 0)
-                {
-                    if (!isSet)
-                    {
-                       // Debug.Log("踏まれた");
-                        beStepSE.Play();
-                        enemyHp--;
-                        blinkStart = false;
-                        isSet = true;
-                    }
-                    if (isJamp)
-                    {
-                        rb.isKinematic = true;
-                    }
-                    else
-                    {
-                        SetInvincible();
-                    }
-                    if (!blinkStart && enemyHp > 0)
-                    {
-                        GetBlink(sr);
-                        if (isBlinkFin())
-                        {
-                            blinkStart = true;
-                            UnSetInvincible();
-                            isSet = false;
-                            playerStepOn = false;
-                        }
-                    }
-                }
-                 if(enemyHp <= 0)
-                {              
-                    isDead = true;
-                }
-            }
-            else
-            {
-                anim.SetBool("Defeated", true);
-                AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);
-                if (isJamp)
-                {
-                    rb.velocity = new Vector2(0, -gravity);
-                    transform.Rotate(new Vector3(0, 0, 5));
-                    Destroy(gameObject, 3f);
+                    Move();
                 }
                 else
                 {
-                    rb.velocity = new Vector2(0, 0);
-                    if (checkDefeatedAnim(currentState)){
-                        if (currentState.normalizedTime >= 1)
+                    rb.Sleep();
+                }
+            }
+            else//踏まれた場合
+            {
+                if (!isDead)
+                {
+                    if (GameManager.instance != null)
+                    {
+                        GameManager.instance.score += myScore;
+                    }
+                    if (enemyHp > 0)
+                    {
+                        if (!isSet)
                         {
-                            gameObject.SetActive(false);
+                            // Debug.Log("踏まれた");
+                            beStepSE.Play();
+                            enemyHp--;
+                            blinkStart = false;
+                            isSet = true;
+                        }
+                        if (isJamp)
+                        {
+                            rb.isKinematic = true;
+                        }
+                        else
+                        {
+                            SetInvincible();
+                        }
+                        if (!blinkStart && enemyHp > 0)
+                        {
+                            GetBlink(sr);
+                            if (isBlinkFin())
+                            {
+                                blinkStart = true;
+                                UnSetInvincible();
+                                isSet = false;
+                                playerStepOn = false;
+                            }
+                        }
+                    }
+                    if (enemyHp <= 0)
+                    {
+                        isDead = true;
+                    }
+                }
+                else
+                {
+                    anim.SetBool("Defeated", true);
+                    AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);
+                    if (isJamp)
+                    {
+                        rb.velocity = new Vector2(0, -gravity);
+                        transform.Rotate(new Vector3(0, 0, 5));
+                        Destroy(gameObject, 3f);
+                    }
+                    else
+                    {
+                        rb.velocity = new Vector2(0, 0);
+                        if (checkDefeatedAnim(currentState))
+                        {
+                            if (currentState.normalizedTime >= 1)
+                            {
+                                gameObject.SetActive(false);
+                            }
                         }
                     }
                 }

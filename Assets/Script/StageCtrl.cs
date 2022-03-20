@@ -15,6 +15,7 @@ public class StageCtrl : MonoBehaviour
     private int nextFallDeadPos = 1;
     private int fallDeadPos = 0;
     private FallDeadNum Fnum;
+    private bool ContinueCtrSet = false;
 
     void Start()
     {
@@ -70,12 +71,17 @@ public class StageCtrl : MonoBehaviour
             }
 
             //プレイヤースクリプトの方で消滅アニメーションが終了した場合
-            if (p.IsDeadAnimEnd())
-            {
-                //Debug.Log("ContinueCtrSetActive");
-                ContinueCtr.SetActive(true);
-            }
-        
+        if (p.IsDeadAnimEnd() && !ContinueCtrSet)
+        {
+            //Debug.Log("ContinueCtrSetActive");
+            ContinueCtr.SetActive(true);
+            ContinueCtrSet = true;
+        }
+
+        if (!p.isDead)
+        {
+            ContinueCtrSet = false;
+        }
     }
 
     public void isFallDead()

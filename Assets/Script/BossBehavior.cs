@@ -25,6 +25,7 @@ public class BossBehavior : BlinkObject
     [HideInInspector] public bool isGenerating = false;
     [HideInInspector] public bool playerStepOn2 = false; //敵を踏んだかどうか判断、インスペクターでは非表示
     [HideInInspector] public bool playerHit = false;
+    [HideInInspector] public bool HitInvP = false;
 
     private Animator anim = null;
     private SpriteRenderer sr;
@@ -83,7 +84,7 @@ public class BossBehavior : BlinkObject
             if (!isReturn)
             {
                 pSc = player.GetComponent<Player>();
-                if (pSc.isDown)
+                if (pSc.isDown　|| HitInvP)//HitInvPはBossAttackBehaviorでfalseにする。
                 {
                     SetInvincible();
                 }
@@ -171,14 +172,14 @@ public class BossBehavior : BlinkObject
     {
         if (playerHit)//プレイヤーと衝突した場合
         {
-            if (JudgeIsReturnPos())
+            if (JudgeIsReturnPos())//戻り境界線の中にいた場合
             {
                 isReturn = true;
             }
-            else
+            else//戻り境界線にいなかった場合
             {
-                xVector = moveRight ? -1 : 1;
-                if (time > 0.2f)
+                xVector = moveRight ? -1 : 1;//0.5秒間後退する
+                if (time > 0.5f)
                 {
                     playerHit = false;
                     time = 0.0f;
@@ -313,6 +314,7 @@ public class BossBehavior : BlinkObject
                     attackNum = 0;
                     isAttack = false;
                     isSet = false;
+                    HitInvP = false;
                     anim.SetBool("Attack", false);
                     enemySpeed = beforeSpeed;
                     AttackAnimFin = true;                  

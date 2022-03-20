@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70f5efcfdad9d4a9ca894f4b51a05dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isUI: 0
   gravity: 30
   speed: 30
   jumpSpeed: 20
@@ -180,17 +181,20 @@ MonoBehaviour:
   head: {fileID: 405939116045467331}
   EnemyCollision: 0
   isDead: 0
+  isDown: 0
   RLimitObj: {fileID: 0}
   LLimitObj: {fileID: 0}
   deadPos: {fileID: 0}
   playerFoots: {fileID: 405939117442520299}
+  children:
+  - {fileID: 405939117442520299}
+  - {fileID: 405939116045467341}
+  - {fileID: 8524659314723188258}
   testMode: 0
   JampSE: {fileID: 0}
   JampDownSE: {fileID: 0}
-  EnemyOrBossStepSE: {fileID: 0}
   GetDamagedSE: {fileID: 0}
   RunningSE: {fileID: 0}
-  EnemyStepSE2: {fileID: 0}
 --- !u!212 &405939116434810718
 SpriteRenderer:
   m_ObjectHideFlags: 0

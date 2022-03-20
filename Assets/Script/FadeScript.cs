@@ -8,13 +8,10 @@ public class FadeScript : MonoBehaviour
     [HideInInspector] public bool goLoadScene = false;
     public bool firstFadeInComp;//最初からフェードインを終了させておくか
     private Image img = null;
-    private int frameCount = 0;
-    private float timer = 0.0f;
     private bool fadeIn = false;
     private bool compFadeIn = false;
     private bool fadeOut = false;
     private bool compFadeOut = false;
-    private bool FadingFin = false;
 
     public void StartFadeIn()//フェードインを始める
     {
@@ -25,7 +22,6 @@ public class FadeScript : MonoBehaviour
         }
         fadeIn = true;
         compFadeIn = false;
-        timer = 0.0f;
         img.raycastTarget = true;//フェード中にボタンを押されないように
         StartFadeInUpdate();
     }
@@ -42,11 +38,10 @@ public class FadeScript : MonoBehaviour
             Debug.Log("fadeOut中断");
             return;
         }
-        Debug.Log("StartFadeOut");
+        //Debug.Log("StartFadeOut");
         img.enabled = true;
         fadeOut = true;
         compFadeOut = false;
-        timer = 0.0f;
         img.raycastTarget = true;
         StartFadeOutUpdate();
     }
@@ -132,7 +127,6 @@ public class FadeScript : MonoBehaviour
         
         img.color = new Color(1, 1, 1, 0);
         img.raycastTarget = false;
-        timer = 0.0f;
         fadeIn = false;
         compFadeIn = true;
     }
@@ -142,7 +136,6 @@ public class FadeScript : MonoBehaviour
         
         img.color = new Color(1, 1, 1, 1);
         img.raycastTarget = false;
-        timer = 0.0f;
         fadeIn = false;
         compFadeOut = true;
     }
