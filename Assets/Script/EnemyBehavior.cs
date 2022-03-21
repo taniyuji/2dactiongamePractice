@@ -12,6 +12,7 @@ public class EnemyBehavior : BlinkObject
     public float gravity;
     public int enemyHp = 1;
     public bool nonVisible = false;//見えてないときでも動かすか
+    public bool beNonVisible = false;//一度見えたらずっと動くようにするか
     public bool DirectionRight;//右方向に動かすか
     public bool isJamp = false;
     public int myScore;
@@ -105,6 +106,10 @@ public class EnemyBehavior : BlinkObject
                 if (sr.isVisible || nonVisible)
                 {
                     Move();
+                    if (beNonVisible)//一度見えたら止まらないようにするか
+                    {
+                        nonVisible = true;
+                    }
                 }
                 else
                 {

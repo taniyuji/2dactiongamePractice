@@ -29,9 +29,6 @@ public class GameManager : MonoBehaviour
     private bool isSet = false;
     private GameObject goBossPos;
     private bool Play = false;
-    private float BackColorR;
-    private float BackColorG;
-    private float BackColorB;
     private AsyncOperation asyncOperation;
     private bool keyPushed = false;
 
@@ -47,9 +44,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        BackColorR = cam.backgroundColor.r;
-        BackColorG = cam.backgroundColor.g;
-        BackColorB = cam.backgroundColor.b;
         goBossPos = GameObject.Find("goBossBattlePoint");
     }
 
@@ -74,26 +68,6 @@ public class GameManager : MonoBehaviour
         if(Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
         {
             return;
-        }
-
-        if (player != null)
-        {
-            if (player.transform.position.y < BackGroundChangePos.transform.position.y)
-            {
-                if (BackColorR > 0.08f)
-                {
-                    BackColorR -= 0.01f;
-                }
-                else if (BackColorG > 0.055f)
-                {
-                    BackColorG -= 0.01f;
-                }
-                else if (BackColorB > 0.31f)
-                {
-                    BackColorB -= 0.01f;
-                }
-                cam.backgroundColor = new Color(BackColorR, BackColorG, BackColorB, 0);
-            }
         }
 
         if(hpNum >= 1m)
