@@ -117,12 +117,16 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 3.6796057, y: -3.2829993}
-  - {x: 3.7957387, y: -0.41843092}
-  - {x: 6.4238415, y: -0.35844156}
-  - {x: 12.232213, y: -0.4435908}
-  - {x: 12.439244, y: -3.4457724}
-  - {x: 3.8217106, y: -3.2386668}
+  - {x: 4.171625, y: -3.7258177}
+  - {x: 3.6062653, y: -3.0131798}
+  - {x: 7.1428304, y: -0.6017934}
+  - {x: 10.246338, y: -0.43766734}
+  - {x: 12.084607, y: -2.657679}
+  - {x: 12.039075, y: -3.9869943}
+  - {x: 10.389171, y: -4.070428}
+  - {x: 8.5208435, y: -2.012561}
+  - {x: 7.096716, y: -2.0836327}
+  - {x: 4.3137307, y: -3.878292}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -199,7 +203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1022158829641947749}
   - component: {fileID: 3753353696984365322}
-  - component: {fileID: 5288243222958345451}
+  - component: {fileID: 2035991111631592558}
   m_Layer: 16
   m_Name: CheckPlayerPenetration
   m_TagString: Untagged
@@ -215,7 +219,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7039892146635445985}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.07, y: -2.74, z: 0}
+  m_LocalPosition: {x: 8.07, y: -0.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8424379708208166257}
@@ -234,8 +238,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 6670252709622124105}
---- !u!61 &5288243222958345451
-BoxCollider2D:
+--- !u!68 &2035991111631592558
+EdgeCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -248,18 +252,19 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 9, y: 5}
   m_EdgeRadius: 0
+  m_Points:
+  - {x: -5.1741867, y: -4.428177}
+  - {x: -5.1781435, y: -3.218447}
+  - {x: -1.0230048, y: -0.34408867}
+  - {x: 2.1836677, y: -0.14658144}
+  - {x: 4.2194366, y: -2.5068045}
+  - {x: 4.236786, y: -4.737899}
+  - {x: -4.8630147, y: -4.5757837}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &8424379708208166261
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,6 +409,7 @@ MonoBehaviour:
   isGenerating: 0
   playerStepOn2: 0
   playerHit: 0
+  HitInvP: 0
 --- !u!50 &5332623041972457708
 Rigidbody2D:
   serializedVersion: 4

@@ -7,14 +7,14 @@ public class PlayerTriggerCheck : MonoBehaviour
     [HideInInspector]public bool isOn = false;
     private string playerTag = "player";
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.collider.tag == playerTag)
+        if(collision.tag == playerTag)
         {
             isOn = true;
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.tag == playerTag)
         {

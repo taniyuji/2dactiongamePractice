@@ -8,24 +8,28 @@ public class Item : MonoBehaviour
     public PlayerTriggerCheck playerCheck;
     public EnemyBehavior enemy = null;
     public BossBehavior boss = null;
-    public int bossHpJudge;
-    public AudioSource GetItemSound;
+    public int bossHpJudge;//ボスのHPが指定した数と同じになったら出現
+   
 
     private SpriteRenderer sr;
     private BoxCollider2D box;
+    private EdgeCollider2D edge;
     private Rigidbody2D rb;
     private bool pop = false;
     private bool added = false;
     private bool enemyDead = false;
     private bool bossDamaged = false;
     private int bosshp;
+    private AudioSource getItemSE;
 
 
     private void Start()
     {
         sr = gameObject.GetComponent<SpriteRenderer>();
         box = gameObject.GetComponent<BoxCollider2D>();
+        edge = gameObject.GetComponent<EdgeCollider2D>();
         rb = gameObject.GetComponent<Rigidbody2D>();
+        getItemSE = gameObject.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -35,22 +39,23 @@ public class Item : MonoBehaviour
             return;
         }
 
-        if (boss != null)
+        if (boss != null)//ボスのスクリプトがある場合
         {
-            bosshp = boss.bossHp;
+            bosshp = boss.bossHp;//ボスのHPを常に取得
         }
-
+        //エネミーが消滅していないまたはボスがダメージを受けていない場合
         if ((enemy != null && !enemyDead) || (boss != null && !bossDamaged))
         {
+            //ボス、またはエネミーについていく。このメソッド内で、enemyDeadとbossDamagedを判定
             judgeTrigger();
         }
-        else
+        else//エネミーが消滅またはボスがダメージを受けた場合
         {
-            if (playerCheck.isOn)
+            if (playerCheck.isOn)//プレイヤーが範囲内に侵入した場合
             {
-                if (GetItemSound != null)
+                if (getItemSE != null)
                 {
-                    GetItemSound.Play();
+                    getItemSE.Play();
                 }
                 if (!added)
                 {
@@ -64,30 +69,24 @@ public class Item : MonoBehaviour
 
     }
 
-    private void judgeTrigger()
+    private void judgeTrigger()//このオブジェクトの挙動を判定
     {
-        if (enemy != null && !enemy.playerStepOn)
+        //ボスまたはエネミースクリプトがあり、踏まれていない場合
+        if ((enemy != null && !enemy.playerStepOn) || (boss != null && !boss.playerStepOn2))
         {
-            keepMoving();
+            keepMoving();//ついていく
         }
-        else if (boss != null && !boss.playerStepOn2)
+        else//踏まれた場合
         {
-            keepMoving();
-        }
-        else
-        {
-            if (enemy != null)
+            //エネミースクリプトがある場合またはボススクリプトがあり、指定した数とボスのHPが同じになった場合
+            if ((enemy != null) || (boss != null && bosshp == bossHpJudge))
             {
-                getEnable();
-            }
-            else if (boss != null && bosshp == bossHpJudge)
-            {
-                getEnable();
+                getEnable();//出現させる
             }
         }
     }
 
-    private void keepMoving()
+    private void keepMoving()//対象の敵についていく
     {
         if (enemy != null)
         {
@@ -99,12 +98,14 @@ public class Item : MonoBehaviour
         }
         sr.enabled = false;
         box.enabled = false;
+        edge.enabled = false;
     }
 
     private void getEnable()
     {
         sr.enabled = true;
         box.enabled = true;
+        edge.enabled = true;
         if (!pop)
         {
             rb.velocity = new Vector2(-1f, 7f);

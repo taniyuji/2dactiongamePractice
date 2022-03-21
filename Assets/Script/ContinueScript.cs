@@ -25,42 +25,47 @@ public class ContinueScript : MonoBehaviour
 
     private void Start()
     {
-        skippedUIs = UIs.Skip(1)
+        skippedUIs = UIs.Skip(1)//初めの要素からスタートさせたいため。
                         .ToList();
-        skippedUIs.ForEach(skippedUIs =>
+        skippedUIs.ForEach(skippedUIs =>//初めの要素以外を点滅させない。
         {
             blinkObject = skippedUIs.GetComponent<BlinkObject>();
             blinkObject.enabled = false;
-        });                  
+        });
+        //カーソルを始めの要素にセット
         cursol.transform.position = CursolPos[0].transform.position;
     }
     // Update is called once per frame
     void Update()
     {
         pauseCtr.SetActive(false);//コンティニュー画面中はポーズメニューが開かないようにする。
+        //要素番号がUIのリストの最後尾でなく、右矢印が押された場合
         if (!(objNum == UIs.Count - 1) && Input.GetKeyDown(KeyCode.RightArrow))
         {
             RightPushed = true;
             // Debug.Log("moveCursolToRight");
             changeUI();
         }
+        //要素番号がUIのリストの最前列でなく、左矢印が押された場合
         else if (!(objNum == 0) && Input.GetKeyDown(KeyCode.LeftArrow))
         {
             RightPushed = false;
             // Debug.Log("moveCursolToLeft");
             changeUI();
         }
+        //カーソルの位置を新しい位置に移動
         cursol.transform.position = CursolPos[objNum].transform.position;
         //Debug.Log("CursolPos == " + cursol.transform.position);
         //Debug.Log("objNum = " + objNum);
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))//スペースが押された場合。決定ボタン。
         {
             if (SelectSE != null)
             {
                 SelectSE.Play();
             }
-            if (objNum == 0)
+            if (objNum == 0)//最初の要素(continue)の場合
             {
+                //コンティニューする地点よりも格納されているコンティニュー地点の方が大きい場合
                 if (stct.continuePoint.Length > stct.continueNum)
                 {
                     stct.playerObj.transform.position = stct.continuePoint[stct.continueNum].transform.position;
@@ -73,24 +78,24 @@ public class ContinueScript : MonoBehaviour
                     Debug.Log("コンティニューポイントの設定が足りていない");
                 }
             }
-            else if (objNum == 1)
+            else if (objNum == 1)//２つ目の要素(backToTitle)の場合
             {
                 GameManager.instance.goBackTitle = true;
             }
-            gameObject.SetActive(false);
+            gameObject.SetActive(false);//何かが選択されたら、コンティニュー画面を終了する。
         }      
     }
 
-    private void changeUI()
+    private void changeUI()//点滅するUIを変更するメソッド
     {
         txt = UIs[objNum].GetComponent<Text>();
         beforeColor = txt.color;
-        txt.color = new Color(beforeColor.r, beforeColor.g, beforeColor.b, 1);
+        txt.color = new Color(beforeColor.r, beforeColor.g, beforeColor.b, 1);//元の色に戻す
         blinkObject = UIs[objNum].GetComponent<BlinkObject>();
-        blinkObject.enabled = false;
+        blinkObject.enabled = false;//現在のUIの点滅状態を解除
         objNum = RightPushed ? ++objNum : --objNum;
         blinkObject = UIs[objNum].GetComponent<BlinkObject>();
-        blinkObject.enabled = true;
+        blinkObject.enabled = true;//次のUIの点滅を開始
     }
 }
 
