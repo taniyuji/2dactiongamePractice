@@ -73,7 +73,7 @@ public class EnemyBehavior : BlinkObject
 
     void FixedUpdate()
     {
-        if (ofBoss)
+        if (ofBoss)//ボスの生成対象の場合
         {
             boss = GameObject.FindWithTag("Boss");
             /*
@@ -86,13 +86,13 @@ public class EnemyBehavior : BlinkObject
                 Debug.Log("couldntGetBossObj");
             }
             */
-            if (boss != null && !isGenerated)
+            if (boss != null && !isGenerated)//まだ生成されていない場合
             {
                 rb.isKinematic = true;
                 var fixedBossPos = new Vector2(boss.transform.position.x, boss.transform.position.y - 21);
                 rb.MovePosition(fixedBossPos);
             }
-            else
+            else//生成された場合
             {
                 rb.isKinematic = false;
                 ofBoss = false;
@@ -118,11 +118,11 @@ public class EnemyBehavior : BlinkObject
             }
             else//踏まれた場合
             {
-                if (!isDead)
+                if (!isDead)//死んでいない場合
                 {
                     if (GameManager.instance != null)
                     {
-                        GameManager.instance.score += myScore;
+                        GameManager.instance.score += myScore;//スコアを足す
                     }
                     if (enemyHp > 0)
                     {
@@ -134,7 +134,7 @@ public class EnemyBehavior : BlinkObject
                             blinkStart = false;
                             isSet = true;
                         }
-                        if (isJamp)
+                        if (isJamp)//死亡時、ジャンプエネミーだけ落下させたいため
                         {
                             rb.isKinematic = true;
                         }
@@ -321,15 +321,13 @@ public class EnemyBehavior : BlinkObject
     private void SetInvincible()
     {
         gameObject.layer = 14;
-        children.Select(o => o.layer = 14)
-                .ToList();
+        children.ForEach(o => o.layer = 14);
     }
 
     private void UnSetInvincible()
     {
         gameObject.layer = 6;
-        children.Select(o => o.layer = 6)
-                .ToList();
+        children.ForEach(o => o.layer = 6);
         children[1].layer = 15;
         
     }

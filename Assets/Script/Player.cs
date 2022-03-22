@@ -105,6 +105,7 @@ public class Player : BlinkObject
                 if (isGround)
                 {
                     addVelocity = moveObj.GetVelocity();
+                    //Debug.Log("addVelocity = " + addVelocity);
                 }
             }
         }

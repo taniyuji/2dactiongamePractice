@@ -20,7 +20,7 @@ public class Item : MonoBehaviour
     private bool added = false;
     private bool enemyDead = false;
     private bool bossDamaged = false;
-    private int bosshp;
+    private int enemyhp;
 
 
     private void Start()
@@ -40,7 +40,10 @@ public class Item : MonoBehaviour
 
         if (boss != null)//ボスのスクリプトがある場合
         {
-            bosshp = boss.bossHp;//ボスのHPを常に取得
+            enemyhp = boss.bossHp;//ボスのHPを常に取得
+        }else if(enemy != null)
+        {
+            enemyhp = enemy.enemyHp;
         }
         //エネミーが消滅していないまたはボスがダメージを受けていない場合
         if ((enemy != null && !enemyDead) || (boss != null && !bossDamaged))
@@ -78,7 +81,7 @@ public class Item : MonoBehaviour
         else//踏まれた場合
         {
             //エネミースクリプトがある場合またはボススクリプトがあり、指定した数とボスのHPが同じになった場合
-            if ((enemy != null) || (boss != null && bosshp == bossHpJudge))
+            if ((enemy != null && enemyhp < 1) || (boss != null && enemyhp == bossHpJudge))
             {
                 getEnable();//出現させる
             }

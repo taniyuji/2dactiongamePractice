@@ -211,7 +211,7 @@ MonoBehaviour:
   - {fileID: 3802169237513482345}
   nowPoint: 0
   onPlay: 0
-  speed: 20
+  speed: 15
   stopMove: 0
   Move: 1
 --- !u!212 &3802169237925716246
