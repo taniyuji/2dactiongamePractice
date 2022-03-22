@@ -9,6 +9,7 @@ public class Item : MonoBehaviour
     public EnemyBehavior enemy = null;
     public BossBehavior boss = null;
     public int bossHpJudge;//ボスのHPが指定した数と同じになったら出現
+    public AudioSource getItemSE;
    
 
     private SpriteRenderer sr;
@@ -20,7 +21,6 @@ public class Item : MonoBehaviour
     private bool enemyDead = false;
     private bool bossDamaged = false;
     private int bosshp;
-    private AudioSource getItemSE;
 
 
     private void Start()
@@ -29,7 +29,6 @@ public class Item : MonoBehaviour
         box = gameObject.GetComponent<BoxCollider2D>();
         edge = gameObject.GetComponent<EdgeCollider2D>();
         rb = gameObject.GetComponent<Rigidbody2D>();
-        getItemSE = gameObject.GetComponent<AudioSource>();
     }
 
     void Update()

@@ -1003,6 +1003,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1145568346}
     - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
+      propertyPath: getItemSE
+      value: 
+      objectReference: {fileID: 1960076999}
+    - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
       propertyPath: GetItemSound
       value: 
       objectReference: {fileID: 1960076999}
@@ -7640,6 +7644,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1004227329}
     - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
+      propertyPath: getItemSE
+      value: 
+      objectReference: {fileID: 1960076999}
+    - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
       propertyPath: GetItemSound
       value: 
       objectReference: {fileID: 1960076999}
@@ -9590,6 +9598,10 @@ PrefabInstance:
       value: Item (1)
       objectReference: {fileID: 0}
     - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
+      propertyPath: getItemSE
+      value: 
+      objectReference: {fileID: 1960076999}
+    - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: GetItemSound
       value: 
       objectReference: {fileID: 1960076999}
@@ -11155,6 +11167,10 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 132997591}
+    - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
+      propertyPath: getItemSE
+      value: 
+      objectReference: {fileID: 1960076999}
     - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
       propertyPath: GetItemSound
       value: 
@@ -15696,6 +15712,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 954933298}
     - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
+      propertyPath: getItemSE
+      value: 
+      objectReference: {fileID: 1960076999}
+    - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
       propertyPath: GetItemSound
       value: 
       objectReference: {fileID: 1960076999}
@@ -16387,6 +16407,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2081252078}
     - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
+      propertyPath: getItemSE
+      value: 
+      objectReference: {fileID: 1960076999}
+    - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
       propertyPath: GetItemSound
       value: 
       objectReference: {fileID: 1960076999}
@@ -16492,6 +16516,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item
       objectReference: {fileID: 0}
+    - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
+      propertyPath: getItemSE
+      value: 
+      objectReference: {fileID: 1960076999}
     - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: GetItemSound
       value: 
@@ -18308,6 +18336,10 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
+      propertyPath: getItemSE
+      value: 
+      objectReference: {fileID: 1960076999}
+    - target: {fileID: 2750777774449550666, guid: c27928137084147bbb2a77f27f0a9f76, type: 3}
       propertyPath: GetItemSound
       value: 
       objectReference: {fileID: 1960076999}
@@ -19753,6 +19785,10 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 1000844196}
+    - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
+      propertyPath: getItemSE
+      value: 
+      objectReference: {fileID: 1960076999}
     - target: {fileID: 6561392752398110093, guid: fb2fd1263e6e8400bac5bf39aae67be2, type: 3}
       propertyPath: GetItemSound
       value: 

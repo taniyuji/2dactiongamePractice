@@ -10821,6 +10821,7 @@ MonoBehaviour:
   enemy: {fileID: 0}
   boss: {fileID: 1143115672}
   bossHpJudge: 3
+  getItemSE: {fileID: 897230788}
 --- !u!4 &4447084152411634776
 Transform:
   m_ObjectHideFlags: 0
@@ -11093,6 +11094,7 @@ MonoBehaviour:
   enemy: {fileID: 849178561}
   boss: {fileID: 0}
   bossHpJudge: 3
+  getItemSE: {fileID: 897230788}
 --- !u!114 &6561392752067230336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11109,6 +11111,7 @@ MonoBehaviour:
   enemy: {fileID: 1278078276}
   boss: {fileID: 0}
   bossHpJudge: 3
+  getItemSE: {fileID: 897230788}
 --- !u!114 &6561392752151787404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11125,6 +11128,7 @@ MonoBehaviour:
   enemy: {fileID: 984822369}
   boss: {fileID: 0}
   bossHpJudge: 3
+  getItemSE: {fileID: 897230788}
 --- !u!114 &6561392752591527331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11141,6 +11145,7 @@ MonoBehaviour:
   enemy: {fileID: 0}
   boss: {fileID: 1143115672}
   bossHpJudge: 8
+  getItemSE: {fileID: 897230788}
 --- !u!95 &6971160140792000861
 Animator:
   serializedVersion: 3
@@ -11247,6 +11252,7 @@ MonoBehaviour:
   enemy: {fileID: 0}
   boss: {fileID: 1143115672}
   bossHpJudge: 5
+  getItemSE: {fileID: 897230788}
 --- !u!114 &7180019831212489975
 MonoBehaviour:
   m_ObjectHideFlags: 0
