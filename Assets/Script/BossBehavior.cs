@@ -97,14 +97,21 @@ public class BossBehavior : BlinkObject
                 {
                     nonVisible = true;
                     //Debug.Log("踏まれてないよ");
-                    if (!doNotAttack)
+                    if (!isDead)
                     {
-                        BossAttackJudge();//攻撃動作が終了した場合isAttackをfalseにする
-                    }
-                    if (!isAttack)
-                    {
-                        Move();/*JudgeisReturnPos()がtrueでplayerとあたった場合、
+                        if (!doNotAttack)
+                        {
+                            BossAttackJudge();//攻撃動作が終了した場合isAttackをfalseにする
+                        }
+                        if (!isAttack)
+                        {
+                            Move();/*JudgeisReturnPos()がtrueでplayerとあたった場合、
                              isReturnをtrueにする。*/
+                        }
+                    }
+                    else//GetDamageBehaviorでisDeadフラグがtrueになり
+                    {
+                        setBossDead();
                     }
                 }
                 else//踏まれた場合
@@ -126,10 +133,6 @@ public class BossBehavior : BlinkObject
                             isSet = false;//GetDamageBehaviorで使用する。仕様上ここでfalseにする
                             backTime = 0.0f; //仕様上ここでfalseにする
                         }
-                    }else if(isDead && !canBlink)/*GetDamageBehaviorでisDeadフラグがtrueになり
-                        　　　　　　　　　　　　　　　blinkObjectも終了した場合*/
-                    {
-                        setBossDead();
                     }
                 }
                 rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
@@ -238,6 +241,7 @@ public class BossBehavior : BlinkObject
         {
             isDead = true;
         }
+
         if (!isDead)
         {
             if (backTime < 1f)
@@ -261,9 +265,17 @@ public class BossBehavior : BlinkObject
                 anim.SetBool("GetBack", false);
                 anim.Play("Boss_stand");
                 UnSetInvincible();
-                getDamageFin = true;
+                getDamageFin = true;           
             }
             backTime += Time.deltaTime;
+        }
+        else
+        {
+            if (!canBlink)
+            {
+                isSet = false;
+                playerStepOn2 = false;
+            }
         }
     }
 
@@ -271,9 +283,19 @@ public class BossBehavior : BlinkObject
 
     private void setBossDead()//ボス死亡時
     {
-        GameManager.instance.isBossDead = true;
-        gameObject.SetActive(false);
-        playerStepOn2 = false;
+        if (!isSet)
+        {
+            GameManager.instance.isBossDead = true;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            isSet = true;
+            Debug.Log("set boss dead");
+        }
+        anim.Play("Boss_Defeated");
+        if (GameManager.instance.cameraBack)
+        {
+            gameObject.SetActive(false);
+        }
+        
     }
 
     private void BossAttackJudge()//ボスの攻撃処理
@@ -400,6 +422,19 @@ public class BossBehavior : BlinkObject
             anim.Play("Boss_stand");
             UnSetInvincible();
             isReturn = false;
+        }
+    }
+
+    public bool IsDefeatedAnimFin()
+    {
+        AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);
+        if(currentState.IsName("Boss_Defeated") && currentState.normalizedTime >= 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

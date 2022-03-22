@@ -120,7 +120,7 @@ MonoBehaviour:
   Obj: {fileID: 7614577729401109582}
   sr: {fileID: 7614577729401109583}
   pt: {fileID: 7614577729401109619}
-  anim: {fileID: 0}
+  anim: {fileID: 7614577729401109616}
 --- !u!114 &7614577729401109619
 MonoBehaviour:
   m_ObjectHideFlags: 0

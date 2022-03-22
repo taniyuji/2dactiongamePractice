@@ -1460,9 +1460,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 46698470}
     - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
+      propertyPath: bSc
+      value: 
+      objectReference: {fileID: 1143115672}
+    - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
       propertyPath: cam
       value: 
       objectReference: {fileID: 1326093296}
+    - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
+      propertyPath: boss
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
       propertyPath: fade
       value: 
@@ -1479,6 +1487,22 @@ PrefabInstance:
       propertyPath: ForestBGM
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
+      propertyPath: bossCamPos
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
+      propertyPath: followObj.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
+      propertyPath: followObj.Array.data[0]
+      value: 
+      objectReference: {fileID: 128108338}
+    - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
+      propertyPath: followObj.Array.data[1]
+      value: 
+      objectReference: {fileID: 1143115670}
     - target: {fileID: 4606676397612418283, guid: ace5611217db746f5b402e4e51726848, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -5557,7 +5581,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1273694122994360910, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: bossHp
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1273694122994360910, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: gravity

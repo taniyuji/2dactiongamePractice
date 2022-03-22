@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
     public Camera cam;
     public GameObject BackGroundChangePos;
     public GameObject player;
+    public GameObject boss;
+    public List<GameObject> followObj;
+    public BossBehavior bSc;
     public AudioSource buttonSE;
     [HideInInspector] public bool bossIsvisble;
     [HideInInspector] public bool isBossDead = false;
@@ -25,18 +28,22 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool isFallDead = false;
     [HideInInspector] public bool goNextScene = false;
     [HideInInspector] public bool goBackTitle = false;
+    [HideInInspector] public bool cameraBack = false;
 
     private bool isSet = false;
     private GameObject goBossPos;
     private bool Play = false;
     private AsyncOperation asyncOperation;
     private bool keyPushed = false;
+    private GameObject fixedBossPoss;
+    private int followIdx = 0;
+    private float newCamSize;
 
     private void Awake()
     {
         Time.timeScale = 1f;
-         //インスタンスが存在しない場合
-        if(instance == null)
+        //インスタンスが存在しない場合
+        if (instance == null)
         {
             instance = this;
         }
@@ -44,11 +51,50 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    private void Start()
+    {
+        followObj.Add(player);
+        followObj.Add(boss);
         goBossPos = GameObject.Find("goBossBattlePoint");
+        newCamSize = Cam.m_Lens.OrthographicSize;
     }
 
     void Update()
     {
+        if (isBossDead)
+        {
+            if (newCamSize > 18)
+            {
+               newCamSize -= 1f;
+            }
+            if (bSc.IsDefeatedAnimFin())
+            {
+                cameraBack = true;
+                newCamSize = 15;
+                isBossDead = false;
+            }
+            Debug.Log("cameraBack = " + cameraBack);
+        }
+
+        followIdx = isBossDead ? 1 : 0;
+        Cam.Follow = followObj[followIdx].transform;
+
+        if (!cameraBack && bossIsvisble && !isBossDead)
+        {
+            if (!Play && BossBGM != null)
+            {
+                BossBGM.Play();
+                Play = true;
+            }
+            if (newCamSize < 30)
+            {
+                newCamSize += 0.2f;
+            }
+        }
+        Cam.m_Lens.OrthographicSize = newCamSize;
+
         if (SceneManager.GetActiveScene().name == "TitleScene" && Input.anyKey && !keyPushed)
         {
             Debug.Log("起動開始");
@@ -87,26 +133,9 @@ public class GameManager : MonoBehaviour
             goBackTitle = false;
         }
 
-        if(bossIsvisble && !isBossDead)
-        {
-            if (!Play && BossBGM != null)
-            {
-                BossBGM.Play();
-                Play = true;
-            }
-            if (Cam.m_Lens.OrthographicSize < 30)
-            {
-                Cam.m_Lens.OrthographicSize += 0.2f;
-            }
-        }
-
         if (isBossDead && BossBGM != null)
         {
             BossBGM.volume -= 0.01f;
-            if (Cam.m_Lens.OrthographicSize > 20)
-            {
-                Cam.m_Lens.OrthographicSize -= 0.2f;
-            }
         }
     }
 
