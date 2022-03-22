@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class ChangeBackGroundColor : MonoBehaviour
 {
 
-    public List<Tilemap> Ground;
+    public Tilemap Ground;
     public List<SpriteRenderer> sr;
     public List<Image> UIs;
     public GameObject changePos;
@@ -36,8 +36,7 @@ public class ChangeBackGroundColor : MonoBehaviour
         {
             if (colorNum > 0.2f)
             {
-                Ground.Select(i => i.color = new Color(colorNum, colorNum, colorNum, 1))
-                      .ToList();
+                Ground.color = new Color(colorNum, colorNum, colorNum, 1);
                 sr.Select(i => i.color = new Color(colorNum, colorNum, colorNum, 1))
                     .ToList();
                 colorNum -= 0.01f;

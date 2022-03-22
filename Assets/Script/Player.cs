@@ -15,7 +15,6 @@ public class Player : BlinkObject
     [Header("ダッシュの速さ表現")] public AnimationCurve DashCurve;
     [Header("ジャンプの速さ表現")] public AnimationCurve JampCurve;
     [Header("設置判定")] public GroudCheck ground;
-    public JudgeIsEnemy judgeEnemySpace;
     [Header("頭をぶつけた判定")] public GroudCheck head;
     [HideInInspector] public bool EnemyCollision = false;
     [HideInInspector] public bool isDead = false;
@@ -91,7 +90,7 @@ public class Player : BlinkObject
         isGround = ground.IsGround();
         isHead = head.IsGround();
         //アニメーションをセット
-        SetAnim();      
+        SetAnim();
         //プレイヤーがダウンしていない場合
         if (!isDown)
         {
