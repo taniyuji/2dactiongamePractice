@@ -21,6 +21,7 @@ public class Item : MonoBehaviour
     private bool enemyDead = false;
     private bool bossDamaged = false;
     private int enemyhp;
+    private Vector2 fixedenemyPos;
 
 
     private void Start()
@@ -92,6 +93,7 @@ public class Item : MonoBehaviour
     {
         if (enemy != null)
         {
+            fixedenemyPos = new Vector2(enemy.transform.position.x, enemy.transform.position.y);
             rb.MovePosition(enemy.transform.position);
         }
         else if (boss != null)
@@ -101,6 +103,7 @@ public class Item : MonoBehaviour
         sr.enabled = false;
         box.enabled = false;
         edge.enabled = false;
+        rb.isKinematic = true;
     }
 
     private void getEnable()
@@ -108,6 +111,7 @@ public class Item : MonoBehaviour
         sr.enabled = true;
         box.enabled = true;
         edge.enabled = true;
+        rb.isKinematic = false;
         if (!pop)
         {
             rb.velocity = new Vector2(-1f, 7f);
