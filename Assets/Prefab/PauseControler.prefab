@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ddbb05f7bfda4020a4c56d6f437bb49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 405939116434810712, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
   pauseUI: {fileID: 482830491349364164}
   cursol: {fileID: 2457390680608194677}
   UIs:
@@ -58,6 +59,7 @@ MonoBehaviour:
   - {fileID: 1706220027159732448}
   - {fileID: 7521671266668578200}
   SelectSE: {fileID: 0}
+  goback: 0
 --- !u!1 &482830491349364164
 GameObject:
   m_ObjectHideFlags: 0

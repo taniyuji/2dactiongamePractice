@@ -289,7 +289,7 @@ public class BossBehavior : BlinkObject
             GameManager.instance.isBossDead = true;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             isSet = true;
-            Debug.Log("set boss dead");
+            //Debug.Log("set boss dead");
         }
         anim.Play("Boss_Defeated");
         if (camCtr.cameraBack)

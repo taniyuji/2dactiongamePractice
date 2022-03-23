@@ -7,11 +7,13 @@ using System.Linq;
 
 public class PauseScript : MonoBehaviour
 {
+    public GameObject player;
     public GameObject pauseUI;
     public GameObject cursol;
     public List<GameObject> UIs;
     public List<GameObject> CursolPos;
     public AudioSource SelectSE;
+    [HideInInspector] public bool goback = false;
 
     private Image img;
     private Color BeforeColor;
@@ -37,26 +39,27 @@ public class PauseScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!(objNum == UIs.Count - 1) && Input.GetKeyDown(KeyCode.DownArrow))
+        if (!goback)
         {
-            DownAllowPushed = true;
-            changeUI();
-        }
-        else if (!(objNum == 0) && Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            DownAllowPushed = false;
-            changeUI();
-        }
-        cursol.transform.position = CursolPos[objNum].transform.position;
-        if (!GameManager.instance.goBackTitle)
-        {
+            if (!(objNum == UIs.Count - 1) && Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                DownAllowPushed = true;
+                changeUI();
+            }
+            else if (!(objNum == 0) && Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                DownAllowPushed = false;
+                changeUI();
+            }
+            cursol.transform.position = CursolPos[objNum].transform.position;
+
             if (isPausing)
             {
                 pauseUI.SetActive(true);
                 Time.timeScale = 0f;
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    if(SelectSE != null)
+                    if (SelectSE != null)
                     {
                         SelectSE.Play();
                     }
@@ -98,12 +101,10 @@ public class PauseScript : MonoBehaviour
 
     public void BackToTiTle()//GameManagaerスクリプト側でフェードとシーンを移動
     {
-        if (GameManager.instance.goBackTitle)
-        {
-            return;
-        }
+        player.SetActive(false);
         isPausing = false;
         GameManager.instance.goBackTitle = true;
+        goback = true;
     }
 
     private void changeUI()

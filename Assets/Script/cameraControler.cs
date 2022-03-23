@@ -41,7 +41,7 @@ public class cameraControler : MonoBehaviour
                 newCamSize = 15;
                 GameManager.instance.isBossDead = false;
             }
-            Debug.Log("cameraBack = " + cameraBack);
+            //Debug.Log("cameraBack = " + cameraBack);
         }
 
         followIdx = GameManager.instance.isBossDead ? 1 : 0;

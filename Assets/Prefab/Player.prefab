@@ -180,6 +180,7 @@ MonoBehaviour:
   EnemyCollision: 0
   isDead: 0
   isDown: 0
+  isFallDead: 0
   RLimitObj: {fileID: 0}
   LLimitObj: {fileID: 0}
   deadPos: {fileID: 0}
@@ -193,6 +194,7 @@ MonoBehaviour:
   GetDamagedSE: {fileID: 0}
   RunningSE: {fileID: 0}
   stc: {fileID: 0}
+  pauseScr: {fileID: 482830491163810767, guid: a81f3fd1bf3b347cbbb7e4d9f6b01722, type: 3}
 --- !u!212 &405939116434810718
 SpriteRenderer:
   m_ObjectHideFlags: 0
