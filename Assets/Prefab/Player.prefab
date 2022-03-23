@@ -192,6 +192,7 @@ MonoBehaviour:
   JampDownSE: {fileID: 0}
   GetDamagedSE: {fileID: 0}
   RunningSE: {fileID: 0}
+  stc: {fileID: 0}
 --- !u!212 &405939116434810718
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -278,7 +279,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: aa9d66fb04c7f4784948c900bd1765a5, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -292,7 +293,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 405939116434810712}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: aa9d66fb04c7f4784948c900bd1765a5, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
