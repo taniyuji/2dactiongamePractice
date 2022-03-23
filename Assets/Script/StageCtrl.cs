@@ -7,8 +7,12 @@ public class StageCtrl : MonoBehaviour
     public GameObject playerObj;
     public GameObject[] continuePoint;
     public GameObject[] fallDeadPoint;
+    public List<GameObject> RightMoveLim;
+    public List<GameObject> LeftMoveLim;
+    public GameObject DescendPosObj;
+    public GameObject UnderGPosObj;
     public GameObject ContinueCtr;
-    public int continueNum; //リスポーンする地点
+    public int continuePos; //リスポーンする地点
 
     private Player p;
     private int nextSpawn = 1;
@@ -16,12 +20,16 @@ public class StageCtrl : MonoBehaviour
     private int fallDeadPos = 0;
     private FallDeadNum Fnum;
     private bool ContinueCtrSet = false;
+    private int RlimitNum = 0;
+    private int LLimitNum = 0;
+    private Vector2 DescendPos;
+    private Vector2 UnderGPos;
 
     void Start()
     {
         if (playerObj != null && continuePoint != null && continuePoint.Length > 0)
         {
-            playerObj.transform.position = continuePoint[continueNum].transform.position;
+            playerObj.transform.position = continuePoint[continuePos].transform.position;
             p = playerObj.GetComponent<Player>();
             if(p == null)
             {
@@ -32,6 +40,11 @@ public class StageCtrl : MonoBehaviour
         {
             Debug.Log("設定が足りてないよ");
         }
+        if (DescendPosObj != null && UnderGPosObj != null)
+        {
+            DescendPos = DescendPosObj.transform.position;
+            UnderGPos = UnderGPosObj.transform.position;
+        }
     }
 
     void Update()
@@ -39,6 +52,11 @@ public class StageCtrl : MonoBehaviour
         if (Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
         {
             return;
+        }
+
+        if (DescendPosObj != null && UnderGPosObj != null)
+        {
+            judgeMoveLimit();
         }
 
         if (fallDeadPoint.Length >= 1)
@@ -52,7 +70,7 @@ public class StageCtrl : MonoBehaviour
                 Fnum.connectContinuePos = -1;
             }
 
-            if (Fnum.connectContinuePos == continueNum)
+            if (Fnum.connectContinuePos == continuePos)
             {
                 fallDeadPos = nextFallDeadPos;
                 nextFallDeadPos++;
@@ -64,7 +82,7 @@ public class StageCtrl : MonoBehaviour
             {
                 if (playerObj.transform.position.x <= continuePoint[nextSpawn].transform.position.x)
                 {
-                    continueNum = nextSpawn;
+                    continuePos = nextSpawn;
                     nextSpawn++;
                 }
 
@@ -82,6 +100,28 @@ public class StageCtrl : MonoBehaviour
         {
             ContinueCtrSet = false;
         }
+    }
+
+    private void judgeMoveLimit()
+    {
+        if(playerObj.transform.position.x < DescendPos.x && RlimitNum == 0)
+        {
+            RlimitNum++;
+        }else if(playerObj.transform.position.y < UnderGPos.y && RlimitNum == 1 && LLimitNum == 0)
+        {
+            RlimitNum++;
+            LLimitNum++;
+        }
+    }
+
+    public float getRLimitXPos()
+    {
+        return RightMoveLim[RlimitNum].transform.position.x;
+    }
+
+    public float getLLimitXPos()
+    {
+        return LeftMoveLim[LLimitNum].transform.position.x;
     }
 
     public void isFallDead()

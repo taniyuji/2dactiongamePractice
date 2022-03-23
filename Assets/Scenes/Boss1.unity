@@ -983,6 +983,10 @@ PrefabInstance:
       value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
+      propertyPath: stc
+      value: 
+      objectReference: {fileID: 1952282526}
+    - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
       propertyPath: JampSE
       value: 
       objectReference: {fileID: 1377211856}
@@ -9257,8 +9261,14 @@ MonoBehaviour:
   continuePoint:
   - {fileID: 34376345}
   fallDeadPoint: []
+  RightMoveLim:
+  - {fileID: 1703672482}
+  LeftMoveLim:
+  - {fileID: 2022022444}
+  DescendPosObj: {fileID: 0}
+  UnderGPosObj: {fileID: 0}
   ContinueCtr: {fileID: 2080051297}
-  continueNum: 0
+  continuePos: 0
 --- !u!4 &1952282527
 Transform:
   m_ObjectHideFlags: 0

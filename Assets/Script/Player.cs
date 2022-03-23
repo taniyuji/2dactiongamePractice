@@ -29,6 +29,7 @@ public class Player : BlinkObject
     public AudioSource JampDownSE;
     public AudioSource GetDamagedSE;
     public AudioSource RunningSE;
+    public StageCtrl stc;
 
     //プライベート変数
     private Animator anim = null;
@@ -124,7 +125,7 @@ public class Player : BlinkObject
             }
         }
 
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, LLimitObj.transform.position.x, RLimitObj.transform.position.x), transform.position.y, transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, stc.getLLimitXPos(), stc.getRLimitXPos()), transform.position.y, transform.position.z);
         transform.localScale = new Vector3(Math.Abs(transform.localScale.x) * xVector, transform.localScale.y, 1);
         rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;
 

@@ -66,9 +66,9 @@ public class ContinueScript : MonoBehaviour
             if (objNum == 0)//最初の要素(continue)の場合
             {
                 //コンティニューする地点よりも格納されているコンティニュー地点の方が大きい場合
-                if (stct.continuePoint.Length > stct.continueNum)
+                if (stct.continuePoint.Length > stct.continuePos)
                 {
-                    stct.playerObj.transform.position = stct.continuePoint[stct.continueNum].transform.position;
+                    stct.playerObj.transform.position = stct.continuePoint[stct.continuePos].transform.position;
                     p.ContinuePlayer();
                     GameManager.instance.isFallDead = false;
                     pauseCtr.SetActive(true);
