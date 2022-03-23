@@ -20,6 +20,7 @@ public class BossBehavior : BlinkObject
     public GameObject JudgeReturnLeft;
     public GameObject ReturnPos;
     public bool doNotAttack = false;
+    public cameraControler camCtr;
     [HideInInspector] public bool hitGround = false;
     [HideInInspector] public bool isAttack = false;
     [HideInInspector] public bool isGenerating = false;
@@ -291,7 +292,7 @@ public class BossBehavior : BlinkObject
             Debug.Log("set boss dead");
         }
         anim.Play("Boss_Defeated");
-        if (GameManager.instance.cameraBack)
+        if (camCtr.cameraBack)
         {
             gameObject.SetActive(false);
         }
