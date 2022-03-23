@@ -196,7 +196,7 @@ public class Player : BlinkObject
                 jumpTime = 0.0f;
                 otherJumpHeight = o.BoundHeight;//ザコ敵のスクリプトから跳ねる高さを取得
                 o.playerStepOn = true;//ザコ敵に踏んづけたことを通知
-                Debug.Log("踏んだ");
+                //Debug.Log("踏んだ");
             }
         //無敵状態でなく、敵の体と衝突した場合。無敵状態の場合は、通り抜ける。
         }else if(collision.collider.tag == "Enemy_Body"　&& !invincibleMode)
@@ -486,7 +486,7 @@ public class Player : BlinkObject
         else
         {
             if(IsDeadAnimEnd())
-            Debug.Log("IsDeadAnim Finished");
+            //Debug.Log("IsDeadAnim Finished");
             xspeed = 0;
             yspeed = 0;
             isDown = false;

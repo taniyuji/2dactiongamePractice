@@ -308,7 +308,7 @@ public class BossBehavior : BlinkObject
     {
         if (attackNum != 1)
         {
-            attackNum = UnityEngine.Random.Range(1, 351);
+            attackNum = UnityEngine.Random.Range(1,351);
         }
         else
         {
@@ -327,15 +327,15 @@ public class BossBehavior : BlinkObject
             isSet = true;
         }
         if (AttackAnimFin == false)
-        {     
+        {
             isAttack = true;
             anim.SetBool("Attack", true);
             AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
             if (currentState.IsName("Boss_Attack") && isAttack)//ダウンアニメーションの場合
             {
-                if (currentState.normalizedTime >= 0.32 && currentState.normalizedTime < 1)
+                if (currentState.normalizedTime >= 0.5 && currentState.normalizedTime < 1)
                 {
-                        enemySpeed += 1f;
+                    enemySpeed += 1.3f;
                 }
                 else if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
@@ -345,17 +345,16 @@ public class BossBehavior : BlinkObject
                     HitInvP = false;
                     anim.SetBool("Attack", false);
                     enemySpeed = beforeSpeed;
-                    AttackAnimFin = true;                  
+                    AttackAnimFin = true;
                 }
             }
 
         }
-        time += Time.deltaTime;
     }
 
     private void JudgeCanGenerate()
     {
-        if (bossHp == 8 || bossHp == 4)
+        if (bossHp == 10 || bossHp == 4)
         {
             if ((CountGenerate == 0 && generateTime == 0) || (CountGenerate == 1 && generateTime == 5))
             {
@@ -386,7 +385,7 @@ public class BossBehavior : BlinkObject
         }
         else if (generateTime == 5 || generateTime == 10)//攻撃毎に、5体生成した場合
         {
-            Debug.Log("生成終了");
+            //Debug.Log("生成終了");
             anim.SetBool("Generate", false);
             CountGenerate++;
             rb.constraints = RigidbodyConstraints2D.FreezePositionY
