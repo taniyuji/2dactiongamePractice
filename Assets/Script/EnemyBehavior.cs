@@ -73,6 +73,12 @@ public class EnemyBehavior : BlinkObject
 
     void FixedUpdate()
     {
+        if(boss != null && GameManager.instance.isBossDead)
+        {
+            playerStepOn = true;
+            isDead = true;
+        }
+
         if (ofBoss)//ボスの生成対象の場合
         {
             boss = GameObject.FindWithTag("Boss");
@@ -89,7 +95,7 @@ public class EnemyBehavior : BlinkObject
             if (boss != null && !isGenerated)//まだ生成されていない場合
             {
                 rb.isKinematic = true;
-                var fixedBossPos = new Vector2(boss.transform.position.x, boss.transform.position.y - 21);
+                var fixedBossPos = new Vector2(boss.transform.position.x, boss.transform.position.y - 10);
                 rb.MovePosition(fixedBossPos);
             }
             else//生成された場合
@@ -167,7 +173,7 @@ public class EnemyBehavior : BlinkObject
                     {
                         rb.velocity = new Vector2(0, -gravity);
                         transform.Rotate(new Vector3(0, 0, 5));
-                        Destroy(gameObject, 3f);
+                        Destroy(gameObject, 2f);
                     }
                     else
                     {

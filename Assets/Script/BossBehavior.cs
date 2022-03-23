@@ -55,7 +55,7 @@ public class BossBehavior : BlinkObject
     private Func<bool> boolFunction;
     private bool canBlink = false;
     private bool moveToReturn = false;
-    private bool getDamageFin = true;
+    private bool getDamageFin = false;
     private bool isDead = false;
     private AudioSource beSteppedSE;
 
@@ -80,26 +80,26 @@ public class BossBehavior : BlinkObject
         //カメラに写っているか場合
         if (sr.isVisible || nonVisible)
         {
+
             GameManager.instance.bossIsvisble = true;
             judgeMoveDir();
             if (!isReturn)
             {
-                pSc = player.GetComponent<Player>();
-                if (pSc.isDown　|| HitInvP)//HitInvPはBossAttackBehaviorでfalseにする。
-                {
-                    SetInvincible();
-                }
-                else
-                {
-                    UnSetInvincible();
-                }
-
                 if (!playerStepOn2)
                 {
-                    nonVisible = true;
-                    //Debug.Log("踏まれてないよ");
                     if (!isDead)
                     {
+                        pSc = player.GetComponent<Player>();
+                        if (pSc.isDown || HitInvP)//HitInvPはBossAttackBehaviorでfalseにする。
+                        {
+                            SetInvincible();
+                        }
+                        else
+                        {
+                            UnSetInvincible();
+                        }
+                        nonVisible = true;
+                        //Debug.Log("踏まれてないよ");
                         if (!doNotAttack)
                         {
                             BossAttackJudge();//攻撃動作が終了した場合isAttackをfalseにする
@@ -107,19 +107,22 @@ public class BossBehavior : BlinkObject
                         if (!isAttack)
                         {
                             Move();/*JudgeisReturnPos()がtrueでplayerとあたった場合、
-                             isReturnをtrueにする。*/
+                            isReturnをtrueにする。*/
                         }
                     }
-                    else//GetDamageBehaviorでisDeadフラグがtrueになり
+                    else
                     {
                         setBossDead();
-                    }
+                    }                   
                 }
                 else//踏まれた場合
                 {
                     //Debug.Log("踏まれたよ");
-                    GetDamageBehavior();//回避動作が終了したらgetDamageFinフラグをtrueにする。
-                    if (getDamageFin)
+                    if (!getDamageFin)
+                    {
+                        GetDamageBehavior();//回避動作が終了したらgetDamageFinフラグをtrueにする。
+                    }
+                    else
                     {
                         //Debug.Log("EnterTogetDamageFin");
                         JudgeCanGenerate();//Hpが生成作業対象の場合は、isGeneratingをtrueにする
@@ -130,6 +133,7 @@ public class BossBehavior : BlinkObject
 
                         if(!isGenerating)//生成作業終了後、すぐに起動させたいため上記のif文とは別々に記述
                         {
+                            getDamageFin = false;
                             playerStepOn2 = false;//ここで!playerStepOn分岐を終了
                             isSet = false;//GetDamageBehaviorで使用する。仕様上ここでfalseにする
                             backTime = 0.0f; //仕様上ここでfalseにする
@@ -240,6 +244,7 @@ public class BossBehavior : BlinkObject
         }
         if(bossHp <= 0)
         {
+            SetInvincible();
             isDead = true;
         }
 
@@ -260,7 +265,7 @@ public class BossBehavior : BlinkObject
                 anim.SetBool("telepote", false);
                 anim.SetBool("GetBack", true);
             }
-            else if (backTime >= 2f && backTime < 3f)
+            else if (backTime >= 2f)
             {
                 //Debug.Log("GetDamageBehaviorFin");
                 anim.SetBool("GetBack", false);
@@ -274,8 +279,8 @@ public class BossBehavior : BlinkObject
         {
             if (!canBlink)
             {
+                getDamageFin = true;
                 isSet = false;
-                playerStepOn2 = false;
             }
         }
     }

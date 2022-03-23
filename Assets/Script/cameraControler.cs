@@ -57,7 +57,7 @@ public class cameraControler : MonoBehaviour
         Cam.m_Lens.OrthographicSize = newCamSize;
 
 
-        if (!Play && BossBGM != null)
+        if (GameManager.instance.bossIsvisble && !Play && BossBGM != null)
         {
             BossBGM.Play();
             Play = true;
