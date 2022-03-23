@@ -53,7 +53,7 @@ public class MoveObject : MonoBehaviour
                 {
                     Vector2 toVector;
                     int nextPoint;
-                    if (onPlay && (player.isDead || GameManager.instance.isFallDead))//onPlayでプレイヤーが死亡した場合
+                    if (onPlay && (player.isDead || player.isFallDead))//onPlayでプレイヤーが死亡した場合
                     {
                         toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
                         nowPoint = 0;
@@ -90,7 +90,7 @@ public class MoveObject : MonoBehaviour
                 {
                     int nextPoint;
                     Vector2 toVector;
-                    if (onPlay && (player.isDead || GameManager.instance.isFallDead))
+                    if (onPlay && (player.isDead || player.isFallDead))
                     {
                         toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
                         nowPoint = 0;

@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
     public decimal hpNum = 0.5m;
     [HideInInspector] public bool bossIsvisble;
     [HideInInspector] public bool isBossDead = false;
-    [HideInInspector] public bool isFallDead = false;
     [HideInInspector] public bool goBackTitle = false;
 
     private void Awake()

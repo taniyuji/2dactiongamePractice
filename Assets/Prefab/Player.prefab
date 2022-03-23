@@ -122,7 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUI: 0
   gravity: 30
-  speed: 30
+  speed: 20
   jumpSpeed: 20
   jumpHeightLimit: 24
   jumpLimitTime: 0.5

@@ -6,7 +6,7 @@ public class StageCtrl : MonoBehaviour
 {
     public GameObject playerObj;
     public GameObject[] continuePoint;
-    public GameObject[] fallDeadPoint;
+    public List<GameObject> fallDeadPoint;
     public List<GameObject> RightMoveLim;
     public List<GameObject> LeftMoveLim;
     public GameObject DescendPosObj;
@@ -16,9 +16,7 @@ public class StageCtrl : MonoBehaviour
 
     private Player p;
     private int nextSpawn = 1;
-    private int nextFallDeadPos = 1;
-    private int fallDeadPos = 0;
-    private FallDeadNum Fnum;
+    private int fallDeadNum = 0;
     private bool ContinueCtrSet = false;
     private int RlimitNum = 0;
     private int LLimitNum = 0;
@@ -59,37 +57,20 @@ public class StageCtrl : MonoBehaviour
             judgeMoveLimit();
         }
 
-        if (fallDeadPoint.Length >= 1)
+        JudgeIsFallDead();
+        
+        if (continuePoint.Length > nextSpawn)
         {
-            if (fallDeadPoint.Length > nextFallDeadPos)
+            if (playerObj.transform.position.x <= continuePoint[nextSpawn].transform.position.x)
             {
-                Fnum = fallDeadPoint[nextFallDeadPos].GetComponent<FallDeadNum>();
-            }
-            else
-            {
-                Fnum.connectContinuePos = -1;
+                continuePos = nextSpawn;
+                nextSpawn++;
             }
 
-            if (Fnum.connectContinuePos == continuePos)
-            {
-                fallDeadPos = nextFallDeadPos;
-                nextFallDeadPos++;
-            }
-
-            isFallDead();
         }
-            if (continuePoint.Length > nextSpawn)
-            {
-                if (playerObj.transform.position.x <= continuePoint[nextSpawn].transform.position.x)
-                {
-                    continuePos = nextSpawn;
-                    nextSpawn++;
-                }
-
-            }
 
             //プレイヤースクリプトの方で消滅アニメーションが終了した場合
-        if (p.IsDeadAnimEnd() && !ContinueCtrSet)
+        if ((p.IsDeadAnimEnd() || p.isFallDead) && !ContinueCtrSet)
         {
             //Debug.Log("ContinueCtrSetActive");
             ContinueCtr.SetActive(true);
@@ -124,14 +105,22 @@ public class StageCtrl : MonoBehaviour
         return LeftMoveLim[LLimitNum].transform.position.x;
     }
 
-    public void isFallDead()
+    public void JudgeIsFallDead()
     {
         if (fallDeadPoint == null)
         {
-            return;
-        }else if (playerObj.transform.position.y <= fallDeadPoint[fallDeadPos].transform.position.y)
+          return;
+        }
+
+        if (playerObj.transform.position.x < DescendPos.x && fallDeadNum == 0)
         {
-            GameManager.instance.isFallDead = true;
+            fallDeadNum++;
+        }
+
+        if (playerObj.transform.position.y < fallDeadPoint[fallDeadNum].transform.position.y)
+        {
+            p.isFallDead = true;
+            Debug.Log("set player fall dead");
         }
     }
 

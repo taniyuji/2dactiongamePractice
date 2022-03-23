@@ -70,7 +70,6 @@ public class ContinueScript : MonoBehaviour
                 {
                     stct.playerObj.transform.position = stct.continuePoint[stct.continuePos].transform.position;
                     p.ContinuePlayer();
-                    GameManager.instance.isFallDead = false;
                     pauseCtr.SetActive(true);
                 }
                 else

@@ -19,6 +19,7 @@ public class Player : BlinkObject
     [HideInInspector] public bool EnemyCollision = false;
     [HideInInspector] public bool isDead = false;
     [HideInInspector] public bool isDown = false;
+    [HideInInspector] public bool isFallDead = false;
     public GameObject RLimitObj;
     public GameObject LLimitObj;
     public GameObject deadPos = null;
@@ -93,7 +94,8 @@ public class Player : BlinkObject
         //アニメーションをセット
         SetAnim();
         //プレイヤーがダウンしていない場合
-        if (!isDown)
+        //Debug.Log("isFallDead = " + isFallDead);
+        if (!isDown && !isFallDead)
         {
             //x軸、y軸の速度を入手
             xspeed = GetXspeed();
@@ -109,9 +111,15 @@ public class Player : BlinkObject
                 }
             }
         }
-        else if (isDown && !testMode)
+        else if (isDown && !testMode && !isFallDead)
         {//プレイヤーがダウンしている場合
             downBehavior();
+        }
+        else if (isFallDead)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            sr.enabled = false;
+            isDead = true;
         }
 
         if (beforeDown || isContinue)//ダウン明け、またはコンティニュー明けか
@@ -545,7 +553,9 @@ public class Player : BlinkObject
 
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         children.ForEach(i => i.SetActive(true));
+        sr.enabled = true;
         isBoss = false;
         GameManager.instance.hpNum = 0.5m;
         anim.Play("Player_Stand");
@@ -554,6 +564,7 @@ public class Player : BlinkObject
         isRun = false;
         isContinue = true;
         isDead = false;
+        isFallDead = false;
     }
 
     private IEnumerator DelayCorutine(float sec, Action action)
