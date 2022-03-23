@@ -987,12 +987,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1952282526}
     - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
+      propertyPath: speed
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
       propertyPath: JampSE
       value: 
       objectReference: {fileID: 1377211856}
     - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
       propertyPath: deadPos
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
+      propertyPath: gravity
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
       propertyPath: LLimitObj

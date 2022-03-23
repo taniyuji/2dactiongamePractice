@@ -57,7 +57,10 @@ public class StageCtrl : MonoBehaviour
             judgeMoveLimit();
         }
 
-        JudgeIsFallDead();
+        if (fallDeadPoint.Count != 0)
+        {
+            JudgeIsFallDead();
+        }
         
         if (continuePoint.Length > nextSpawn)
         {
