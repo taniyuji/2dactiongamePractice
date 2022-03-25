@@ -5,15 +5,15 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     public AudioSource[] audioList;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
+    private bool played = false;
+
     void Update()
     {
-        
+        if (GameManager.instance.canContinue && !played)
+        {
+            audioList[0].Play();
+            played = true;
+        }
     }
 }

@@ -17,7 +17,6 @@ public class ContinueScript : MonoBehaviour
     public Player p;
     public GameObject pauseCtr;
     public LoadScenes loadScenes;
-    public bool canContinue = false;
 
     private Text txt;
     private Color beforeColor;
@@ -70,7 +69,7 @@ public class ContinueScript : MonoBehaviour
                 //コンティニューする地点よりも格納されているコンティニュー地点の方が大きい場合
                 if (stct.continuePoint.Length > stct.continuePos)
                 {
-                    if (!canContinue)
+                    if (!GameManager.instance.canContinue)
                     {
                         GameManager.instance.ResetPram();
                         loadScenes.startLoadStage1Scene();
@@ -81,6 +80,7 @@ public class ContinueScript : MonoBehaviour
                         stct.playerObj.transform.position = stct.continuePoint[stct.continuePos].transform.position;
                         p.ContinuePlayer();
                         pauseCtr.SetActive(true);
+                        GameManager.instance.canContinue = false;
                     }
                 }
                 else

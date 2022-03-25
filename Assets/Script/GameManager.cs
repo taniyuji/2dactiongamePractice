@@ -5,10 +5,14 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     public int score;
     public int stageNum;//どのステージに居るか
-    public decimal hpNum = 0.5m;
+    public decimal hpNum = 1m;  
+    public bool canContinue;
+
     [HideInInspector] public bool bossIsvisble;
     [HideInInspector] public bool isBossDead = false;
     [HideInInspector] public bool goBackTitle = false;
+
+     private int judgeCanContinue = 0;
 
     private void Awake()
     {
@@ -27,9 +31,16 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(hpNum >= 1m)
+        if(hpNum > 1m)
         {
             hpNum = 1m;
+            judgeCanContinue++;
+            Debug.Log("judgeCanContinue = " + judgeCanContinue);
+        }
+        if(judgeCanContinue >= 5)
+        {
+            canContinue = true;
+            judgeCanContinue = 0;
         }
     }
 
@@ -37,5 +48,6 @@ public class GameManager : MonoBehaviour
     {
         hpNum = 0.5m;
         score = 0;
+        judgeCanContinue = 0;
     }
 }
