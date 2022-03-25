@@ -122,7 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUI: 0
   gravity: 30
-  speed: 20
+  speed: 23
   jumpSpeed: 20
   jumpHeightLimit: 24
   jumpLimitTime: 0.5
@@ -194,7 +194,6 @@ MonoBehaviour:
   GetDamagedSE: {fileID: 0}
   RunningSE: {fileID: 0}
   stc: {fileID: 0}
-  pauseScr: {fileID: 482830491163810767, guid: a81f3fd1bf3b347cbbb7e4d9f6b01722, type: 3}
 --- !u!212 &405939116434810718
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -233,7 +232,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1824211541
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 97181c507342649cfa48839ecbafa5fa, type: 3}
   m_Color: {r: 0.9811321, g: 0.9579922, b: 0.9579922, a: 1}

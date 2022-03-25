@@ -19,6 +19,7 @@ public class EnemyCollisionCheck : MonoBehaviour
         {
             if (enm != null)
             {
+                //Debug.Log("敵の方向を転換");
                 enm.DirectionRight = !enm.DirectionRight;
             }else if(bos != null)
             {

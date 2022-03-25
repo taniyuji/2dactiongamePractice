@@ -135,10 +135,6 @@ public class Player : BlinkObject
 
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, stc.getLLimitXPos(), stc.getRLimitXPos()), transform.position.y, transform.position.z);
         transform.localScale = new Vector3(Math.Abs(transform.localScale.x) * xVector, transform.localScale.y, 1);
-        if (!isJump)
-        {
-            xspeed *= DashCurve.Evaluate(dashTime);
-        }
         rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;
 
     }
@@ -261,8 +257,7 @@ public class Player : BlinkObject
         float horizontalkey = Input.GetAxisRaw("Horizontal") * Time.deltaTime;
         float xspeed;
 
-        //右矢印キーが押された場合
-        if (horizontalkey > 0)
+        if(horizontalkey != 0)//入力がある場合
         {
             if (RunningSE != null)
             {
@@ -279,30 +274,10 @@ public class Player : BlinkObject
                 }
             }
             isRun = true;
+            xVector = horizontalkey > 0 ? -1 : 1;//ここで右か左かを判断
+            //スプライトの向きと進む方向があべこべになってしまっているため
+            xspeed = -xVector * (speed * DashCurve.Evaluate(dashTime));
             dashTime += Time.deltaTime;
-            xspeed = speed;
-            xVector = -1;
-        }//左矢印キーが押された場合
-        else if (horizontalkey < 0)
-        {
-            if (RunningSE != null)
-            {
-                if (isGround)
-                {
-                    if (dashTime < 0.02f || wasJamp)
-                    {
-                        RunningSE.Play();
-                    }
-                }
-                else
-                {
-                    RunningSE.Pause();
-                }
-            }
-            isRun = true;
-            dashTime += Time.deltaTime;
-            xspeed = -speed;
-            xVector = 1;
         }//入力がない場合
         else
         {
@@ -327,7 +302,7 @@ public class Player : BlinkObject
 
         //直前に押されていたキーを入手
         beforeKey = horizontalkey;
-
+        Debug.Log("playerXspeed = " + xspeed);
         return xspeed;
     }
 

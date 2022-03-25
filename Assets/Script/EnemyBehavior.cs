@@ -256,19 +256,11 @@ public class EnemyBehavior : BlinkObject
             anim.SetBool("Run", false);
             xVector = 0;
         }
-        else if (g.IsGround())
+        else if (g.IsGround() || isJamp)
         {
             anim.SetBool("Run", true);
-            if (DirectionRight)//動く方向が右方向の場合
-            {
-                xVector = 1;
-                transform.localScale = new Vector3(Math.Abs(transform.localScale.x), transform.localScale.y);
-            }
-            else//動く方向が左方向の場合
-            {
-                xVector = -1;
-                transform.localScale = new Vector2(-(Math.Abs(transform.localScale.x)), transform.localScale.y);
-            }
+            xVector = DirectionRight ? 1 : -1;
+            transform.localScale = new Vector3(xVector * Math.Abs(transform.localScale.x), transform.localScale.y);
         }
     }
 
