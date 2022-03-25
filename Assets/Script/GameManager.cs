@@ -32,4 +32,10 @@ public class GameManager : MonoBehaviour
             hpNum = 1m;
         }
     }
+
+    public void ResetPram()
+    {
+        hpNum = 0.5m;
+        score = 0;
+    }
 }

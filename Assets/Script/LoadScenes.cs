@@ -74,7 +74,7 @@ public class LoadScenes : MonoBehaviour
         asyncOperation.allowSceneActivation = true;
     }
 
-    private void startLoadStage1Scene()
+    public void startLoadStage1Scene()
     {
         StartCoroutine("LoadStage1Scene");
     }

@@ -135,6 +135,10 @@ public class Player : BlinkObject
 
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, stc.getLLimitXPos(), stc.getRLimitXPos()), transform.position.y, transform.position.z);
         transform.localScale = new Vector3(Math.Abs(transform.localScale.x) * xVector, transform.localScale.y, 1);
+        if (!isJump)
+        {
+            xspeed *= DashCurve.Evaluate(dashTime);
+        }
         rb.velocity = new Vector2(xspeed, yspeed) + addVelocity;
 
     }
@@ -485,8 +489,6 @@ public class Player : BlinkObject
         }
         else
         {
-            if(IsDeadAnimEnd())
-            //Debug.Log("IsDeadAnim Finished");
             xspeed = 0;
             yspeed = 0;
             isDown = false;
@@ -496,6 +498,7 @@ public class Player : BlinkObject
             }
             else
             {
+                rb.constraints = RigidbodyConstraints2D.FreezeAll;
                 children.ForEach(i => i.SetActive(false));
             }
         }

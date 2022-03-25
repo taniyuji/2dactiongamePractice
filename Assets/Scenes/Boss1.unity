@@ -357,6 +357,10 @@ PrefabInstance:
       propertyPath: pauseCtr
       value: 
       objectReference: {fileID: 1594948535}
+    - target: {fileID: 4117227457600100700, guid: 74a658adf704747e4898a86084ef2302, type: 3}
+      propertyPath: loadScenes
+      value: 
+      objectReference: {fileID: 536594398}
     - target: {fileID: 4117227457600100701, guid: 74a658adf704747e4898a86084ef2302, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6759,7 +6763,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1273694122994360910, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: bossHp
-      value: 15
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -1273694122994360910, guid: 72d4b71b5203145d9b722d7c6a838799, type: 3}
       propertyPath: camCtr
