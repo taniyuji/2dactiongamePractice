@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool goBackTitle = false;
 
      private int judgeCanContinue = 0;
+    private bool setContinue = false;
 
     private void Awake()
     {
@@ -32,29 +33,31 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        //Debug.Log("canContinue = " + canContinue);
         if(hpNum > 1m)//hpが１以上になった場合
         {
             hpNum = 1m;
         }
 
-        if (judgeHp)//hpが変化した場合
+        if (judgeHp)//hpが変化し、まだコンティニューしていない場合
         {
-            if(hpNum <= 0.1m)
+            if(!setContinue && hpNum <= 0.1m)
             {
                 judgeCanContinue++;
-                Debug.Log("judgeCanContinue = " + judgeCanContinue);
+                //Debug.Log("judgeCanContinue = " + judgeCanContinue);
             }
             judgeHp = false;
         }
 
-        //hp残量が1以下の状態を3回繰り返すとコンティニューできるようになる。
-        if(judgeCanContinue >= 3)
+        //hp残量が1以下の状態を4回繰り返すとコンティニューできるようになる。
+        if(judgeCanContinue >= 4)
         {
-            canContinue = true;
+            canContinue = true;//コンティニュースクリプトでfalseになる
+            setContinue = true;//いちどだけコンティニューできるようにするため
             judgeCanContinue = 0;
         }
 
-        if (goBackTitle)
+        if (goBackTitle)//タイトルに戻ってもゲームマネージャーはリビルトされないため
         {
             ResetPram();
         }
@@ -65,5 +68,8 @@ public class GameManager : MonoBehaviour
         hpNum = 0.5m;
         score = 0;
         judgeCanContinue = 0;
+        canContinue = false;
+        setContinue = false;
+        bossIsvisble = false;
     }
 }

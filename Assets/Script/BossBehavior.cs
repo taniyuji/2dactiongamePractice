@@ -46,7 +46,6 @@ public class BossBehavior : BlinkObject
     private int xLocalScale;
     private int generateTime = 0;
     private int CountGenerate = 0;
-    private Vector2 returnPos;
     private Vector2 p;
     private Vector2 This;
     private Vector2 ReRight;
@@ -83,6 +82,7 @@ public class BossBehavior : BlinkObject
 
             GameManager.instance.bossIsvisble = true;
             judgeMoveDir();
+            Debug.Log("isReturn = " + isReturn);
             if (!isReturn)
             {
                 if (!playerStepOn2)
@@ -144,7 +144,7 @@ public class BossBehavior : BlinkObject
             }
             else//isReturnの場合
             {
-                //Debug.Log("EnterToIsreturn");
+                Debug.Log("EnterToIsreturn");
                 TelepoteBehavior();//ここでplayerHitをfalseにする
                                    
                 if (moveToReturn)//TelepoteBehaviorにてmoveToReturnがtrueにされた場合
@@ -254,7 +254,7 @@ public class BossBehavior : BlinkObject
             {
                 anim.SetBool("telepote", true);
                 SetInvincible();
-                enemySpeed += 0.5f;
+                enemySpeed += 0.8f;
                 xVector = moveRight ? -1 : 1;
             }
             else if (backTime >= 1f && backTime < 2f)
@@ -335,7 +335,7 @@ public class BossBehavior : BlinkObject
             {
                 if (currentState.normalizedTime >= 0.5 && currentState.normalizedTime < 1)
                 {
-                    enemySpeed += 1.3f;
+                    enemySpeed += 1f;
                 }
                 else if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
                 {
@@ -398,10 +398,8 @@ public class BossBehavior : BlinkObject
 
     private void TelepoteBehavior()
     {
-        nonVisible = true;
         SetInvincible();
         playerHit = false;
-
 
         if (!moveToReturn)
         {

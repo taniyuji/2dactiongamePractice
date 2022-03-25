@@ -77,13 +77,13 @@ MonoBehaviour:
   gravity: 20
   enemyHp: 1
   nonVisible: 0
+  beNonVisible: 0
   DirectionRight: 1
   isJamp: 0
-  myScore: 10
+  myScore: 100
   g: {fileID: 7097574723148991221}
   isFly: 1
   ofBoss: 0
-  boss: {fileID: 0}
   children:
   - {fileID: 6383653711324228896}
   - {fileID: 7487032735248056419}
@@ -130,7 +130,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -641761675
-  m_SortingLayer: -3
+  m_SortingLayer: -4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d47e598238cf7460780b308e4f714161, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -377,10 +377,10 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 1.7184448, y: -0.6038015}
-  - {x: 1.7276611, y: -7.544159}
-  - {x: -1.6542206, y: -7.763663}
-  - {x: -1.6785278, y: -0.77725446}
+  - {x: 1.7579956, y: -0.36041206}
+  - {x: 1.7581787, y: -12.329248}
+  - {x: -1.623642, y: -12.2127495}
+  - {x: -1.6587524, y: -0.16878092}
   - {x: 1.6710815, y: -0.08443993}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
@@ -504,12 +504,12 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0.2
   m_Points:
-  - {x: -1.8737488, y: 1.6949883}
+  - {x: -1.8935242, y: 1.06213}
   - {x: -1.9201431, y: -0.4502945}
   - {x: 2.1435547, y: -0.48401737}
-  - {x: 2.123932, y: 1.0536757}
-  - {x: 2.1428604, y: 1.8462839}
-  - {x: -1.572998, y: 1.8402939}
+  - {x: 2.123932, y: 1.0141249}
+  - {x: 2.0835342, y: 1.3123026}
+  - {x: -1.6125488, y: 1.3063278}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -540,7 +540,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7918316179040272315}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.97, z: 0}
+  m_LocalPosition: {x: 0, y: 4.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1855782679090707794}

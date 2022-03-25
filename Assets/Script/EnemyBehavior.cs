@@ -126,10 +126,6 @@ public class EnemyBehavior : BlinkObject
             {
                 if (!isDead)//死んでいない場合
                 {
-                    if (GameManager.instance != null)
-                    {
-                        GameManager.instance.score += myScore;//スコアを足す
-                    }
                     if (enemyHp > 0)
                     {
                         if (!isSet)
@@ -162,6 +158,10 @@ public class EnemyBehavior : BlinkObject
                     }
                     if (enemyHp <= 0)
                     {
+                        if (GameManager.instance != null)
+                        {
+                            GameManager.instance.score += myScore;//スコアを足す
+                        }
                         isDead = true;
                     }
                 }

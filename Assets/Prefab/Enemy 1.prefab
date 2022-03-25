@@ -80,7 +80,7 @@ MonoBehaviour:
   beNonVisible: 0
   DirectionRight: 1
   isJamp: 1
-  myScore: 10
+  myScore: 250
   g: {fileID: 8082390524828616886}
   isFly: 0
   ofBoss: 0

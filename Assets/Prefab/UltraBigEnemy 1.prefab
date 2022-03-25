@@ -349,7 +349,7 @@ MonoBehaviour:
   beNonVisible: 0
   DirectionRight: 1
   isJamp: 0
-  myScore: 0
+  myScore: 500
   g: {fileID: 1671014875539418032}
   isFly: 0
   ofBoss: 0

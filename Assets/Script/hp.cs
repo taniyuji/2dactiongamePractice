@@ -6,12 +6,10 @@ using UnityEngine.UI;
 public class hp : MonoBehaviour
 {
     public Image hpGage;
-    private Text hpText = null;
     private decimal oldHpNum = 0m;
 
     void Start()
     {
-        hpText = GetComponent<Text>();
         if (GameManager.instance != null)
         {
             hpGage.fillAmount = (float)GameManager.instance.hpNum;

@@ -202,6 +202,10 @@ public class Player : BlinkObject
         }else if(collision.collider.tag == "Enemy_Body"　&& !invincibleMode)
         {
             isDown = true;
+            if (b != null)
+            {
+                b.playerHit = true;
+            }
         //動く床に乗った場合
         }else if(collision.collider.tag == "MovingGround")
         {
@@ -276,7 +280,14 @@ public class Player : BlinkObject
             isRun = true;
             xVector = horizontalkey > 0 ? -1 : 1;//ここで右か左かを判断
             //スプライトの向きと進む方向があべこべになってしまっているため
-            xspeed = -xVector * (speed * DashCurve.Evaluate(dashTime));
+            if (!isJump)
+            {
+                xspeed = -xVector * (speed * DashCurve.Evaluate(dashTime));
+            }
+            else
+            {
+                xspeed = -xVector * speed;
+            }
             dashTime += Time.deltaTime;
         }//入力がない場合
         else
@@ -302,7 +313,7 @@ public class Player : BlinkObject
 
         //直前に押されていたキーを入手
         beforeKey = horizontalkey;
-        Debug.Log("playerXspeed = " + xspeed);
+       //Debug.Log("playerXspeed = " + xspeed);
         return xspeed;
     }
 
