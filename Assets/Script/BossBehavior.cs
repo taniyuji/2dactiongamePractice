@@ -15,13 +15,13 @@ public class BossBehavior : BlinkObject
     public int stopWidth = 25;
     public List<GameObject> enemies;
     public List<GameObject> children;
-    public EnemyCollisionCheck enc;
     public GameObject JudgeReturnRight;
     public GameObject JudgeReturnLeft;
     public GameObject ReturnPos;
     public bool doNotAttack = false;
     public cameraControler camCtr;
-    [HideInInspector] public bool hitGround = false;
+    public GameObject rightLim;
+    public GameObject leftLim;
     [HideInInspector] public bool isAttack = false;
     [HideInInspector] public bool isGenerating = false;
     [HideInInspector] public bool playerStepOn2 = false; //敵を踏んだかどうか判断、インスペクターでは非表示
@@ -140,6 +140,7 @@ public class BossBehavior : BlinkObject
                         }
                     }
                 }
+                transform.position = new Vector3(Mathf.Clamp(transform.position.x, leftLim.transform.position.x, rightLim.transform.position.x), transform.position.y, transform.position.z);
                 rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
             }
             else//isReturnの場合
@@ -149,6 +150,7 @@ public class BossBehavior : BlinkObject
                                    
                 if (moveToReturn)//TelepoteBehaviorにてmoveToReturnがtrueにされた場合
                 {
+                    enemySpeed = beforeSpeed;
                     rb.MovePosition(ReturnVector);//移動したあと、TelepoteBehaviorにてisReturnがfalseになる
                 }
             }
@@ -182,6 +184,7 @@ public class BossBehavior : BlinkObject
         {
             if (JudgeIsReturnPos())//戻り境界線の中にいた場合
             {
+                enemySpeed = 0;
                 isReturn = true;
             }
             else//戻り境界線にいなかった場合
@@ -354,7 +357,7 @@ public class BossBehavior : BlinkObject
 
     private void JudgeCanGenerate()
     {
-        if (bossHp == 10 || bossHp == 4)
+        if (bossHp == 9 || bossHp == 4)
         {
             if ((CountGenerate == 0 && generateTime == 0) || (CountGenerate == 1 && generateTime == 5))
             {
@@ -453,7 +456,7 @@ public class BossBehavior : BlinkObject
         gameObject.layer = 6;
         children.Select(o => o.layer = 6)
                 .ToList();
-        children[1].layer = 15;
+        children[0].layer = 15;
     }
 
     private IEnumerator DelayCoroutine(float sec, Action action)
