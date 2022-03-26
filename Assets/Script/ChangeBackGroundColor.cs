@@ -48,6 +48,7 @@ public class ChangeBackGroundColor : MonoBehaviour
                     .ToList();
             }
 
+            
             if (BackColorR > 0.08f)
             {
                 BackColorR -= 0.01f;

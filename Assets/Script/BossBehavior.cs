@@ -82,7 +82,7 @@ public class BossBehavior : BlinkObject
 
             GameManager.instance.bossIsvisble = true;
             judgeMoveDir();
-            Debug.Log("isReturn = " + isReturn);
+           // Debug.Log("isReturn = " + isReturn);
             if (!isReturn)
             {
                 if (!playerStepOn2)

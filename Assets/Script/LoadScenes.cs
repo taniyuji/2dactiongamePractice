@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadScenes : MonoBehaviour
 {
-    public FadeScript fade;
+    public GameObject fadeObj;
     public GameObject player;
     public GameObject goBossPos;
     public bool isTitle = false;
@@ -14,7 +14,14 @@ public class LoadScenes : MonoBehaviour
     public AudioSource buttonSE;
 
     private bool isSet = false;
+    private FadeScript fade;
     private AsyncOperation asyncOperation;
+
+    private void Awake()
+    {
+        fadeObj.SetActive(true);
+        fade = fadeObj.GetComponent<FadeScript>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -85,6 +92,10 @@ public class LoadScenes : MonoBehaviour
         asyncOperation.allowSceneActivation = false;
         fade.StartFadeOut();
         yield return new WaitForSeconds(1f);
+        if (!GameManager.instance.canContinue)
+        {
+            GameManager.instance.ResetPram();
+        }
         asyncOperation.allowSceneActivation = true;
     }
 
@@ -99,6 +110,7 @@ public class LoadScenes : MonoBehaviour
         asyncOperation.allowSceneActivation = false;
         fade.StartFadeOut();
         yield return new WaitForSeconds(2f);
+        GameManager.instance.ResetPram();
         asyncOperation.allowSceneActivation = true;
     }
 }

@@ -73,7 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUI: 0
   BoundHeight: 7
-  enemySpeed: 10
+  enemySpeed: 8
   gravity: 20
   enemyHp: 1
   nonVisible: 0

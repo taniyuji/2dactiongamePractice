@@ -5,16 +5,13 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     public int score;
     public int stageNum;//どのステージに居るか
-    public decimal hpNum = 0.5m;  
-    public bool canContinue;
-   
+    public decimal hpNum = 0.5m;
+
+    [HideInInspector]public bool canContinue;
     [HideInInspector] public bool judgeHp = false;
     [HideInInspector] public bool bossIsvisble;
     [HideInInspector] public bool isBossDead = false;
     [HideInInspector] public bool goBackTitle = false;
-
-     private int judgeCanContinue = 0;
-    private bool setContinue = false;
 
     private void Awake()
     {
@@ -39,22 +36,13 @@ public class GameManager : MonoBehaviour
             hpNum = 1m;
         }
 
-        if (judgeHp)//hpが変化し、まだコンティニューしていない場合
+        if(score >= 1500)
         {
-            if(!setContinue && hpNum <= 0.1m)
-            {
-                judgeCanContinue++;
-                //Debug.Log("judgeCanContinue = " + judgeCanContinue);
-            }
-            judgeHp = false;
+            canContinue = true;
         }
-
-        //hp残量が1以下の状態を4回繰り返すとコンティニューできるようになる。
-        if(judgeCanContinue >= 4)
+        else
         {
-            canContinue = true;//コンティニュースクリプトでfalseになる
-            setContinue = true;//いちどだけコンティニューできるようにするため
-            judgeCanContinue = 0;
+            canContinue = false;
         }
 
         if (goBackTitle)//タイトルに戻ってもゲームマネージャーはリビルトされないため
@@ -67,9 +55,12 @@ public class GameManager : MonoBehaviour
     {
         hpNum = 0.5m;
         score = 0;
-        judgeCanContinue = 0;
         canContinue = false;
-        setContinue = false;
         bossIsvisble = false;
+    }
+
+    public void continueBehavior()
+    {
+        score -= 1500;
     }
 }

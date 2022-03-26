@@ -408,6 +408,11 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1 &688396314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1273567067422481637, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
+  m_PrefabInstance: {fileID: 1273567069232974643}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &786326988
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,7 +956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9984f19c15b9045ccaa34c6b2ad8bf5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fade: {fileID: 2082761029}
+  fadeObj: {fileID: 688396314}
   player: {fileID: 0}
   goBossPos: {fileID: 0}
   isTitle: 1
@@ -982,7 +987,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1273567067422481643, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
   m_PrefabInstance: {fileID: 1273567069232974643}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 688396314}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 041f63363e85b45bb80bad3d5d2fc848, type: 3}
@@ -1167,7 +1172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1273567067422481637, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1273567067422481642, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
       propertyPath: m_Color.a

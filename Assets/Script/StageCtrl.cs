@@ -11,7 +11,7 @@ public class StageCtrl : MonoBehaviour
     public List<GameObject> LeftMoveLim;
     public GameObject DescendPosObj;
     public GameObject UnderGPosObj;
-    public GameObject ContinueCtr;
+    public ContinueScript ContinueCtr;
     public int continuePos; //リスポーンする地点
 
     private Player p;
@@ -76,7 +76,7 @@ public class StageCtrl : MonoBehaviour
         if ((p.IsDeadAnimEnd() || p.isFallDead) && !ContinueCtrSet)
         {
             //Debug.Log("ContinueCtrSetActive");
-            ContinueCtr.SetActive(true);
+            ContinueCtr.activateParent = true;
             ContinueCtrSet = true;
         }
 
@@ -123,7 +123,7 @@ public class StageCtrl : MonoBehaviour
         if (playerObj.transform.position.y < fallDeadPoint[fallDeadNum].transform.position.y)
         {
             p.isFallDead = true;
-            Debug.Log("set player fall dead");
+            //Debug.Log("set player fall dead");
         }
     }
 
