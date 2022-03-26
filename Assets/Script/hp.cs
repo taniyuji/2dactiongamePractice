@@ -6,13 +6,23 @@ using UnityEngine.UI;
 public class hp : MonoBehaviour
 {
     public Image hpGage;
-    private decimal oldHpNum = 0m;
+    public GameObject bossHpGages;
+    public BossBehavior boss;
+    public bool ofBoss;
+
+    private decimal oldHpNum;
+    private float bossFirstHp;
+    private bool isSet = false;
 
     void Start()
     {
         if (GameManager.instance != null)
         {
-            hpGage.fillAmount = (float)GameManager.instance.hpNum;
+            if (!ofBoss)
+            {
+                hpGage.fillAmount = (float)GameManager.instance.hpNum;
+                oldHpNum = 0m;
+            }
         }
         else
         {
@@ -23,15 +33,56 @@ public class hp : MonoBehaviour
 
     void Update()
     {
+        if (ofBoss)
+        {
+            if (!GameManager.instance.bossIsvisble)
+            {
+                bossHpGages.SetActive(false);
+            }
+            else
+            {
+                bossHpGages.SetActive(true);
+                if (!isSet)
+                {
+                    oldHpNum = boss.bossHp;
+                    bossFirstHp = boss.bossHp;
+                    isSet = true;
+                }
+            }
+
+            if (GameManager.instance.isBossDead)
+            {
+                bossHpGages.SetActive(false);
+            }
+        }
         if (Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
         {
             return;
         }
-
-        if (oldHpNum != GameManager.instance.hpNum)
+        if (boss == null)
         {
-            hpGage.fillAmount = (float)GameManager.instance.hpNum;
-            oldHpNum = GameManager.instance.hpNum;
+            if (oldHpNum != GameManager.instance.hpNum)
+            {
+                hpGage.fillAmount = (float)GameManager.instance.hpNum;
+                oldHpNum = GameManager.instance.hpNum;
+            }
+        }
+        else
+        {
+            if (oldHpNum != boss.bossHp && GameManager.instance.bossIsvisble)
+            {
+                if (boss.bossHp != 0)
+                {
+                    hpGage.fillAmount = 1 * (boss.bossHp / bossFirstHp);
+                }
+                else
+                {
+                    hpGage.fillAmount = 0f;
+                }
+                Debug.Log("bossHPgage = " + hpGage.fillAmount);
+                oldHpNum = boss.bossHp;
+            }
+
         }
     }
 }

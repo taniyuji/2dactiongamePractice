@@ -15368,7 +15368,7 @@ MonoBehaviour:
   DescendPosObj: {fileID: 1363521638}
   UnderGPosObj: {fileID: 1389278898}
   ContinueCtr: {fileID: 212272858}
-  continuePos: 2
+  continuePos: 0
 --- !u!4 &1152320169
 Transform:
   m_ObjectHideFlags: 0
@@ -19429,6 +19429,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpGage: {fileID: 1644985646}
+  boss: {fileID: 0}
+  bossHptxt: {fileID: 0}
 --- !u!4 &1653123985 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 170186136822024261, guid: 7d3927faecbd440dc9c90abbf2ed3781, type: 3}
@@ -23065,7 +23067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
       propertyPath: score
-      value: 2000
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
       propertyPath: player
