@@ -265,7 +265,7 @@ public class Player : BlinkObject
         {
             if (RunningSE != null)
             {
-                if (isGround)
+                if (isGround && !isRolling)
                 {
                     if (dashTime < 0.02f || wasJamp)
                     {
