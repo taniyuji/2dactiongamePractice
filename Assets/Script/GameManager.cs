@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float playTime;
     [HideInInspector] public bool startPlayTime = false;
     [HideInInspector] public bool continueWait = false;
+    [HideInInspector] public bool isPlayerDead = false;
 
     private void Awake()
     {
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
             Retry = false;
             startPlayTime = false;
         }
-        else if(startPlayTime && !continueWait)
+        else if(startPlayTime && !continueWait && !isBossDead)
         {
             playTime += Time.deltaTime;
             Debug.Log("playTime = " + playTime);
@@ -57,7 +58,7 @@ public class GameManager : MonoBehaviour
             hpNum = 1m;
         }
 
-        if(score >= 1200)
+        if(score >= 1500)
         {
             canContinue = true;
         }
@@ -82,6 +83,6 @@ public class GameManager : MonoBehaviour
 
     public void continueBehavior()
     {
-        score -= 1200;
+        score -= 1500;
     }
 }

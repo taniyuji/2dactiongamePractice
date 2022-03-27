@@ -24,8 +24,11 @@ public class cameraControler : MonoBehaviour
     private void Start()
     {
         newCamSize = Cam.m_Lens.OrthographicSize;
-        Logo.color = new Color(Logo.color.r, Logo.color.g, Logo.color.b, 0);
-        Logo.enabled = false;
+        if (Logo != null)
+        {
+            Logo.color = new Color(Logo.color.r, Logo.color.g, Logo.color.b, 0);
+            Logo.enabled = false;
+        }
     }
 
     private void Update()

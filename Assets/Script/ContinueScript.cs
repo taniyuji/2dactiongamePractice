@@ -32,13 +32,8 @@ public class ContinueScript : MonoBehaviour
 
     private void Start()
     {
-        skippedUIs = UIs.Skip(1)//初めの要素からスタートさせたいため。
-                        .ToList();
-        skippedUIs.ForEach(skippedUIs =>//初めの要素以外を点滅させない。
-        {
-            blinkObject = skippedUIs.GetComponent<BlinkObject>();
-            blinkObject.enabled = false;
-        });
+        blinkObject = UIs[1].GetComponent<BlinkObject>();//初期位置じゃないオブジェクトは点滅させない
+        blinkObject.enabled = false;
         //カーソルを始めの要素にセット
         cursol.transform.position = CursolPos[0].transform.position;
     }

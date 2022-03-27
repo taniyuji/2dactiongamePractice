@@ -494,6 +494,7 @@ public class Player : BlinkObject
             {
                 rb.constraints = RigidbodyConstraints2D.FreezeAll;
                 children.ForEach(i => i.SetActive(false));
+                gameObject.layer = 18;//プレイヤー死亡レイヤーに変更
             }
         }
     }
@@ -551,6 +552,7 @@ public class Player : BlinkObject
     public void ContinuePlayer()//ダウンからの復帰。stageCtrlスクリプトで使用。
     {
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        gameObject.layer = 13;
         children.ForEach(i => i.SetActive(true));
         sr.enabled = true;
         isBoss = false;

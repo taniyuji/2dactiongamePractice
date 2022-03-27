@@ -76,6 +76,7 @@ public class BossBehavior : BlinkObject
     {
         p = player.transform.position;
         This = transform.position;
+
         
         //カメラに写っているか場合
         if (sr.isVisible || nonVisible)
@@ -136,7 +137,7 @@ public class BossBehavior : BlinkObject
                         attackSteped = true;
                         isAttack = true;
                         playerStepOn2 = false;
-                        if(bossHp == 7 || bossHp == 4)
+                        if(bossHp == 10 || bossHp == 5)
                         {
                             generateTrigger = true;
                         }
@@ -334,7 +335,14 @@ public class BossBehavior : BlinkObject
     {
         if (attackNum != 1)
         {
-            attackNum = UnityEngine.Random.Range(1, 361);//351
+            if (bossHp > 6)
+            {
+                attackNum = UnityEngine.Random.Range(1, 301);//351
+            }
+            else
+            {
+                attackNum = UnityEngine.Random.Range(1, 151);//351
+            }
         }
         else
         {
@@ -387,7 +395,7 @@ public class BossBehavior : BlinkObject
 
     private void JudgeCanGenerate()
     {
-        if (bossHp == 7 || bossHp == 4)
+        if (bossHp == 10 || bossHp == 5)
         {
             if ((CountGenerate == 0 && generateTime == 0) || (CountGenerate == 1 && generateTime == 5))
             {

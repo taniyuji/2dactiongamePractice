@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StageCtrl : MonoBehaviour
 {
+    public bool isBossBattle;
+    public GameObject boss;
     public GameObject playerObj;
     public GameObject[] continuePoint;
     public List<GameObject> fallDeadPoint;
@@ -76,6 +78,11 @@ public class StageCtrl : MonoBehaviour
         if ((p.IsDeadAnimEnd() || p.isFallDead) && !ContinueCtrSet)
         {
             //Debug.Log("ContinueCtrSetActive");
+            if (isBossBattle && judgeBossPos())
+            {
+                Debug.Log("Change continue pos");
+                continuePos = continuePos == 1 ? --continuePos : ++continuePos;
+            }
             ContinueCtr.activateParent = true;
             ContinueCtrSet = true;
         }
@@ -127,4 +134,9 @@ public class StageCtrl : MonoBehaviour
         }
     }
 
+    private bool judgeBossPos()
+    {
+        return boss.transform.position.x > continuePoint[continuePos].transform.position.x - 20
+               && boss.transform.position.x < continuePoint[continuePos].transform.position.x + 20;
+    }
 }

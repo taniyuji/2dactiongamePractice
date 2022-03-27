@@ -33,6 +33,11 @@ public class hp : MonoBehaviour
 
     void Update()
     {
+        if (Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
+        {
+            return;
+        }
+
         if (ofBoss)
         {
             if (!GameManager.instance.bossIsvisble)
@@ -55,10 +60,7 @@ public class hp : MonoBehaviour
                 bossHpGages.SetActive(false);
             }
         }
-        if (Mathf.Approximately(Time.timeScale, 0f))//ポーズ中は起動させない
-        {
-            return;
-        }
+
         if (boss == null)
         {
             if (oldHpNum != GameManager.instance.hpNum)
@@ -67,8 +69,17 @@ public class hp : MonoBehaviour
                 oldHpNum = GameManager.instance.hpNum;
             }
         }
-        else
+        else if(GameManager.instance.bossIsvisble)
         {
+            if (GameManager.instance.continueWait)
+            {
+                bossHpGages.SetActive(false);
+            }
+            else
+            {
+                bossHpGages.SetActive(true);
+            }
+
             if (oldHpNum != boss.bossHp && GameManager.instance.bossIsvisble)
             {
                 Debug.Log("bossHP = " + boss.bossHp);
