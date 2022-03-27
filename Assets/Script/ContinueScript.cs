@@ -71,6 +71,7 @@ public class ContinueScript : MonoBehaviour
 
         if (activateParent)//stageCtrでtrueにする。
         {
+            GameManager.instance.continueWait = true;
             parent.SetActive(true);
             pauseCtr.SetActive(false);//コンティニュー画面中はポーズメニューが開かないようにする。
             //カーソルポジションの要素番号が最後尾でなく、右矢印が押された場合
@@ -104,6 +105,7 @@ public class ContinueScript : MonoBehaviour
                     {
                         if (!GameManager.instance.canContinue)
                         {
+                            GameManager.instance.Retry = true;
                             loadScenes.startLoadStage1Scene();
                         }
                         else
@@ -123,6 +125,7 @@ public class ContinueScript : MonoBehaviour
                 {
                     GameManager.instance.goBackTitle = true;
                 }
+                GameManager.instance.continueWait = false;
                 parent.SetActive(false);//何かが選択されたら、コンティニュー画面を終了する。
                 activateParent = false;
             }

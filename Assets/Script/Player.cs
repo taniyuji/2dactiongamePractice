@@ -48,6 +48,7 @@ public class Player : BlinkObject
     private bool isContinue = false;
     private bool isBoss = false;
     private bool isSet = false;
+    private bool wasLocked = false;
     private SpriteRenderer sr = null;
     private float jumpPos = 0.0f;
     private float jumpTime = 0.0f;
@@ -82,6 +83,11 @@ public class Player : BlinkObject
     {
         if (Mathf.Approximately(Time.timeScale, 0f))//pause中は起動させない
         {
+            if(RunningSE != null)
+            {
+                RunningSE.Pause();
+            }
+            wasLocked = true;
             return;
         }
     }
@@ -267,9 +273,10 @@ public class Player : BlinkObject
             {
                 if (isGround && !isRolling)
                 {
-                    if (dashTime < 0.02f || wasJamp)
+                    if (dashTime < 0.02f || wasJamp || wasLocked)
                     {
                         RunningSE.Play();
+                        wasLocked = false;
                     }
                 }
                 else

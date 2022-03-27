@@ -14,6 +14,7 @@ public class LoadScenes : MonoBehaviour
     public AudioSource buttonSE;
 
     private bool isSet = false;
+    private bool setbool = false;
     private FadeScript fade;
     private AsyncOperation asyncOperation;
 
@@ -42,36 +43,32 @@ public class LoadScenes : MonoBehaviour
             }
         }
 
-        if (isStage1)
+        if (isStage1 && !isSet)
         {
-            if (!isSet)
+            if (!setbool)
             {
-                if (player.transform.position.x < goBossPos.transform.position.x)
-                {
-                    Debug.Log("ボス戦へ");
-                    startLoadBoss1Scene();
-                    isSet = true;
-                }
+                GameManager.instance.startPlayTime = true;
+                setbool = true;
             }
-        }
-
-        if(isStage1 || isBossScene)
-        {
-
-            if (GameManager.instance.goBackTitle)
+            if (player.transform.position.x < goBossPos.transform.position.x)
             {
-                startLoadTitleScene();
-                GameManager.instance.goBackTitle = false;
-            }
-        }
-
-        if (isBossScene && GameManager.instance.isBossDead)
-        {
-            if (!isSet)
-            {
-                startLoadEndingScene();
+                Debug.Log("ボス戦へ");
+                startLoadBoss1Scene();
                 isSet = true;
             }
+        }
+
+        if((isStage1 || isBossScene) && GameManager.instance.goBackTitle && !isSet)
+        {
+            startLoadTitleScene();
+            GameManager.instance.startbackTitle = true;
+            isSet = true;
+        }
+
+        if (isBossScene && GameManager.instance.isBossDead && !isSet)
+        {
+            startLoadEndingScene();
+            isSet = true;
         }
 
     }

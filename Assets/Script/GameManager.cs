@@ -12,6 +12,11 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool judgeHp = false;
     [HideInInspector] public bool bossIsvisble = true;
     [HideInInspector] public bool goBackTitle = false;
+    [HideInInspector] public bool startbackTitle = false;
+    [HideInInspector] public bool Retry = false;
+    [HideInInspector] public float playTime;
+    [HideInInspector] public bool startPlayTime = false;
+    [HideInInspector] public bool continueWait = false;
 
     private void Awake()
     {
@@ -30,6 +35,22 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (startbackTitle || Retry)
+        {
+            playTime = 0.0f;
+            goBackTitle = false;
+            startbackTitle = false;
+            Retry = false;
+            startPlayTime = false;
+        }
+        else if(startPlayTime && !continueWait)
+        {
+            playTime += Time.deltaTime;
+            Debug.Log("playTime = " + playTime);
+        }
+
+
+
         //Debug.Log("canContinue = " + canContinue);
         if(hpNum > 1m)//hpが１以上になった場合
         {
