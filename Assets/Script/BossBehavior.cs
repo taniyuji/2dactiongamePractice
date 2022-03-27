@@ -19,7 +19,6 @@ public class BossBehavior : BlinkObject
     public GameObject JudgeReturnLeft;
     public GameObject ReturnPos;
     public bool doNotAttack = false;
-    public cameraControler camCtr;
     public GameObject rightLim;
     public GameObject leftLim;
     [HideInInspector] public bool isAttack = false;
@@ -56,6 +55,8 @@ public class BossBehavior : BlinkObject
     private bool moveToReturn = false;
     private bool getDamageFin = false;
     private bool isDead = false;
+    private bool attackSteped = false;
+    private bool generateTrigger = false;
     private AudioSource beSteppedSE;
 
     private void Start()
@@ -85,6 +86,7 @@ public class BossBehavior : BlinkObject
            // Debug.Log("isReturn = " + isReturn);
             if (!isReturn)
             {
+                //Debug.Log("player step on2 = " + playerStepOn2);
                 if (!playerStepOn2)
                 {
                     if (!isDead)
@@ -109,6 +111,15 @@ public class BossBehavior : BlinkObject
                             Move();/*JudgeisReturnPos()がtrueでplayerとあたった場合、
                             isReturnをtrueにする。*/
                         }
+
+                        if(attackSteped)
+                        {
+                            GetBlink(sr);
+                            if (isBlinkFin())
+                            {
+                                attackSteped = false;
+                            }
+                        }
                     }
                     else
                     {
@@ -117,6 +128,20 @@ public class BossBehavior : BlinkObject
                 }
                 else//踏まれた場合
                 {
+                    if (attackNum == 1)
+                    {
+                        //Debug.Log("steped while attack");
+                        beSteppedSE.Play();
+                        bossHp--;
+                        attackSteped = true;
+                        isAttack = true;
+                        playerStepOn2 = false;
+                        if(bossHp == 7 || bossHp == 4)
+                        {
+                            generateTrigger = true;
+                        }
+                        return;
+                    }
                     //Debug.Log("踏まれたよ");
                     if (!getDamageFin)
                     {
@@ -128,6 +153,7 @@ public class BossBehavior : BlinkObject
                         JudgeCanGenerate();//Hpが生成作業対象の場合は、isGeneratingをtrueにする
                         if (isGenerating)//生成作業中の場合
                         {
+                            //Debug.Log("生成開始");
                             GenerateEnemy();//生成作業が終了したらisGeneratingをfalseにする
                         }
 
@@ -145,7 +171,7 @@ public class BossBehavior : BlinkObject
             }
             else//isReturnの場合
             {
-                Debug.Log("EnterToIsreturn");
+                //Debug.Log("EnterToIsreturn");
                 TelepoteBehavior();//ここでplayerHitをfalseにする
                                    
                 if (moveToReturn)//TelepoteBehaviorにてmoveToReturnがtrueにされた場合
@@ -187,7 +213,7 @@ public class BossBehavior : BlinkObject
                 enemySpeed = 0;
                 isReturn = true;
             }
-            else//戻り境界線にいなかった場合
+            else if(!attackSteped)//戻り境界線にいなかった場合
             {
                 xVector = moveRight ? -1 : 1;//0.5秒間後退する
                 if (time > 0.5f)
@@ -233,6 +259,7 @@ public class BossBehavior : BlinkObject
             beSteppedSE.Play();
             canBlink = true;
             getDamageFin = false;
+            GameManager.instance.score += 200;
             isSet = true;
         }
            
@@ -248,11 +275,13 @@ public class BossBehavior : BlinkObject
         if(bossHp <= 0)
         {
             SetInvincible();
+            anim.Play("Boss_Defeated");
             isDead = true;
         }
 
         if (!isDead)
         {
+            //Debug.Log("enter to getDamageBehavior back Time = " + backTime);
             if (backTime < 1f)
             {
                 anim.SetBool("telepote", true);
@@ -298,20 +327,14 @@ public class BossBehavior : BlinkObject
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             isSet = true;
             //Debug.Log("set boss dead");
-        }
-        anim.Play("Boss_Defeated");
-        if (camCtr.cameraBack)
-        {
-            gameObject.SetActive(false);
-        }
-        
+        }      
     }
 
     private void BossAttackJudge()//ボスの攻撃処理
     {
         if (attackNum != 1)
         {
-            attackNum = UnityEngine.Random.Range(1,351);
+            attackNum = UnityEngine.Random.Range(1, 361);//351
         }
         else
         {
@@ -331,13 +354,13 @@ public class BossBehavior : BlinkObject
         }
         if (AttackAnimFin == false)
         {
-            isAttack = true;
             anim.SetBool("Attack", true);
             AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
-            if (currentState.IsName("Boss_Attack") && isAttack)//ダウンアニメーションの場合
+            if (currentState.IsName("Boss_Attack"))//ダウンアニメーションの場合
             {
                 if (currentState.normalizedTime >= 0.5 && currentState.normalizedTime < 1)
                 {
+                    isAttack = true;
                     enemySpeed += 1f;
                 }
                 else if (currentState.normalizedTime >= 1)//1で100%再生。再生し終わってるかを判断
@@ -349,6 +372,13 @@ public class BossBehavior : BlinkObject
                     anim.SetBool("Attack", false);
                     enemySpeed = beforeSpeed;
                     AttackAnimFin = true;
+                    if (generateTrigger)
+                    {
+                        Debug.Log("set generateTrigger");
+                        playerStepOn2 = true;
+                        getDamageFin = true;
+                        generateTrigger = false;
+                    }
                 }
             }
 
@@ -357,7 +387,7 @@ public class BossBehavior : BlinkObject
 
     private void JudgeCanGenerate()
     {
-        if (bossHp == 9 || bossHp == 4)
+        if (bossHp == 7 || bossHp == 4)
         {
             if ((CountGenerate == 0 && generateTime == 0) || (CountGenerate == 1 && generateTime == 5))
             {
@@ -401,6 +431,7 @@ public class BossBehavior : BlinkObject
 
     private void TelepoteBehavior()
     {
+        Debug.Log("enter to telepoteBehavior");
         SetInvincible();
         playerHit = false;
 
@@ -422,25 +453,12 @@ public class BossBehavior : BlinkObject
         }
         else if(currentState.IsName("Boss_GetBack") && currentState.normalizedTime >= 1)
         {
-           // Debug.Log("帰還");
+            //Debug.Log("帰還");
             moveToReturn = false;
             anim.SetBool("GetBack", false);
             anim.Play("Boss_stand");
             UnSetInvincible();
             isReturn = false;
-        }
-    }
-
-    public bool IsDefeatedAnimFin()
-    {
-        AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);
-        if(currentState.IsName("Boss_Defeated") && currentState.normalizedTime >= 1)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 

@@ -114,7 +114,7 @@ public class FadeScript : MonoBehaviour
             //Debug.Log("FadeOutが" + img.color + "進んでます");
             if (i == 1m)
             {
-                Debug.Log("終わり");
+                //Debug.Log("終わり");
                 FadeOutComplete();
             }
             yield return null;

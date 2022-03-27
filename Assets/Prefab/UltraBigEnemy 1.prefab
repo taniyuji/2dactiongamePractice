@@ -50,7 +50,7 @@ EdgeCollider2D:
   - {x: 0.9807129, y: 1.3297677}
   - {x: 2.8493042, y: 2.1797104}
   - {x: 2.874527, y: 3.0178251}
-  - {x: -0.9212799, y: 3.0630264}
+  - {x: -1.2867279, y: 3.020033}
   - {x: -1.6617432, y: 1.4816384}
   - {x: 0.22920227, y: 1.4157195}
   - {x: 0.70007324, y: 1.3972578}
@@ -68,8 +68,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5944492519574364403}
   - component: {fileID: 6732122529602478327}
-  - component: {fileID: 8342160290689140312}
-  m_Layer: 6
+  - component: {fileID: 6857004917112470079}
+  m_Layer: 16
   m_Name: CheckPlayerPenetration
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,8 +103,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 5642764577232220070}
---- !u!61 &8342160290689140312
-BoxCollider2D:
+--- !u!68 &6857004917112470079
+EdgeCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -113,22 +113,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 5, y: 3}
   m_EdgeRadius: 0
+  m_Points:
+  - {x: -3.1362305, y: -1.2757244}
+  - {x: -3.0823364, y: 0.36182976}
+  - {x: -1.9724426, y: 0.4528427}
+  - {x: -1.9367981, y: 1.4804325}
+  - {x: 1.7311401, y: 1.4635677}
+  - {x: 1.6992188, y: 0.5790539}
+  - {x: 2.4262695, y: 0.1409378}
+  - {x: 2.4455261, y: -1.4257851}
+  - {x: -2.8468933, y: -1.3327923}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &2003909189268267085
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,7 +345,7 @@ MonoBehaviour:
   gravity: 10
   enemyHp: 2
   nonVisible: 0
-  beNonVisible: 0
+  beNonVisible: 1
   DirectionRight: 1
   isJamp: 0
   myScore: 500

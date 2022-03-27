@@ -5,16 +5,19 @@ using UnityEngine;
 
 public class cameraControler : MonoBehaviour
 {
+    public bool isBossBattle;
     public CinemachineVirtualCamera Cam;
     public Camera cam;
     public List<GameObject> followObj;
-    public BossBehavior bSc;
+    public BossEnding BESc;
     public AudioSource BossBGM;
+    public PlayerEnding pEnd;
     [HideInInspector] public bool cameraBack = false;
 
     private float newCamSize;
-    private int followIdx = 0;
+    private int followIdx = 1;
     private bool Play = false;
+    private float waitTime = 0f;
 
     private void Start()
     {
@@ -29,43 +32,49 @@ public class cameraControler : MonoBehaviour
             return;
         }
 
-        if (GameManager.instance.isBossDead)
+        if (isBossBattle)
         {
-            if (newCamSize > 18)
+            if (GameManager.instance.bossIsvisble)
             {
-                newCamSize -= 1f;
+                if (BossBGM != null && !Play)
+                {
+                    BossBGM.Play();
+                    Play = true;
+                }
+                if (newCamSize < 30)
+                {
+                    newCamSize += 0.1f;
+                }
             }
-            if (bSc.IsDefeatedAnimFin())
+            Cam.m_Lens.OrthographicSize = newCamSize;         
+        }
+        else
+        {
+            if (!GameManager.instance.isBossDead && !pEnd.playerIn)
             {
-                cameraBack = true;
-                newCamSize = 15;
-                GameManager.instance.isBossDead = false;
+                if (waitTime > 3f)
+                {
+                   // Debug.Log("set followIdx = 0");
+                    newCamSize = 15;
+                    followIdx = 0;
+                }
+                waitTime += Time.deltaTime;
+                Cam.Follow = followObj[followIdx].transform;
             }
-            //Debug.Log("cameraBack = " + cameraBack);
-        }
-
-        followIdx = GameManager.instance.isBossDead ? 1 : 0;
-        Cam.Follow = followObj[followIdx].transform;
-
-        if (!cameraBack && GameManager.instance.bossIsvisble && !GameManager.instance.isBossDead)
-        {
-            if (newCamSize < 30)
+            else if (pEnd.playerIn && newCamSize > 10)
             {
-                newCamSize += 0.2f;
+                newCamSize -= 0.1f;
             }
-        }
-        Cam.m_Lens.OrthographicSize = newCamSize;
+
+            if (pEnd.dontFollow)
+            {
+                Cam.Follow = null;
+            }
+
+            Cam.m_Lens.OrthographicSize = newCamSize;
 
 
-        if (GameManager.instance.bossIsvisble && !Play && BossBGM != null)
-        {
-            BossBGM.Play();
-            Play = true;
-        }
 
-        if (GameManager.instance.isBossDead && BossBGM != null)
-        {
-            BossBGM.volume -= 0.01f;
         }
     }
 }

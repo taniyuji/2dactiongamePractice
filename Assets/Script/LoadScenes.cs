@@ -65,6 +65,15 @@ public class LoadScenes : MonoBehaviour
             }
         }
 
+        if (isBossScene && GameManager.instance.isBossDead)
+        {
+            if (!isSet)
+            {
+                startLoadEndingScene();
+                isSet = true;
+            }
+        }
+
     }
 
     private void startLoadBoss1Scene()
@@ -111,6 +120,20 @@ public class LoadScenes : MonoBehaviour
         fade.StartFadeOut();
         yield return new WaitForSeconds(2f);
         GameManager.instance.ResetPram();
+        asyncOperation.allowSceneActivation = true;
+    }
+
+    private void startLoadEndingScene()
+    {
+        StartCoroutine("LoadEndingScene");
+    }
+
+    IEnumerator LoadEndingScene()
+    {
+        asyncOperation = SceneManager.LoadSceneAsync("Ending");
+        asyncOperation.allowSceneActivation = false;
+        fade.StartFadeOut();
+        yield return new WaitForSeconds(2f);
         asyncOperation.allowSceneActivation = true;
     }
 }

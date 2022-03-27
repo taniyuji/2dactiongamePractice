@@ -6,11 +6,11 @@ public class GameManager : MonoBehaviour
     public int score;
     public int stageNum;//どのステージに居るか
     public decimal hpNum = 0.5m;
+    public bool isBossDead;
 
     [HideInInspector]public bool canContinue;
     [HideInInspector] public bool judgeHp = false;
-    [HideInInspector] public bool bossIsvisble;
-    [HideInInspector] public bool isBossDead = false;
+    [HideInInspector] public bool bossIsvisble = true;
     [HideInInspector] public bool goBackTitle = false;
 
     private void Awake()
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             hpNum = 1m;
         }
 
-        if(score >= 1500)
+        if(score >= 1200)
         {
             canContinue = true;
         }
@@ -61,6 +61,6 @@ public class GameManager : MonoBehaviour
 
     public void continueBehavior()
     {
-        score -= 1500;
+        score -= 1200;
     }
 }

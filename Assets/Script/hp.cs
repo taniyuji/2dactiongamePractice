@@ -71,6 +71,7 @@ public class hp : MonoBehaviour
         {
             if (oldHpNum != boss.bossHp && GameManager.instance.bossIsvisble)
             {
+                Debug.Log("bossHP = " + boss.bossHp);
                 if (boss.bossHp != 0)
                 {
                     hpGage.fillAmount = 1 * (boss.bossHp / bossFirstHp);
@@ -79,7 +80,7 @@ public class hp : MonoBehaviour
                 {
                     hpGage.fillAmount = 0f;
                 }
-                Debug.Log("bossHPgage = " + hpGage.fillAmount);
+                //Debug.Log("bossHPgage = " + hpGage.fillAmount);
                 oldHpNum = boss.bossHp;
             }
 

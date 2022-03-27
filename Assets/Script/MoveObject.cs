@@ -45,6 +45,10 @@ public class MoveObject : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (onPlay && (player.isDead || player.isFallDead))
+        {
+            Move = true;
+        }
         if (movePoint != null && movePoint.Length > 1 && rb != null)
         {
             if (Move == true)
