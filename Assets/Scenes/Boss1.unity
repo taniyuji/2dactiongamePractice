@@ -1728,6 +1728,8 @@ MonoBehaviour:
   - {fileID: 0}
   BESc: {fileID: 0}
   BossBGM: {fileID: 1356772801}
+  pEnd: {fileID: 0}
+  Logo: {fileID: 0}
   cameraBack: 0
 --- !u!4 &176292871
 Transform:
@@ -7309,7 +7311,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1178741915}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15, y: -192, z: -2786.1624}
+  m_LocalPosition: {x: -15, y: -122, z: -2786.1624}
   m_LocalScale: {x: 40, y: 20, z: 18}
   m_Children:
   - {fileID: 1690014730}
@@ -13880,7 +13882,7 @@ MonoBehaviour:
   gravity: 0
   nonVisible: 0
   myScore: 1000
-  bossHp: 10
+  bossHp: 1
   stopWidth: 25
   enemies:
   - {fileID: 984822365}

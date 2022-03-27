@@ -12,16 +12,20 @@ public class cameraControler : MonoBehaviour
     public BossEnding BESc;
     public AudioSource BossBGM;
     public PlayerEnding pEnd;
+    public SpriteRenderer Logo;
     [HideInInspector] public bool cameraBack = false;
 
     private float newCamSize;
     private int followIdx = 1;
     private bool Play = false;
     private float waitTime = 0f;
+    private float colorNum = 0f;
 
     private void Start()
     {
         newCamSize = Cam.m_Lens.OrthographicSize;
+        Logo.color = new Color(Logo.color.r, Logo.color.g, Logo.color.b, 0);
+        Logo.enabled = false;
     }
 
     private void Update()
@@ -63,18 +67,23 @@ public class cameraControler : MonoBehaviour
             }
             else if (pEnd.playerIn && newCamSize > 10)
             {
+                waitTime = 0f;
                 newCamSize -= 0.1f;
             }
 
             if (pEnd.dontFollow)
             {
                 Cam.Follow = null;
+                if(waitTime > 6f)
+                {
+                    Logo.enabled = true;
+                    Logo.color = new Color(Logo.color.r, Logo.color.g, Logo.color.b, colorNum);
+                    colorNum += 0.01f;
+                }
+                waitTime += Time.deltaTime;
             }
 
             Cam.m_Lens.OrthographicSize = newCamSize;
-
-
-
         }
     }
 }
