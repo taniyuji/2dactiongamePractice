@@ -95,7 +95,7 @@ public class StageCtrl : MonoBehaviour
 
     private void judgeMoveLimit()
     {
-        if(playerObj.transform.position.x < DescendPos.x && RlimitNum == 0)
+        if(playerObj.transform.position.x < DescendPos.x && playerObj.transform.position.y > DescendPos.y && RlimitNum == 0)
         {
             RlimitNum++;
         }else if(playerObj.transform.position.y < UnderGPos.y && RlimitNum == 1 && LLimitNum == 0)
@@ -122,7 +122,7 @@ public class StageCtrl : MonoBehaviour
           return;
         }
 
-        if (playerObj.transform.position.x < DescendPos.x && fallDeadNum == 0)
+        if (playerObj.transform.position.x < DescendPos.x && playerObj.transform.position.y > DescendPos.y && fallDeadNum == 0)
         {
             fallDeadNum++;
         }
