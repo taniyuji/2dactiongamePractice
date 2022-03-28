@@ -11,6 +11,8 @@ public class MoveObject : MonoBehaviour
     public float speed = 20.0f;
     public bool stopMove = false;
     public bool Move = true;
+    public AudioSource moveSE;
+    public bool isDecend = false;
 
     private Rigidbody2D rb = null;
     private GameObject pObj;
@@ -21,6 +23,7 @@ public class MoveObject : MonoBehaviour
     private bool playerOn = false;
     private float pExitTime;
     private bool playerExit = false;
+    private bool play = false;
 
     // Start is called before the first frame update
     void Start()
@@ -49,7 +52,7 @@ public class MoveObject : MonoBehaviour
     {
         if (playerExit && nowPoint != movePoint.Length - 1)
         {
-            Debug.Log("pExitTime = " + pExitTime);
+            //Debug.Log("pExitTime = " + pExitTime);
             pExitTime += Time.deltaTime;
         }
         if (onPlay && (player.isDead || player.isFallDead))
@@ -64,17 +67,24 @@ public class MoveObject : MonoBehaviour
                 {
                     Vector2 toVector;
                     int nextPoint;
-                    if (onPlay && (player.isDead || player.isFallDead || pExitTime > 3f))//onPlayでプレイヤーが死亡した場合
+                    if (onPlay && (player.isDead || player.isFallDead ||(!isDecend && pExitTime > 3f)))//onPlayでプレイヤーが死亡した場合
                     {
                         toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
                         nowPoint = 0;
                         playerOn = false;
                         pExitTime = 0.0f;
                         playerExit = false;
+                        moveSE.Pause();
+                        play = false;
                         rb.MovePosition(toVector);
                     }
                     else if (!onPlay || (onPlay && playerOn))//プレイヤーが死亡していない場合
                     {
+                        if (!play &&　onPlay)
+                        {
+                            moveSE.Play();
+                            play = true;
+                        }
                         nextPoint = nowPoint + 1;
                         if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
                         {
@@ -128,6 +138,14 @@ public class MoveObject : MonoBehaviour
                     {
                         returnPoint = false;
                     }
+                }
+            }
+            else
+            {
+                if (play)
+                {
+                    moveSE.Pause();
+                    play = false;
                 }
             }
         }

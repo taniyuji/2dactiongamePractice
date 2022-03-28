@@ -590,7 +590,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7453018531966241983, guid: 74a658adf704747e4898a86084ef2302, type: 3}
       propertyPath: m_Text
-      value: "Use 1500 scores \nto continue"
+      value: "Use 2000 scores \nto continue"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74a658adf704747e4898a86084ef2302, type: 3}
@@ -713,6 +713,8 @@ MonoBehaviour:
   speed: 20
   stopMove: 0
   Move: 1
+  moveSE: {fileID: 0}
+  isDecend: 0
 --- !u!50 &80376442
 Rigidbody2D:
   serializedVersion: 4
@@ -1120,7 +1122,7 @@ PrefabInstance:
       objectReference: {fileID: 1952282526}
     - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
       propertyPath: speed
-      value: 22
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
       propertyPath: JampSE
@@ -1778,7 +1780,7 @@ PrefabInstance:
       objectReference: {fileID: 467592237}
     - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
       propertyPath: score
-      value: 20000
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4606676397612418280, guid: ace5611217db746f5b402e4e51726848, type: 3}
       propertyPath: slight
@@ -2291,6 +2293,8 @@ MonoBehaviour:
   speed: 20
   stopMove: 0
   Move: 1
+  moveSE: {fileID: 0}
+  isDecend: 0
 --- !u!50 &310835005
 Rigidbody2D:
   serializedVersion: 4
@@ -3118,6 +3122,8 @@ MonoBehaviour:
   speed: 20
   stopMove: 0
   Move: 1
+  moveSE: {fileID: 0}
+  isDecend: 0
 --- !u!50 &482593107
 Rigidbody2D:
   serializedVersion: 4
@@ -4111,6 +4117,8 @@ MonoBehaviour:
   speed: 20
   stopMove: 0
   Move: 1
+  moveSE: {fileID: 0}
+  isDecend: 0
 --- !u!50 &594171162
 Rigidbody2D:
   serializedVersion: 4
@@ -5967,6 +5975,8 @@ MonoBehaviour:
   speed: 20
   stopMove: 0
   Move: 1
+  moveSE: {fileID: 0}
+  isDecend: 0
 --- !u!50 &1066846632
 Rigidbody2D:
   serializedVersion: 4
@@ -9779,6 +9789,8 @@ MonoBehaviour:
   speed: 20
   stopMove: 0
   Move: 1
+  moveSE: {fileID: 0}
+  isDecend: 0
 --- !u!50 &1696320211
 Rigidbody2D:
   serializedVersion: 4
@@ -10236,6 +10248,8 @@ MonoBehaviour:
   speed: 20
   stopMove: 0
   Move: 1
+  moveSE: {fileID: 0}
+  isDecend: 0
 --- !u!50 &1766444033
 Rigidbody2D:
   serializedVersion: 4
@@ -11721,6 +11735,8 @@ MonoBehaviour:
   speed: 20
   stopMove: 0
   Move: 1
+  moveSE: {fileID: 0}
+  isDecend: 0
 --- !u!50 &2053081496
 Rigidbody2D:
   serializedVersion: 4
@@ -11896,6 +11912,8 @@ MonoBehaviour:
   speed: 20
   stopMove: 0
   Move: 1
+  moveSE: {fileID: 0}
+  isDecend: 0
 --- !u!50 &2071338284
 Rigidbody2D:
   serializedVersion: 4

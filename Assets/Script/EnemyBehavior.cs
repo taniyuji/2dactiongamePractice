@@ -20,6 +20,7 @@ public class EnemyBehavior : BlinkObject
     public bool isFly;
     public bool ofBoss;
     public List<GameObject> children;
+    public AudioSource beStepSE2;
     
     [HideInInspector] public bool playerStepOn = false; //敵を踏んだかどうか判断、インスペクターでは非表示
     [HideInInspector] public bool isGenerated = false;
@@ -131,8 +132,15 @@ public class EnemyBehavior : BlinkObject
                         if (!isSet)
                         {
                             // Debug.Log("踏まれた");
-                            beStepSE.Play();
                             enemyHp--;
+                            if(enemyHp > 0 && beStepSE2 != null)
+                            {
+                                beStepSE2.Play();
+                            }
+                            else
+                            {
+                                beStepSE.Play();
+                            }
                             blinkStart = false;
                             isSet = true;
                         }
@@ -238,7 +246,7 @@ public class EnemyBehavior : BlinkObject
                 yVector = -gravity;
             }
             else if (g.IsGround())
-            {
+            {          
                 judgeTime = 0.0f;
             }
             judgeTime += Time.deltaTime;

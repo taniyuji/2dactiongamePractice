@@ -14,8 +14,9 @@ public class LoadScenes : MonoBehaviour
     public bool isEnding = false;
     public bool isResult = false;
     public AudioSource buttonSE;
+    [HideInInspector] public bool isSet = false;
+    [HideInInspector] public bool openRanking = false;
 
-    private bool isSet = false;
     private bool setbool = false;
     private AsyncOperation asyncOperation;
 
@@ -29,12 +30,21 @@ public class LoadScenes : MonoBehaviour
 
         if (isTitle)
         {
-            if (Input.anyKey && !isSet)
+            if (openRanking)
+            {
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Space) && !isSet)
             {
                 Debug.Log("起動開始");
                 buttonSE.Play();
                 startLoadStage1Scene();
                 isSet = true;
+            }else if(Input.GetKeyDown(KeyCode.X) && !isSet)
+            {
+                LoadRankingScene();
+                isSet = true;
+                openRanking = true;
             }
         }
 
@@ -53,7 +63,7 @@ public class LoadScenes : MonoBehaviour
             }
         }
 
-        if(!isTitle && !isResult && GameManager.instance.goBackTitle && !isSet)
+        if(!isTitle && GameManager.instance.goBackTitle && !isSet)
         {
             Debug.Log("start load Title");
             startLoadTitleScene();
@@ -73,13 +83,11 @@ public class LoadScenes : MonoBehaviour
             isSet = true;
         }
 
-        if(isResult && Input.GetKeyDown(KeyCode.Space) && !isSet)
-        {
-            startLoadTitleScene();
-            GameManager.instance.startbackTitle = true;
-            isSet = true;
-        }
+    }
 
+    public void LoadRankingScene()
+    {
+        naichilab.RankingLoader.Instance.SendScoreAndShowRanking(GameManager.instance.finalScore);
     }
 
     private void startLoadBoss1Scene()

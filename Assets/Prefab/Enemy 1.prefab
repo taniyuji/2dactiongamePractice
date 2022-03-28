@@ -89,6 +89,7 @@ MonoBehaviour:
   - {fileID: 8480987686165561888}
   - {fileID: 6012990080905854596}
   - {fileID: 5913426405608296564}
+  jampSE: {fileID: 4646963107582480548, guid: fa4969daff44c45afac291fca6692518, type: 3}
   playerStepOn: 0
   isGenerated: 0
   isDead: 0

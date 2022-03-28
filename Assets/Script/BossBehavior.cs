@@ -131,7 +131,7 @@ public class BossBehavior : BlinkObject
                 }
                 else//踏まれた場合
                 {
-                    Debug.Log("enter to enemyStepOn");
+                    //Debug.Log("enter to enemyStepOn");
                     if (attackNum == 1)
                     {
                         //Debug.Log("steped while attack");
@@ -152,14 +152,14 @@ public class BossBehavior : BlinkObject
                         }
                         if(bossHp > 0)
                         {
-                            GameManager.instance.score += 200;
+                            GameManager.instance.score += 100;
                         }
                         return;
                     }
                     //Debug.Log("踏まれたよ");
                     if (!getDamageFin)
                     {
-                        Debug.Log("Enter to GetDamageBehavior");
+                       // Debug.Log("Enter to GetDamageBehavior");
                         GetDamageBehavior();//回避動作が終了したらgetDamageFinフラグをtrueにする。
                     }
                     else
@@ -182,7 +182,8 @@ public class BossBehavior : BlinkObject
                     }
                 }
                 transform.position = new Vector3(Mathf.Clamp(transform.position.x, leftLim.transform.position.x, rightLim.transform.position.x), transform.position.y, transform.position.z);
-                rb.velocity = new Vector2(xVector * enemySpeed, -gravity);
+                transform.localScale = new Vector3(xLocalScale * Math.Abs(transform.localScale.x), transform.localScale.y);
+                rb.velocity = new Vector2(xVector * Math.Abs(enemySpeed), -gravity);
             }
             else//isReturnの場合
             {
@@ -256,7 +257,7 @@ public class BossBehavior : BlinkObject
                 xLocalScale = moveRight ? 1 : -1;
             }
         }
-        transform.localScale = new Vector3(xLocalScale * Math.Abs(transform.localScale.x), transform.localScale.y);
+        //Debug.Log("xVector = " + xVector + "xLocalScale = " + xLocalScale);
     }
 
     private bool JudgeIsReturnPos()
@@ -275,14 +276,14 @@ public class BossBehavior : BlinkObject
             beSteppedSE.Play();
             canBlink = true;
             getDamageFin = false;
-            GameManager.instance.score += 200;
+            GameManager.instance.score += 100;
             isSet = true;
         }
            
         //一度終了したら、次に上記のif文でcanBlinkがtrueになるまで起動させない。
         if (canBlink)
         {
-            Debug.Log("start boss blink");
+            //Debug.Log("start boss blink");
             GetBlink(sr);
             if (isBlinkFin())
             {
@@ -353,11 +354,11 @@ public class BossBehavior : BlinkObject
         {
             if (bossHp > 6)
             {
-                attackNum = UnityEngine.Random.Range(1, 301);//301
+                attackNum = UnityEngine.Random.Range(1, 151);//151
             }
             else
             {
-                attackNum = UnityEngine.Random.Range(1, 151);//151
+                attackNum = UnityEngine.Random.Range(1, 51);//51
             }
         }
         else
@@ -457,7 +458,7 @@ public class BossBehavior : BlinkObject
 
     private void TelepoteBehavior()
     {
-        Debug.Log("enter to telepoteBehavior");
+        //Debug.Log("enter to telepoteBehavior");
         SetInvincible();
         playerHit = false;
 
