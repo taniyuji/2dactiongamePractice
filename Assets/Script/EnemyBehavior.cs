@@ -181,7 +181,7 @@ public class EnemyBehavior : BlinkObject
                     {
                         rb.velocity = new Vector2(0, -gravity);
                         transform.Rotate(new Vector3(0, 0, 5));
-                        Destroy(gameObject, 2f);
+                        Destroy(gameObject, 1f);
                     }
                     else
                     {
