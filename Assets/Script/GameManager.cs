@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     public bool startPlayTime = false;
 
     [HideInInspector]public bool canContinue;
-    [HideInInspector] public bool judgeHp = false;
     [HideInInspector] public bool bossIsvisble = true;
     [HideInInspector] public bool goBackTitle = false;
     [HideInInspector] public bool startbackTitle = false;
@@ -41,12 +40,7 @@ public class GameManager : MonoBehaviour
     {
         if (startbackTitle || Retry)
         {
-            playTime = 0.0f;
-            minute = 0;
-            goBackTitle = false;
-            startbackTitle = false;
-            Retry = false;
-            startPlayTime = false;
+            ResetPram();           
         }
         else if(startPlayTime && !continueWait && !isBossDead)
         {
@@ -70,11 +64,6 @@ public class GameManager : MonoBehaviour
         {
             canContinue = false;
         }
-
-        if (goBackTitle)//タイトルに戻ってもゲームマネージャーはリビルトされないため
-        {
-            ResetPram();
-        }
     }
 
     public void ResetPram()
@@ -83,6 +72,12 @@ public class GameManager : MonoBehaviour
         score = 0;
         canContinue = false;
         bossIsvisble = false;
+        isBossDead = false;
+        LogoAppeared = false;
+        startbackTitle = false;
+        startPlayTime = false;
+        goBackTitle = false;
+        Retry = false;
         playTime = 0;
         minute = 0;
     }

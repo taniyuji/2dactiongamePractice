@@ -460,7 +460,6 @@ public class Player : BlinkObject
                 GetDamagedSE.Play();
             }
             GameManager.instance.hpNum -= 0.1m;
-            GameManager.instance.judgeHp = true;
     
             isSet = true;
         }

@@ -53,6 +53,10 @@ public class cameraControler : MonoBehaviour
                     newCamSize += 0.1f;
                 }
             }
+            if (GameManager.instance.isBossDead)
+            {
+                BossBGM.volume -= 0.05f;
+            }
             Cam.m_Lens.OrthographicSize = newCamSize;         
         }
         else

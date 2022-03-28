@@ -53,8 +53,9 @@ public class LoadScenes : MonoBehaviour
             }
         }
 
-        if((isStage1 || isBossScene) && GameManager.instance.goBackTitle && !isSet)
+        if(!isTitle && !isResult && GameManager.instance.goBackTitle && !isSet)
         {
+            Debug.Log("start load Title");
             startLoadTitleScene();
             GameManager.instance.startbackTitle = true;
             isSet = true;
@@ -75,6 +76,7 @@ public class LoadScenes : MonoBehaviour
         if(isResult && Input.GetKeyDown(KeyCode.Space) && !isSet)
         {
             startLoadTitleScene();
+            GameManager.instance.startbackTitle = true;
             isSet = true;
         }
 

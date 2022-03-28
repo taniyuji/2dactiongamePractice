@@ -69,6 +69,7 @@ public class PauseScript : MonoBehaviour
                     }
                     else if (objNum == 1)
                     {
+                        Debug.Log("タイトルに戻る");
                         BackToTiTle();
                     }
                 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerEnding : MonoBehaviour
 {
+    public GameObject moveLim;
     public float speed;
     public AudioSource walkSE;
     public Rigidbody2D rb;
@@ -75,6 +76,7 @@ public class PlayerEnding : MonoBehaviour
             }
         }
         //Debug.Log("playerXspeed = " + xspeed);
+        gameObject.transform.position = new Vector3(Mathf.Clamp(gameObject.transform.position.x, -100, moveLim.transform.position.x), gameObject.transform.position.y, gameObject.transform.position.z);
         gameObject.transform.localScale = new Vector3(xVector, 1, 1);
         rb.velocity = new Vector2(speed, -1);
     }
