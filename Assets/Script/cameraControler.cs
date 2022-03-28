@@ -57,7 +57,7 @@ public class cameraControler : MonoBehaviour
         }
         else
         {
-            if (!GameManager.instance.isBossDead && !pEnd.playerIn)
+            if (followObj[1].activeSelf == false && !pEnd.playerIn)
             {
                 if (waitTime > 3f)
                 {
@@ -82,6 +82,10 @@ public class cameraControler : MonoBehaviour
                     Logo.enabled = true;
                     Logo.color = new Color(Logo.color.r, Logo.color.g, Logo.color.b, colorNum);
                     colorNum += 0.01f;
+                    if(colorNum >= 1 && waitTime > 10f)
+                    {
+                        GameManager.instance.LogoAppeared = true;
+                    }
                 }
                 waitTime += Time.deltaTime;
             }

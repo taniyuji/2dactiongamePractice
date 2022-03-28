@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public int stageNum;//どのステージに居るか
     public decimal hpNum = 0.5m;
     public bool isBossDead;
+    public bool startPlayTime = false;
 
     [HideInInspector]public bool canContinue;
     [HideInInspector] public bool judgeHp = false;
@@ -15,9 +16,11 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool startbackTitle = false;
     [HideInInspector] public bool Retry = false;
     [HideInInspector] public float playTime;
-    [HideInInspector] public bool startPlayTime = false;
     [HideInInspector] public bool continueWait = false;
     [HideInInspector] public bool isPlayerDead = false;
+    [HideInInspector] public bool LogoAppeared = false;
+    [HideInInspector] public int minute = 0;
+    [HideInInspector] public int finalScore;
 
     private void Awake()
     {
@@ -39,6 +42,7 @@ public class GameManager : MonoBehaviour
         if (startbackTitle || Retry)
         {
             playTime = 0.0f;
+            minute = 0;
             goBackTitle = false;
             startbackTitle = false;
             Retry = false;
@@ -47,7 +51,7 @@ public class GameManager : MonoBehaviour
         else if(startPlayTime && !continueWait && !isBossDead)
         {
             playTime += Time.deltaTime;
-            Debug.Log("playTime = " + playTime);
+            //Debug.Log("playTime = " + playTime);
         }
 
 
@@ -79,6 +83,8 @@ public class GameManager : MonoBehaviour
         score = 0;
         canContinue = false;
         bossIsvisble = false;
+        playTime = 0;
+        minute = 0;
     }
 
     public void continueBehavior()

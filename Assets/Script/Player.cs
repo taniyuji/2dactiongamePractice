@@ -48,7 +48,7 @@ public class Player : BlinkObject
     private bool isContinue = false;
     private bool isBoss = false;
     private bool isSet = false;
-    private bool wasLocked = false;
+    private bool RunSEPaused = false;
     private SpriteRenderer sr = null;
     private float jumpPos = 0.0f;
     private float jumpTime = 0.0f;
@@ -86,8 +86,8 @@ public class Player : BlinkObject
             if(RunningSE != null)
             {
                 RunningSE.Pause();
+                RunSEPaused = true;
             }
-            wasLocked = true;
             return;
         }
     }
@@ -273,15 +273,16 @@ public class Player : BlinkObject
             {
                 if (isGround && !isRolling)
                 {
-                    if (dashTime < 0.02f || wasJamp || wasLocked)
+                    if (dashTime < 0.02f || wasJamp || RunSEPaused)
                     {
                         RunningSE.Play();
-                        wasLocked = false;
+                        RunSEPaused = false;
                     }
                 }
                 else
                 {
                     RunningSE.Pause();
+                    RunSEPaused = true;
                 }
             }
             isRun = true;
@@ -302,6 +303,7 @@ public class Player : BlinkObject
             if (RunningSE != null)
             {
                 RunningSE.Pause();
+                RunSEPaused = true;
             }
             isRun = false;
             dashTime = 0.0f;

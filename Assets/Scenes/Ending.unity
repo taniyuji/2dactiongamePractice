@@ -2041,11 +2041,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &970373647 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1273567067422481637, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
+--- !u!114 &970373648 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1273567067422481643, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
   m_PrefabInstance: {fileID: 2035429189}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 041f63363e85b45bb80bad3d5d2fc848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &970373651 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1273567067422481636, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
@@ -3932,7 +3938,7 @@ GameObject:
   - component: {fileID: 1788267651}
   - component: {fileID: 1788267650}
   m_Layer: 0
-  m_Name: LoadTitleScene
+  m_Name: LoadResultScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3950,12 +3956,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9984f19c15b9045ccaa34c6b2ad8bf5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeObj: {fileID: 970373647}
   player: {fileID: 3524828316031073259}
   goBossPos: {fileID: 0}
+  fade: {fileID: 970373648}
   isTitle: 0
   isStage1: 0
   isBossScene: 0
+  isEnding: 1
   buttonSE: {fileID: 239142704}
 --- !u!4 &1788267651
 Transform:
@@ -4873,7 +4880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1273567067422481637, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1273567067422481642, guid: 14b71efc12a264a59906e5e46b2edab5, type: 3}
       propertyPath: m_FillAmount

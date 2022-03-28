@@ -44,7 +44,7 @@ public class ChangeBackGroundColor : MonoBehaviour
 
             if(colorNum > 0.85f)
             {
-                UIs.Select(i => i.color = new Color(colorNum, colorNum, colorNum, 1))
+                UIs.Select(i => i.color = new Color(colorNum, colorNum, colorNum, 0.6f))
                     .ToList();
             }
 

@@ -132,6 +132,7 @@ public class BossBehavior : BlinkObject
                     if (attackNum == 1)
                     {
                         //Debug.Log("steped while attack");
+                        
                         beSteppedSE.Play();
                         bossHp--;
                         attackSteped = true;
@@ -141,11 +142,22 @@ public class BossBehavior : BlinkObject
                         {
                             generateTrigger = true;
                         }
+                        else if(bossHp < 1)
+                        {
+                            isSet = false;
+                            attackNum = 0;
+                            playerStepOn2 = true;
+                        }
+                        if(bossHp > 0)
+                        {
+                            GameManager.instance.score += 200;
+                        }
                         return;
                     }
                     //Debug.Log("踏まれたよ");
                     if (!getDamageFin)
                     {
+                        Debug.Log("Enter to GetDamageBehavior");
                         GetDamageBehavior();//回避動作が終了したらgetDamageFinフラグをtrueにする。
                     }
                     else
@@ -267,6 +279,7 @@ public class BossBehavior : BlinkObject
         //一度終了したら、次に上記のif文でcanBlinkがtrueになるまで起動させない。
         if (canBlink)
         {
+            Debug.Log("start boss blink");
             GetBlink(sr);
             if (isBlinkFin())
             {
@@ -337,11 +350,11 @@ public class BossBehavior : BlinkObject
         {
             if (bossHp > 6)
             {
-                attackNum = UnityEngine.Random.Range(1, 301);//351
+                attackNum = UnityEngine.Random.Range(1, 301);//301
             }
             else
             {
-                attackNum = UnityEngine.Random.Range(1, 151);//351
+                attackNum = UnityEngine.Random.Range(1, 151);//151
             }
         }
         else

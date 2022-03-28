@@ -5,24 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class LoadScenes : MonoBehaviour
 {
-    public GameObject fadeObj;
     public GameObject player;
     public GameObject goBossPos;
+    public FadeScript fade;
     public bool isTitle = false;
     public bool isStage1 = false;
     public bool isBossScene = false;
+    public bool isEnding = false;
+    public bool isResult = false;
     public AudioSource buttonSE;
 
     private bool isSet = false;
     private bool setbool = false;
-    private FadeScript fade;
     private AsyncOperation asyncOperation;
-
-    private void Awake()
-    {
-        fadeObj.SetActive(true);
-        fade = fadeObj.GetComponent<FadeScript>();
-    }
 
     // Update is called once per frame
     void Update()
@@ -68,6 +63,18 @@ public class LoadScenes : MonoBehaviour
         if (isBossScene && GameManager.instance.isBossDead && !isSet)
         {
             startLoadEndingScene();
+            isSet = true;
+        }
+
+        if(isEnding && GameManager.instance.LogoAppeared && !isSet)
+        {
+            startLoadResultScene();
+            isSet = true;
+        }
+
+        if(isResult && Input.GetKeyDown(KeyCode.Space) && !isSet)
+        {
+            startLoadTitleScene();
             isSet = true;
         }
 
@@ -128,6 +135,20 @@ public class LoadScenes : MonoBehaviour
     IEnumerator LoadEndingScene()
     {
         asyncOperation = SceneManager.LoadSceneAsync("Ending");
+        asyncOperation.allowSceneActivation = false;
+        fade.StartFadeOut();
+        yield return new WaitForSeconds(2f);
+        asyncOperation.allowSceneActivation = true;
+    }
+
+    private void startLoadResultScene()
+    {
+        StartCoroutine("LoadResultScene");
+    }
+
+    IEnumerator LoadResultScene()
+    {
+        asyncOperation = SceneManager.LoadSceneAsync("Result");
         asyncOperation.allowSceneActivation = false;
         fade.StartFadeOut();
         yield return new WaitForSeconds(2f);

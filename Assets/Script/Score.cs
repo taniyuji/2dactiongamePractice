@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
+    public bool isResult = false;
+    public bool isfinalScore = false;
+
     private Text scoreText = null;
     private int oldScore = 0;
 
@@ -13,7 +16,10 @@ public class Score : MonoBehaviour
         scoreText = GetComponent<Text>();
         if(GameManager.instance != null)
         {
-            scoreText.text = "Score" + GameManager.instance.score;
+            if (isResult)
+            {
+                scoreText.text = GameManager.instance.score.ToString();               
+            }
         }
         else
         {
@@ -29,10 +35,13 @@ public class Score : MonoBehaviour
             return;
         }
 
-        if (oldScore != GameManager.instance.score)
+        if (oldScore != GameManager.instance.score && !isfinalScore && !isResult)
         {
             scoreText.text = "Score" + GameManager.instance.score;
             oldScore = GameManager.instance.score;
+        }else if (isfinalScore)
+        {
+            scoreText.text = GameManager.instance.finalScore.ToString();
         }
     }
 }

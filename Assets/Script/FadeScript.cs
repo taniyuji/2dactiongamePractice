@@ -7,7 +7,7 @@ public class FadeScript : MonoBehaviour
 {
     [HideInInspector] public bool goLoadScene = false;
     public bool firstFadeInComp;//最初からフェードインを終了させておくか
-    private Image img = null;
+    public Image img = null;
     private bool fadeIn = false;
     private bool compFadeIn = false;
     private bool fadeOut = false;
@@ -53,7 +53,7 @@ public class FadeScript : MonoBehaviour
     
     void Start()
     {
-        img = GetComponent<Image>();
+        img.enabled = true;
         StartFadeIn();
         goLoadScene = false;
     }

@@ -20,7 +20,6 @@ public class BossEnding : MonoBehaviour
         if (IsDefeatedAnimFin())
         {
             //Debug.Log("boss Ending set false");
-            GameManager.instance.isBossDead = false;
             player.SetActive(true);
             gameObject.SetActive(false);
         }
