@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
             hpNum = 1m;
         }
 
-        if(score >= 1500)
+        if(score >= 2000)
         {
             canContinue = true;
         }
@@ -84,6 +84,6 @@ public class GameManager : MonoBehaviour
 
     public void continueBehavior()
     {
-        score -= 1500;
+        score -= 2000;
     }
 }

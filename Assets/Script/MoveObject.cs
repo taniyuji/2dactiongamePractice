@@ -19,6 +19,8 @@ public class MoveObject : MonoBehaviour
     private Vector2 oldPos = Vector2.zero;
     private Vector2 mvVelocity = Vector2.zero;
     private bool playerOn = false;
+    private float pExitTime;
+    private bool playerExit = false;
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +47,11 @@ public class MoveObject : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (playerExit && nowPoint != movePoint.Length - 1)
+        {
+            Debug.Log("pExitTime = " + pExitTime);
+            pExitTime += Time.deltaTime;
+        }
         if (onPlay && (player.isDead || player.isFallDead))
         {
             Move = true;
@@ -57,11 +64,13 @@ public class MoveObject : MonoBehaviour
                 {
                     Vector2 toVector;
                     int nextPoint;
-                    if (onPlay && (player.isDead || player.isFallDead))//onPlayでプレイヤーが死亡した場合
+                    if (onPlay && (player.isDead || player.isFallDead || pExitTime > 3f))//onPlayでプレイヤーが死亡した場合
                     {
                         toVector = new Vector2(movePoint[0].transform.position.x, movePoint[0].transform.position.y);
                         nowPoint = 0;
                         playerOn = false;
+                        pExitTime = 0.0f;
+                        playerExit = false;
                         rb.MovePosition(toVector);
                     }
                     else if (!onPlay || (onPlay && playerOn))//プレイヤーが死亡していない場合
@@ -131,6 +140,17 @@ public class MoveObject : MonoBehaviour
         if(collision.collider.tag == "player")
         {
             playerOn = true;
+            playerExit = false;
+            pExitTime = 0.0f;
+        }
+    }
+
+
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "player")
+        {
+            playerExit = true;
         }
     }
 }

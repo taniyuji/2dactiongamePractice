@@ -12,7 +12,7 @@ public class BossBehavior : BlinkObject
     public bool nonVisible = false;//見えてないときでも動かすか
     public int myScore;
     public int bossHp;
-    public int stopWidth = 25;
+    public int stopWidth = 10;
     public List<GameObject> enemies;
     public List<GameObject> children;
     public GameObject JudgeReturnRight;
@@ -90,6 +90,7 @@ public class BossBehavior : BlinkObject
                 //Debug.Log("player step on2 = " + playerStepOn2);
                 if (!playerStepOn2)
                 {
+                    //Debug.Log("enter to !enemyStepOn");
                     if (!isDead)
                     {
                         pSc = player.GetComponent<Player>();
@@ -107,8 +108,9 @@ public class BossBehavior : BlinkObject
                         {
                             BossAttackJudge();//攻撃動作が終了した場合isAttackをfalseにする
                         }
-                        if (!isAttack)
+                        if (attackNum != 1)
                         {
+                            //Debug.Log("boss move activate");
                             Move();/*JudgeisReturnPos()がtrueでplayerとあたった場合、
                             isReturnをtrueにする。*/
                         }
@@ -129,10 +131,10 @@ public class BossBehavior : BlinkObject
                 }
                 else//踏まれた場合
                 {
+                    Debug.Log("enter to enemyStepOn");
                     if (attackNum == 1)
                     {
                         //Debug.Log("steped while attack");
-                        
                         beSteppedSE.Play();
                         bossHp--;
                         attackSteped = true;
@@ -223,6 +225,7 @@ public class BossBehavior : BlinkObject
         {
             if (JudgeIsReturnPos())//戻り境界線の中にいた場合
             {
+                Debug.Log("set isReturn");
                 enemySpeed = 0;
                 isReturn = true;
             }
@@ -368,8 +371,8 @@ public class BossBehavior : BlinkObject
     {
         if (!isSet)
         {
-            xVector = moveRight ? 1 : -1;
-            xLocalScale = moveRight ? 1 : -1;
+            xVector = p.x > This.x ? 1 : -1;
+            xLocalScale = xVector > 0 ? 1 : -1;
             AttackAnimFin = false;
             isSet = true;
         }
@@ -379,6 +382,7 @@ public class BossBehavior : BlinkObject
             AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);//再生中のアニメーションを取得
             if (currentState.IsName("Boss_Attack"))//ダウンアニメーションの場合
             {
+               // Debug.Log("bossAttack normalizedTime = " + currentState.normalizedTime);
                 if (currentState.normalizedTime >= 0.5 && currentState.normalizedTime < 1)
                 {
                     isAttack = true;
@@ -393,6 +397,7 @@ public class BossBehavior : BlinkObject
                     anim.SetBool("Attack", false);
                     enemySpeed = beforeSpeed;
                     AttackAnimFin = true;
+                    Debug.Log("boss attack fin");
                     if (generateTrigger)
                     {
                         Debug.Log("set generateTrigger");

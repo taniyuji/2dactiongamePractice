@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8544392106475832344}
   - component: {fileID: 7453018531966241983}
   m_Layer: 5
-  m_Name: use1500scorestocontinue
+  m_Name: use2000scorestocontinue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Use 1500 scores \nto continue?"
+  m_Text: "Use 2000 scores \nto continue?"
 --- !u!1 &2451203396065068954
 GameObject:
   m_ObjectHideFlags: 0
