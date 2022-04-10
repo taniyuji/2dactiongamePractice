@@ -826,10 +826,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 960, y: 540}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1419,7 +1419,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8631413540793514339, guid: 76b2c9955be024211852093db3e407e0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 181
+      value: 270
       objectReference: {fileID: 0}
     - target: {fileID: 8631413540793514339, guid: 76b2c9955be024211852093db3e407e0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1439,7 +1439,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8631413540793514349, guid: 76b2c9955be024211852093db3e407e0, type: 3}
       propertyPath: m_Text
-      value: 0000
+      value: 00000
       objectReference: {fileID: 0}
     - target: {fileID: 8631413540793514349, guid: 76b2c9955be024211852093db3e407e0, type: 3}
       propertyPath: m_Color.a

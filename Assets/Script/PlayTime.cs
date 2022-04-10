@@ -16,7 +16,14 @@ public class PlayTime : MonoBehaviour
     {
         if (isResult)
         {
-            bonusScore = 10 * (judgeTime - (int)GameManager.instance.playTime);
+            if (GameManager.instance.playTime < judgeTime)
+            {
+                bonusScore = 10 * (judgeTime - (int)GameManager.instance.playTime);
+            }
+            else
+            {
+                bonusScore = 0;
+            }
             GameManager.instance.finalScore = GameManager.instance.score + bonusScore;
             txt.text = bonusScore.ToString();
         }

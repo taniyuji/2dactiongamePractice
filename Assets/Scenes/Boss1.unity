@@ -3674,6 +3674,8 @@ MonoBehaviour:
   isEnding: 0
   isResult: 0
   buttonSE: {fileID: 897230788}
+  isSet: 0
+  openRanking: 0
 --- !u!4 &536594399
 Transform:
   m_ObjectHideFlags: 0
@@ -14302,6 +14304,10 @@ PrefabInstance:
     - target: {fileID: 8169943957579628908, guid: fe5b88ab1436341bda2168ce66515ff5, type: 3}
       propertyPath: m_Name
       value: BossBGM
+      objectReference: {fileID: 0}
+    - target: {fileID: 8169943957579628909, guid: fe5b88ab1436341bda2168ce66515ff5, type: 3}
+      propertyPath: m_Volume
+      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 8169943957579628909, guid: fe5b88ab1436341bda2168ce66515ff5, type: 3}
       propertyPath: m_audioClip
