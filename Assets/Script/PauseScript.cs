@@ -76,7 +76,7 @@ public class PauseScript : MonoBehaviour
             }
             else
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.X))
                 {
                     isPausing = true;
                 }

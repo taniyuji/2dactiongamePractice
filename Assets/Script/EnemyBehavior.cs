@@ -198,6 +198,7 @@ public class EnemyBehavior : BlinkObject
             }
         }
     }
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.tag == "player")
@@ -205,6 +206,7 @@ public class EnemyBehavior : BlinkObject
             DirectionRight = !DirectionRight;
         }
     }
+    
 
     //setActiveがオフのままだと生成されるまでボスについて行く挙動ができないため用意
     public void generateItSelf()

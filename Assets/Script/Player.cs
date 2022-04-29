@@ -48,7 +48,6 @@ public class Player : BlinkObject
     private bool isContinue = false;
     private bool isBoss = false;
     private bool isSet = false;
-    private bool RunSEPaused = false;
     private SpriteRenderer sr = null;
     private float jumpPos = 0.0f;
     private float jumpTime = 0.0f;
@@ -67,6 +66,7 @@ public class Player : BlinkObject
     private bool wasJamp = false;
     private bool invincibleMode;//無敵状態
     private bool beforeDown = false;
+    private bool throughMovingG = false;
 
 
     ///////////////////////////////////メイン///////////////////////////////////
@@ -86,7 +86,6 @@ public class Player : BlinkObject
             if(RunningSE != null)
             {
                 RunningSE.Pause();
-                RunSEPaused = true;
             }
             return;
         }
@@ -273,16 +272,14 @@ public class Player : BlinkObject
             {
                 if (isGround && !isRolling)
                 {
-                    if (dashTime < 0.02f || wasJamp || RunSEPaused)
+                    if (dashTime < 0.02f || wasJamp || !RunningSE.isPlaying)
                     {
                         RunningSE.Play();
-                        RunSEPaused = false;
                     }
                 }
                 else
                 {
                     RunningSE.Pause();
-                    RunSEPaused = true;
                 }
             }
             isRun = true;
@@ -303,7 +300,6 @@ public class Player : BlinkObject
             if (RunningSE != null)
             {
                 RunningSE.Pause();
-                RunSEPaused = true;
             }
             isRun = false;
             dashTime = 0.0f;
@@ -353,16 +349,17 @@ public class Player : BlinkObject
                 jumpTime = 0.0f;
             }
         }
-        else if (isGround)//接地している場合
+        else if (isGround && !throughMovingG)//接地している場合
         {
             if (wasJamp && JampDownSE!= null)
             {
                 JampDownSE.Play();
+                jumpTime = 0.0f;
                 wasJamp = false;
             }
             isJampDown = false;
             //上矢印キーが押された場合
-            if (VerticalKey > 0)
+            if (Input.GetKey(KeyCode.Space))
             {
                 yspeed = jumpSpeed;
                 jumpPos = transform.position.y;
@@ -406,8 +403,7 @@ public class Player : BlinkObject
         }else if(isJump)//飛んでいる状態の場合
         {
             //上矢印キーが押された場合
-            bool pushUpKey = VerticalKey > 0;
-
+            bool pushUpKey = Input.GetKey(KeyCode.Space);
             //最後に飛んだ位置と高さの制限を足し合わせ、現在のポジションと比べる。
             //現在のポジションのほうが小さい場合、Trueとなる。
             bool canHeight = jumpPos + jumpHeightLimit > transform.position.y;
@@ -417,19 +413,22 @@ public class Player : BlinkObject
             bool canTime = jumpLimitTime > jumpTime;
 
             //上矢印が押され、ジャンプ制限位置以内、ジャンプ制限時間内かつ頭があたっていない場合
-            if (pushUpKey && canHeight && canTime && !isHead)
+            if (canHeight && canTime && !isHead)
             {
                 yspeed = jumpSpeed;
+                if (ground.IsMovingGround())
+                    throughMovingG = true;
                 jumpTime += Time.deltaTime;
             }//上記のどれか一つでも該当した場合
             else
             {
+                throughMovingG = false;
                 isJump = false;
-                jumpTime = 0.0f;
             }
         }//飛んでおらず、接地していない場合
         else
         {
+            throughMovingG = false;
             isJampDown = true;
             wasJamp = true;
         }

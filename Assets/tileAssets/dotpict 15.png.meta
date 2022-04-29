@@ -105,6 +105,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -760,6 +761,34 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      dotpict 15_20: 1325848793213487736
+      dotpict 15_4: 4653574498289878579
+      dotpict 15_23: 2667337038786869567
+      dotpict 15_3: -4431246787975679129
+      dotpict 15_8: -7195386275916732042
+      dotpict 15_12: -3053013577173492543
+      dotpict 15_7: -5375267867835881067
+      dotpict 15_19: 8666571251915237290
+      dotpict 15_5: 3561968505004131967
+      dotpict 15_15: -7054483014654286482
+      dotpict 15_18: 3532895335832398579
+      dotpict 15_14: -6714110527672536975
+      dotpict 15_16: 2111862637386840978
+      dotpict 15_1: -535197002702312593
+      dotpict 15_6: 1555692876787673271
+      dotpict 15_26: -278796035253581549
+      dotpict 15_24: 932725602225005067
+      dotpict 15_13: -5463217473869552676
+      dotpict 15_0: -7011522609028101867
+      dotpict 15_9: -8330629401297937509
+      dotpict 15_22: -729423185510087980
+      dotpict 15_21: -1660978942423767022
+      dotpict 15_11: -5422092070638924454
+      dotpict 15_10: -6969497350806301340
+      dotpict 15_17: 3588059733978006955
+      dotpict 15_2: 4546696067357237546
+      dotpict 15_25: 7494054742653651569
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

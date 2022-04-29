@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUI: 0
   BoundHeight: 5
-  enemySpeed: 17
+  enemySpeed: 15
   gravity: 20
   enemyHp: 1
   nonVisible: 0
@@ -159,6 +159,7 @@ MonoBehaviour:
   - {fileID: 7205277031276099600}
   - {fileID: 6486607109962446449}
   - {fileID: 7301626849824427114}
+  beStepSE2: {fileID: 0}
   playerStepOn: 0
   isGenerated: 0
   isDead: 0

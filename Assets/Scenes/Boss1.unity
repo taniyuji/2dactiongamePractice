@@ -1161,6 +1161,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1575869035}
     - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
+      propertyPath: jumpLimitTime
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 405939116434810716, guid: 6b0a6273a725c490b9a66841ee029350, type: 3}
       propertyPath: EnemyOrBossStepSE
       value: 
       objectReference: {fileID: 601035900}
@@ -4545,7 +4549,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Push Space \n  to open pause menu"
+  m_Text: "Push X\n  to open pause menu"
 --- !u!222 &728944030
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14312,7 +14316,7 @@ PrefabInstance:
     - target: {fileID: 8169943957579628909, guid: fe5b88ab1436341bda2168ce66515ff5, type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: b3258b3cebe0d42cc8e51a3d7e85b7ff, type: 3}
+      objectReference: {fileID: 8300000, guid: 8276bbb411340424bbc48f43911ac4cb, type: 3}
     - target: {fileID: 8169943957579628910, guid: fe5b88ab1436341bda2168ce66515ff5, type: 3}
       propertyPath: m_RootOrder
       value: 0
