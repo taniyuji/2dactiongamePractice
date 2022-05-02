@@ -361,9 +361,13 @@ public class Player : BlinkObject
             //上矢印キーが押された場合
             if (Input.GetKey(KeyCode.Space))
             {
+                jumpLimitTime = ground.IsElevator() ? 0.2f : 0.4f;
+                    
                 yspeed = jumpSpeed;
                 jumpPos = transform.position.y;
                 //isJumpに飛ぶ
+                isCrouch = false;
+                isRolling = false;
                 isJump = true;
                 jumpTime = 0.0f;
                 if (JampSE != null)
@@ -402,8 +406,6 @@ public class Player : BlinkObject
             }
         }else if(isJump)//飛んでいる状態の場合
         {
-            //上矢印キーが押された場合
-            bool pushUpKey = Input.GetKey(KeyCode.Space);
             //最後に飛んだ位置と高さの制限を足し合わせ、現在のポジションと比べる。
             //現在のポジションのほうが小さい場合、Trueとなる。
             bool canHeight = jumpPos + jumpHeightLimit > transform.position.y;
@@ -422,6 +424,7 @@ public class Player : BlinkObject
             }//上記のどれか一つでも該当した場合
             else
             {
+                jumpLimitTime = 0.4f;
                 throughMovingG = false;
                 isJump = false;
             }

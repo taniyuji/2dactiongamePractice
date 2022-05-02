@@ -15,6 +15,7 @@ TagManager:
   - BackToTitleButton
   - BackToGameButton
   - onlyEnemyGround
+  - Elevator
   layers:
   - Default
   - TransparentFX
@@ -35,7 +36,7 @@ TagManager:
   - Check
   - footsPos
   - playerDead
-  - 
+  - Elevator
   - 
   - 
   - 

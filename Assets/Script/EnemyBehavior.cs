@@ -241,7 +241,7 @@ public class EnemyBehavior : BlinkObject
             anim.SetBool("Run", true);
             if (judgeTime < 1f)
             {
-                yVector = 4.5f;
+                yVector = 4f;
             }
             else if (judgeTime >= 1f && !g.IsGround())
             {

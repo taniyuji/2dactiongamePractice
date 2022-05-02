@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GroudCheck : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GroudCheck : MonoBehaviour
     private bool isGround;
     private bool isGroundEnter, isGroundStay, isGroundExit;
     private bool isMoving;
+    private bool isElevator;
 
     public bool IsGround()
     {
@@ -33,6 +35,11 @@ public class GroudCheck : MonoBehaviour
         return isMoving;
     }
 
+    public bool IsElevator()
+    {
+        return isElevator;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == gTag)
@@ -44,6 +51,12 @@ public class GroudCheck : MonoBehaviour
             isGroundEnter = true;
 
             isMoving = true;
+        }
+
+        if(collision.gameObject.layer == 19)
+        {
+            Debug.Log("Elevator enter");
+            isElevator = true;
         }
     }
 
@@ -71,6 +84,11 @@ public class GroudCheck : MonoBehaviour
         else if (checkPlatformGround && collision.tag == platformTag)
         {
             isGroundExit = true;
+        }
+
+        if(collision.gameObject.layer == 19)
+        {
+            isElevator = false;
         }
     }
 }
